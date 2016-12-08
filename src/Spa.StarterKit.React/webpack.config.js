@@ -21,7 +21,13 @@ var sharedConfig = () => ({
 // Configuration for client-side bundle suitable for running in browsers
 var clientBundleOutputDir = './wwwroot/dist';
 var clientBundleConfig = merge(sharedConfig(), {
-    entry: { 'main-client': './Client/Index.jsx' },
+    entry: {
+        'main-client': [
+            'react-mdl/extra/material.min.css',
+            'react-mdl/extra/material-grid.min.css',
+            './Client/Index.jsx'
+        ]
+    },
     module: {
         loaders: [
             { test: /\.css$/, loader: ExtractTextPlugin.extract(['css-loader']) },

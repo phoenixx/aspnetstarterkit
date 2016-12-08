@@ -57,6 +57,7 @@
     "publishOptions": {
         "include": [
             "appsettings.json",
+            "hosting.json",
             "Client/dist",
             "Views",
             "wwwroot",
@@ -68,8 +69,7 @@
     },
     "scripts": {
         "precompile": [
-            "npm install",
-            "node node_modules/webpack/bin/webpack.js --config webpack.config.vendor.js",
+            //"node node_modules/webpack/bin/webpack.js --config webpack.config.vendor.js",
             "node node_modules/webpack/bin/webpack.js"
         ],
         "prepublish": [

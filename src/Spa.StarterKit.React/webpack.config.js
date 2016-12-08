@@ -23,8 +23,6 @@ var clientBundleOutputDir = './wwwroot/dist';
 var clientBundleConfig = merge(sharedConfig(), {
     entry: {
         'main-client': [
-            'react-mdl/extra/material.min.css',
-            'react-mdl/extra/material-grid.min.css',
             './Client/Index.jsx'
         ]
     },

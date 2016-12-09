@@ -70,6 +70,13 @@ namespace Spa.StarterKit.React.Controllers
             return View();
         }
 
+        [Route("/Account/logout")]
+        public async Task<IActionResult> Logout()
+        {
+            await HttpContext.Authentication.SignOutAsync("Cookie");
+            return RedirectToLocal("/");
+        }
+
         private IActionResult RedirectToLocal(string returnUrl)
         {
             if (Url.IsLocalUrl(returnUrl))

@@ -3,6 +3,7 @@ var path = require('path');
 var webpack = require('webpack');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 var merge = require('webpack-merge');
+var copyWebpackPlugin = require('copy-webpack-plugin');
 
 // Configuration in common to both client-side and server-side bundles
 var sharedConfig = () => ({
@@ -38,7 +39,10 @@ var clientBundleConfig = merge(sharedConfig(), {
         new webpack.DllReferencePlugin({
             context: __dirname,
             manifest: require('./wwwroot/dist/vendor-manifest.json')
-        })
+        }),
+        new copyWebpackPlugin([
+            { from: 'Client/images', to: 'images' }
+        ])
     ].concat(isDevBuild ? [
         // Plugins that apply in development builds only
         new webpack.SourceMapDevToolPlugin({

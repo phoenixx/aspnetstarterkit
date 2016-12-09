@@ -8,9 +8,14 @@
 @section styles {
     <style type="text/css">
         .logo {
-            margin: 30px;
+            margin: 30px auto;
             font-size: 2em;
             font-weight: bold;
+            text-align: center;
+           
+        }
+        .logo > img {
+            width: 150px;
         }
          .mdl-card--full-width {
              width: 100%;
@@ -22,9 +27,9 @@
 }
 
 <div class="mdl-grid--no-spacing">
-    <div class="mdl-cell--6-col mdl-cell--3-offset">
+    <div class="mdl-cell--6-col-desktop mdl-cell--3-offset-desktop mdl-cell--12-col-tablet">
         <div class="logo">
-            logo here...
+            <img src="/dist/images/electio-large-transparent.png" alt="Electio"/>
         </div>
         @using (Html.BeginForm("Login", "Account", null, FormMethod.Post))
         {

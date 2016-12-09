@@ -1,5 +1,5 @@
 ﻿import React from 'react';
-import { Header } from 'react-mdl';
+import { Header, Navigation } from 'react-mdl';
 import stylePropType from 'react-style-proptype'
 
 class SiteHeader extends React.Component {
@@ -12,7 +12,11 @@ class SiteHeader extends React.Component {
                 title={this.props.title}
                 className={this.props.className}
                 style={this.props.style}>
-                {this.props.children}
+                <Navigation>
+                    <a href="/Account/logout">
+                        Logout
+                    </a>
+                </Navigation>
              </Header>
         );
     }

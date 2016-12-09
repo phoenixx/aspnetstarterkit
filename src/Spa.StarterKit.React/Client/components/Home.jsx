@@ -19,7 +19,6 @@ import SideDrawer from '../components/SideDrawer';
 import SiteHeader from '../components/SiteHeader';
 import SiteFooter from '../components/SiteFooter';
 
-import 'react-mdl/extra/material.css';
 import 'react-mdl/extra/material.js';
 
 class Home extends React.Component {

@@ -1,0 +1,66 @@
+﻿@model Spa.StarterKit.React.Models.Account.LoginModel
+
+@section scripts {
+    <script defer src="https://code.getmdl.io/1.2.1/material.min.js"></script>
+
+}
+
+@section styles {
+    <style type="text/css">
+        .logo {
+            margin: 30px;
+            font-size: 2em;
+            font-weight: bold;
+        }
+         .mdl-card--full-width {
+             width: 100%;
+         }
+          .form-field-container {
+              width: 100%;
+          }
+    </style>
+}
+
+<div class="mdl-grid--no-spacing">
+    <div class="mdl-cell--6-col mdl-cell--3-offset">
+        <div class="logo">
+            logo here...
+        </div>
+        @using (Html.BeginForm("Login", "Account", null, FormMethod.Post))
+        {
+            <div class="mdl-card mdl-shadow--2dp mdl-card--full-width">
+                <div class="mdl-card__title">
+                    <h2 class="mdl-card__title-text">Log in</h2>
+                    
+                </div>
+                <div class="mdl-card__supporting-text mdl-card--expand">
+                    @if (ViewBag.HasError == true)
+                    {
+                        <p class="mdl-color-text--deep-orange-A700">@ViewBag.Error</p>
+                    }
+                    <div class="form-field-container">
+                        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                            @Html.TextBoxFor(m => m.Email, new {@class="mdl-textfield__input", id = "email"})
+                            <label class="mdl-textfield__label" for="email">Email address:</label>
+                        </div>
+                    </div>
+                    <div class="form-field-container">
+                        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                            @Html.PasswordFor(m => m.Password, new {@class = "mdl-textfield__input", id = "password"})
+                            <label class="mdl-textfield__label" for="password">Password:</label>
+                        </div>
+                    </div>
+                    @Html.HiddenFor(m => m.ReturnUrl)
+                </div>
+                <div class="mdl-card__actions mdl-card--border">
+                    <input type="submit" value="Login" class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect"/>
+                </div>
+                <div class="mdl-card__menu">
+                    <button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect">
+                        <i class="material-icons">help</i>
+                    </button>
+                </div>
+            </div>
+        }
+    </div>    
+</div>

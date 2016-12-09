@@ -23,7 +23,13 @@
         "Microsoft.NETCore.App": {
             "version": "1.1.0",
             "type": "platform"
-        }
+        },
+        "MPD.Electio.SDK.NetCore": "1.0.0",
+        "MPD.Electio.SDK.NetCore.DataTypes": "1.0.0",
+        "Newtonsoft.Json": "9.0.2-beta1",
+        "structuremap": "4.4.0",
+        "StructureMap.Microsoft.DependencyInjection": "1.2.0",
+        "System.Linq": "4.3.0"
     },
 
     "tools": {

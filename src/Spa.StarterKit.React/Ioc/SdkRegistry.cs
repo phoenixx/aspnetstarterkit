@@ -25,7 +25,9 @@ namespace Spa.StarterKit.React.Ioc
     {
         public IServiceProvider ConfigureSdkRegistry(IServiceCollection services)
         {
-            var container = new Container();
+            var registry = new Registry();
+            registry.IncludeRegistry<WebRegistry>();
+            var container = new Container(registry);
             var configuration = ConfigureElectioSettings();
             var apiKey = GetApiKey(configuration);
 
@@ -65,8 +67,7 @@ namespace Spa.StarterKit.React.Ioc
                 //add existing service collection
                 config.Populate(services);
             });
-            var ep = container.GetInstance<IEndpoints>();
-            var s = ep.Security;
+
             return container.GetInstance<IServiceProvider>();
         } 
 

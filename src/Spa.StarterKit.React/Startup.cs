@@ -45,7 +45,7 @@ namespace Spa.StarterKit.React
             
             var sdkRegistry = new SdkRegistry();
             var configuredRegistry = sdkRegistry.ConfigureSdkRegistry(services);
-
+           
             return configuredRegistry;
             
         }

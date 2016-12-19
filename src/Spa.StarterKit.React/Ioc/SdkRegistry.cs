@@ -12,6 +12,7 @@ using MPD.Electio.SDK.NetCore.Interfaces;
 using MPD.Electio.SDK.NetCore.Internal.Endpoints;
 using MPD.Electio.SDK.NetCore.Internal.Interfaces;
 using MPD.Electio.SDK.NetCore.Internal.Services;
+using Spa.StarterKit.React.Config;
 using StructureMap;
 using StructureMap.Pipeline;
 using ConsignmentService = MPD.Electio.SDK.NetCore.Services.v1_1.ConsignmentService;
@@ -39,7 +40,8 @@ namespace Spa.StarterKit.React.Ioc
                 config.For<ILogger>().Use<SdkReferenceLogger>().LifecycleIs<SingletonLifecycle>();
                 //For<Application>().Use<Application>().LifecycleIs<SingletonLifecycle>();
                 config.For<IConfiguration>().Use(ctx => configuration).LifecycleIs<SingletonLifecycle>();
-                config.For<IEndpoints>().Use<EndpointsFromConfiguration>().LifecycleIs<SingletonLifecycle>();
+                //config.For<IEndpoints>().Use<EndpointsFromConfiguration>().LifecycleIs<SingletonLifecycle>();
+                config.For<IEndpoints>().Use<Endpoints>().LifecycleIs<SingletonLifecycle>();
                 //config.For<IEndpoints>().Use(Production.Instance).LifecycleIs<SingletonLifecycle>();
                 config.For<IConsignmentService>().Use<ConsignmentService>().Ctor<string>("apiKey").Is(apiKey);
 
@@ -63,15 +65,19 @@ namespace Spa.StarterKit.React.Ioc
                 //add existing service collection
                 config.Populate(services);
             });
-
+            var ep = container.GetInstance<IEndpoints>();
+            var s = ep.Security;
             return container.GetInstance<IServiceProvider>();
         } 
 
         private static IConfiguration ConfigureElectioSettings()
         {
+            var environment = Environment.GetEnvironmentVariable("Environment");
+
             var builder = new ConfigurationBuilder();
             builder.SetBasePath(Directory.GetCurrentDirectory());
             builder.AddJsonFile("appsettings.json");
+            builder.AddJsonFile($"appsettings.{environment}.json", optional: true);
             return builder.Build();
         }
 

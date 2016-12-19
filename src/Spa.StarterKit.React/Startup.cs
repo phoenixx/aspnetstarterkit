@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -8,6 +9,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.SpaServices.Webpack;
+using Microsoft.CodeAnalysis.Semantics;
+using MPD.Electio.SDK.NetCore.Internal.Endpoints;
+using Spa.StarterKit.React.Config;
 using Spa.StarterKit.React.Ioc;
 
 namespace Spa.StarterKit.React
@@ -40,7 +44,10 @@ namespace Spa.StarterKit.React
             }).AddControllersAsServices();
             
             var sdkRegistry = new SdkRegistry();
-            return sdkRegistry.ConfigureSdkRegistry(services);
+            var configuredRegistry = sdkRegistry.ConfigureSdkRegistry(services);
+
+            return configuredRegistry;
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

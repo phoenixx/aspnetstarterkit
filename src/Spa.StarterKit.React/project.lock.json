@@ -11864,6 +11864,7 @@
       "MPD.Core.Infrastructure.NetCore >= 1.0.0",
       "MPD.Electio.SDK.NetCore >= 1.0.0",
       "MPD.Electio.SDK.NetCore.DataTypes >= 1.0.0",
+      "MPD.Electio.SDK.NetCore.Internal >= 1.0.0",
       "Microsoft.AspNetCore.Authentication.Cookies >= 1.1.0",
       "Microsoft.AspNetCore.Authorization >= 1.1.0",
       "Microsoft.AspNetCore.Diagnostics >= 1.1.0",

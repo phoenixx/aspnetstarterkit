@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.Authentication;
 using Microsoft.AspNetCore.Mvc;
+using MPD.Electio.SDK.NetCore.Internal.DataTypes.Security;
+using MPD.Electio.SDK.NetCore.Internal.Interfaces;
 using Spa.StarterKit.React.Models.Account;
 
 namespace Spa.StarterKit.React.Controllers
@@ -13,6 +15,13 @@ namespace Spa.StarterKit.React.Controllers
     [AllowAnonymous]
     public class AccountController : Controller
     {
+        private readonly IAuthenticationService _authenticationService;
+
+        public AccountController(IAuthenticationService authenticationService)
+        {
+            _authenticationService = authenticationService;
+        }
+
         [HttpGet]
         [Route("/Account/Login")]
         public IActionResult Index(string ReturnUrl = null)
@@ -40,6 +49,20 @@ namespace Spa.StarterKit.React.Controllers
                 ViewBag.Error = "Invalid username or password";
                 return View("~/Views/Account/Login.cshtml", model);
             }
+
+            var authDetails = _authenticationService.AuthenticateAccount(new AuthenticateAccountRequest()
+            {
+                EmailAddress = model.Email,
+                Password = model.Password
+            });
+
+            if (authDetails.IsAuthenticated == false)
+            {
+                ViewBag.HasError = true;
+                ViewBag.Error = "Invalid username or password";
+                return View("~/Views/Account/Login.cshtml", model);
+            }
+            
 
             const string issuer = "https://www.electioapp.com";
 

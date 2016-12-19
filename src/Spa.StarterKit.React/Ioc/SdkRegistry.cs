@@ -1,14 +1,22 @@
 ﻿using System;
 using System.IO;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using MPD.Core.Infrastructure.NetCore.Infrastructure.Api.Security.Internal;
+using MPD.Core.Infrastructure.NetCore.Infrastructure.Logging;
+using MPD.Core.Infrastructure.NetCore.Interfaces;
 using MPD.Electio.SDK.NetCore;
 using MPD.Electio.SDK.NetCore.Endpoints;
 using MPD.Electio.SDK.NetCore.Interfaces;
-using MPD.Electio.SDK.NetCore.Interfaces.v1_1.Services;
-using MPD.Electio.SDK.NetCore.Services.v1_1;
+using MPD.Electio.SDK.NetCore.Internal.Endpoints;
+using MPD.Electio.SDK.NetCore.Internal.Interfaces;
+using MPD.Electio.SDK.NetCore.Internal.Services;
 using StructureMap;
 using StructureMap.Pipeline;
+using ConsignmentService = MPD.Electio.SDK.NetCore.Services.v1_1.ConsignmentService;
+using IConsignmentService = MPD.Electio.SDK.NetCore.Interfaces.v1_1.Services.IConsignmentService;
+using ILogger = MPD.Electio.SDK.NetCore.Interfaces.ILogger;
 
 namespace Spa.StarterKit.React.Ioc
 {
@@ -22,18 +30,37 @@ namespace Spa.StarterKit.React.Ioc
 
             container.Configure(config =>
             {
-                config.Scan(_ =>
+                config.Scan(c =>
                 {
-                    _.AssemblyContainingType(typeof(Startup));
-                    _.WithDefaultConventions();
+                    c.AssemblyContainingType(typeof(Startup));
+                    c.WithDefaultConventions();
                 });
 
                 config.For<ILogger>().Use<SdkReferenceLogger>().LifecycleIs<SingletonLifecycle>();
                 //For<Application>().Use<Application>().LifecycleIs<SingletonLifecycle>();
                 config.For<IConfiguration>().Use(ctx => configuration).LifecycleIs<SingletonLifecycle>();
-                config.For<IEndpoints>().Use(Production.Instance).LifecycleIs<SingletonLifecycle>();
+                config.For<IEndpoints>().Use<EndpointsFromConfiguration>().LifecycleIs<SingletonLifecycle>();
+                //config.For<IEndpoints>().Use(Production.Instance).LifecycleIs<SingletonLifecycle>();
                 config.For<IConsignmentService>().Use<ConsignmentService>().Ctor<string>("apiKey").Is(apiKey);
 
+                config
+                    .For<IAuthenticationService>()
+                    .Use<AuthenticationService>()
+                    .LifecycleIs<TransientLifecycle>();
+
+                config
+                    .For<IInternalServiceTokenService>()
+                    .Use<InternalJwtTokenService>();
+
+                config
+                    .For<IInternalServiceTokenConfiguration>()
+                    .Use<InternalServiceTokenConfiguration>();
+
+                config
+                    .For<ISystemLogger>()
+                    .Use<NLogSystemLogger>();
+
+                //add existing service collection
                 config.Populate(services);
             });
 

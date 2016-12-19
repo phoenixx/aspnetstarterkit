@@ -51,10 +51,6 @@ namespace Spa.StarterKit.React.Services
             };
         }
 
-        public void Logout()
-        {
-            throw new NotImplementedException();
-        }
 
         private static IEnumerable<Permission> GetDistinctPermissions(AuthenticateAccountResponse authResponse)
         {

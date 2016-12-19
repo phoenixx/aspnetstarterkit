@@ -5,6 +5,5 @@ namespace Spa.StarterKit.React.Services.Interfaces
     public interface ILoginService
     {
         LoginResult Login(string email, string password);
-        void Logout();
     }
 }

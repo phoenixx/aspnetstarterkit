@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -29,10 +28,11 @@ using StructureMap.Pipeline;
 using ConsignmentService = MPD.Electio.SDK.NetCore.Services.v1_1.ConsignmentService;
 using IConsignmentService = MPD.Electio.SDK.NetCore.Interfaces.v1_1.Services.IConsignmentService;
 using ILogger = MPD.Electio.SDK.NetCore.Interfaces.ILogger;
+using System.Linq;
 
 namespace Spa.StarterKit.React.Ioc
 {
-    public class SdkRegistry 
+    public class SdkRegistry
     {
         public IServiceProvider ConfigureSdkRegistry(IServiceCollection services)
         {
@@ -40,7 +40,14 @@ namespace Spa.StarterKit.React.Ioc
             registry.IncludeRegistry<WebRegistry>();
             var container = new Container(registry);
             var configuration = ConfigureElectioSettings();
-            var apiKey = GetApiKey(configuration);
+
+            container.Configure(c =>
+            {
+                //want this first so it is available for subsequent registrations
+                //for getting current user, context etc
+                //see http://stackoverflow.com/questions/36641338/how-get-current-user-in-asp-net-core
+                c.For<IHttpContextAccessor>().Use<HttpContextAccessor>().LifecycleIs<SingletonLifecycle>();
+            });
 
             container.Configure(config =>
             {
@@ -68,34 +75,41 @@ namespace Spa.StarterKit.React.Ioc
                 //config.For<IEndpoints>().Use(Production.Instance).LifecycleIs<SingletonLifecycle>();
                 config.For<MPD.Electio.SDK.NetCore.Internal.Interfaces.IConsignmentService>()
                     .Use<MPD.Electio.SDK.NetCore.Internal.Services.ConsignmentService>()
-                    .Ctor<string>("apiKey").Is(apiKey);
+                    .Ctor<Func<string>>("apiKey").Is(() => ApiKey(container))
+                    .LifecycleIs<TransientLifecycle>();
                 config.For<IConsignmentAllocationService>()
                     .Use<ConsignmentAllocationService>()
-                    .Ctor<string>("apiKey").Is(apiKey);
+                    .Ctor<Func<string>>("apiKey").Is(() => ApiKey(container))
+                    .LifecycleIs<TransientLifecycle>();
                 config.For<MPD.Electio.SDK.NetCore.Interfaces.Services.IConsignmentAllocationService>()
                     .Use<MPD.Electio.SDK.NetCore.Services.ConsignmentAllocationService>()
-                    .Ctor<string>("apiKey").Is(apiKey);
+                    .Ctor<Func<string>>("apiKey").Is(() => ApiKey(container))
+                    .LifecycleIs<TransientLifecycle>();
                 config.For<IConsignmentService>()
                     .Use<ConsignmentService>()
-                    .Ctor<string>("apiKey").Is(apiKey);
+                    .Ctor<Func<string>>("apiKey").Is(() => ApiKey(container))
+                    .LifecycleIs<TransientLifecycle>();
                 config.For<IPackageSizeService>()
                     .Use<PackageSizeService>()
-                    .Ctor<string>("apiKey").Is(apiKey);
+                    .Ctor<Func<string>>("apiKey").Is(() => ApiKey(container))
+                    .LifecycleIs<TransientLifecycle>();
                 config.For<IPackagesService>()
                     .Use<PackagesService>()
-                    .Ctor<string>("apiKey").Is(apiKey);
+                    .Ctor<Func<string>>("apiKey").Is(() => ApiKey(container))
+                    .LifecycleIs<TransientLifecycle>();
                 config.For<IItemsService>()
                     .Use<ItemsService>()
-                    .Ctor<string>("apiKey").Is(apiKey);
+                    .Ctor<Func<string>>("apiKey").Is(() => ApiKey(container))
+                    .LifecycleIs<TransientLifecycle>();
                 config.For<IShippingLocationsService>()
                     .Use<ShippingLocationsServiceService>()
-                    .Ctor<string>("apiKey").Is(apiKey);
+                    .Ctor<Func<string>>("apiKey").Is(() => ApiKey(container))
+                    .LifecycleIs<TransientLifecycle>();
                 config.For<MPD.Electio.SDK.NetCore.Interfaces.Services.IShippingLocationsService>()
                     .Use<MPD.Electio.SDK.NetCore.Services.ShippingLocationsServiceService>()
-                    .Ctor<string>("apiKey").Is(apiKey);
-                //for getting current user, context etc
-                //see http://stackoverflow.com/questions/36641338/how-get-current-user-in-asp-net-core
-                config.For<IHttpContextAccessor>().Use<HttpContextAccessor>().LifecycleIs<SingletonLifecycle>();
+                    .Ctor<Func<string>>("apiKey").Is(() => ApiKey(container))
+                    .LifecycleIs<TransientLifecycle>();
+
 
                 config.For<AutoMapper.IMapper>()
                     .Use(() => ConfigureMappings.ConfigureMaps())
@@ -146,7 +160,7 @@ namespace Spa.StarterKit.React.Ioc
             });
 
             return container.GetInstance<IServiceProvider>();
-        } 
+        }
 
         private static IConfiguration ConfigureElectioSettings()
         {
@@ -163,6 +177,20 @@ namespace Spa.StarterKit.React.Ioc
         {
             var electioConfig = configuration.GetSection("Electio").GetSection("ApiKey");
             return electioConfig.Value;
+        }
+
+        private string ApiKey(IContainer container)
+        {
+            try
+            {
+                var contextAccessor = container.GetInstance<IHttpContextAccessor>();
+                var authToken = contextAccessor.HttpContext.User.Claims.FirstOrDefault(c => c.Type == "AuthToken");
+                return authToken == null ? "anonymous" : authToken.Value;
+            }
+            catch (Exception)
+            {
+                return "anonymous";
+            }
         }
     }
 }

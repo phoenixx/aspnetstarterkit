@@ -39,6 +39,7 @@ namespace Spa.StarterKit.React.Services
             var permissions = GetDistinctPermissions(authenticationResult);
             var claims = PermissionsToClaims(permissions);
             claims.AddRange(AddShippingLocations(authenticationResult));
+            claims.Add(new Claim("AuthToken", authenticationResult.AuthToken.ToString()));
             //claims = claims.Intersect(AddShippingLocations(authenticationResult)).ToList();
             
             var userIdentity = new ClaimsIdentity(claims, "Electio");

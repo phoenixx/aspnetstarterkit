@@ -1,6 +1,6 @@
 ﻿import React from 'react';
 import axios from 'axios';
-
+import Loading from '../components/Loading';
 
 class DashboardContainer extends React.Component {
     constructor(props) {
@@ -23,7 +23,13 @@ class DashboardContainer extends React.Component {
     }
     render() {
         return (
-            <div>{this.state.hasLoaded === true ? 'loaded' : 'not loaded'}</div>
+            this.state.hasLoaded === false ? (
+                <Loading />
+            )
+            :
+            (
+                <div>loaded</div>
+            )
         );
     }
 }

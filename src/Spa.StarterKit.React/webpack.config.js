@@ -30,8 +30,15 @@ var clientBundleConfig = merge(sharedConfig(), {
     module: {
         loaders: [
             { test: /\.css$/, loader: ExtractTextPlugin.extract(['css-loader']) },
-            { test: /\.(png|jpg|jpeg|gif|svg)$/, loader: 'url-loader', query: { limit: 25000 } }
+            { test: /\.(png|jpg|jpeg|gif|svg)$/, loader: 'url-loader', query: { limit: 25000 } },
+            {
+                test: /\.scss$/,
+                loaders: ['style-loader', 'css-loader', 'sass-loader']
+            }
         ]
+    },
+    sassLoader: {
+        includePaths: [path.resolve(__dirname, './sass')]
     },
     output: { path: path.join(__dirname, clientBundleOutputDir) },
     plugins: [

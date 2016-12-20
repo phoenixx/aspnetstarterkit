@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using MPD.Electio.SDK.NetCore.Internal.Mapping;
+using Spa.StarterKit.React.Config.Mapping.Profiles.ServiceInterfaceToViewModel;
 
 namespace Spa.StarterKit.React.Config.Mapping
 {
@@ -16,6 +17,7 @@ namespace Spa.StarterKit.React.Config.Mapping
 
             var mapperConfig = new MapperConfiguration(cfg =>
             {
+                cfg.AddProfile<ConsignmentsProfile>();
                 //cfg.AddProfile<SdkToCoreLibMaps>();
                 //cfg.AddProfile<CoreLibToSdkMaps>();
             });

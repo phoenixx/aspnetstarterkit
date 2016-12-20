@@ -37,16 +37,13 @@ namespace Spa.StarterKit.React.Controllers.Dashboard
 
             var shippingLocationWhiteList = User.Claims.Where(x => x.Type == "ShippingLocation").Select(x => new ShippingLocation()
             {
+                Name = x.Value,
                 Reference = x.Value
             }).ToList();
-            //var shippingLocationWhiteList = MpdAccount.GetAccount().ShippingLocationWhiteList;
+           
+            var dashboard = await _dashboardService.GetPreDespatchDashboard(from.Value, to.Value, shippingLocationWhiteList, shippingLocationReference);
 
-            //using (_profiler.Step("Loading dashboard data"))
-            //{
-                var dashboard = await _dashboardService.GetPreDespatchDashboard(from.Value, to.Value, shippingLocationWhiteList, shippingLocationReference);
-
-                return Json(dashboard);
-            //}
+            return Json(dashboard);
         }
     }
 }

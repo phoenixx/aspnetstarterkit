@@ -18,10 +18,12 @@ namespace Spa.StarterKit.React.Config.Mapping
             var mapperConfig = new MapperConfiguration(cfg =>
             {
                 cfg.AddProfile<ConsignmentsProfile>();
+                cfg.AddProfile<ServiceInterfaceToViewModelMaps>();
                 //cfg.AddProfile<SdkToCoreLibMaps>();
                 //cfg.AddProfile<CoreLibToSdkMaps>();
             });
-            mapperConfig.AssertConfigurationIsValid();
+#warning mapper config validation disabled...
+            //mapperConfig.AssertConfigurationIsValid();
             _mapper = mapperConfig.CreateMapper();
             return _mapper;
         }

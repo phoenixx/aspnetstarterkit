@@ -30,7 +30,7 @@ SiteHeader.propTypes = {
 
 SiteHeader.defaultProps = {
     title: 'Electio',
-    className: 'mdl-color--orange-900',
+    className: 'electio-color--red',
     style: {color: 'white'}
 }
 

@@ -1,4 +1,8 @@
-﻿.animation-loading > ul{
+﻿$red: #df3900;
+$grey: rgb(66,66,66);
+
+
+.animation-loading > ul{
 	height: 50%;
 	width: 100%;
 	display: block;
@@ -11,7 +15,7 @@
 	top: 50%;
 	display: block;
 	background: transparent;
-	border: 10px solid rgb(230,81,0);
+	border: 10px solid $red;
 	border-radius: 500px;
 	transition: all 0.5s ease;
 }
@@ -21,7 +25,7 @@
 	margin-top: -130px;
 	width: 240px;
 	height: 240px;
-	border-color: rgb(230,81,0);
+	border-color: $red;
 	border-left-color: transparent;
 	border-right-color: transparent;
 	animation: spin 12s infinite linear;
@@ -32,7 +36,7 @@
 	margin-top: -120px;
 	width: 220px;
 	height: 220px;
-	border-color: rgb(66,66,66);
+	border-color: $grey;
 	border-top-color: transparent;
 	border-right-color: transparent;
 	animation: spin2 12s infinite linear;
@@ -43,7 +47,7 @@
 	margin-top: -110px;
 	width: 200px;
 	height: 200px;
-	border-color: rgb(230,81,0);
+	border-color: $red;
 	border-left-color: transparent;
 	border-right-color: transparent;
 	animation: spin3 4s infinite linear;
@@ -54,7 +58,7 @@
 	margin-top: -80px;
 	width: 140px;
 	height: 140px;
-	border-color: rgb(66,66,66);
+	border-color: $grey;
 	border-left-color: transparent;
 	border-top-color: transparent;
 	animation: spin4 4s infinite linear;
@@ -65,7 +69,7 @@
 	margin-top: -70px;
 	width: 120px;
 	height: 120px;
-	border-color: rgb(230,81,0);
+	border-color: $red;
 	border-left-color: transparent;
 	border-right-color: transparent;
 	animation: spin5 4s infinite linear;
@@ -76,7 +80,7 @@
 	margin-top: -60px;
 	width: 100px;
 	height: 100px;
-	border-color: rgb(66,66,66);
+	border-color: $grey;
 	border-left-color: transparent;
 	border-right-color: transparent;
 	animation: spin6 4s infinite linear;
@@ -87,7 +91,7 @@
 	margin-top: -40px;
 	width: 60px;
 	height: 60px;
-	border-color: rgb(230,81,0);
+	border-color: $red;
 	border-left-color: transparent;
 	border-right-color: transparent;
 	border-top-color: transparent;
@@ -99,7 +103,7 @@
 	margin-top: -30px;
 	width: 40px;
 	height: 40px;
-	border-color: rgb(66,66,66);
+	border-color: $grey;
 	border-left-color: transparent;
 	border-right-color: transparent;
 	animation: spin8 2s infinite linear;

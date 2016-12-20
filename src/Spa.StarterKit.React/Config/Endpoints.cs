@@ -63,9 +63,31 @@ namespace Spa.StarterKit.React.Config
         public string RatesManagement => _endpoints["Endpoint_RatesManagement"];
         public string Address => _endpoints["Endpoint_Address"];
         public string ServiceAvailability => _endpoints["Endpoint_ServiceAvailability"];
-        public string Consignment => _endpoints["Endpoint_Consignment"];
-        public string ConsignmentCreation => _endpoints["Endpoint_ConsignmentCreation"];
-        public string ConsignmentUpdation => _endpoints["Endpoint_ConsignmentUpdation"];
+
+        public string Consignment
+        {
+            get
+            {
+                return _endpoints["Endpoint_Consignment"];
+            }
+        }
+
+        public string ConsignmentCreation
+        {
+            get
+            {
+                return _endpoints["Endpoint_ConsignmentCreation"];
+            }
+        }
+
+        public string ConsignmentUpdation
+        {
+            get
+            {
+                return _endpoints["Endpoint_ConsignmentUpdation"];
+            }
+        } 
+
         public string Quotes => _endpoints["Endpoint_Quotes"];
         public string ConsignmentAllocation => _endpoints["Endpoint_ConsignmentAllocation"];
         public string Packages => _endpoints["Endpoint_Packages"];

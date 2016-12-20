@@ -1,18 +1,29 @@
 ﻿using System;
 using System.IO;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using MPD.Core.Infrastructure.NetCore.Infrastructure.Api;
+using MPD.Core.Infrastructure.NetCore.Infrastructure.Api.Interfaces;
+using MPD.Core.Infrastructure.NetCore.Infrastructure.Api.Security;
+using MPD.Core.Infrastructure.NetCore.Infrastructure.Api.Security.Context;
 using MPD.Core.Infrastructure.NetCore.Infrastructure.Api.Security.Internal;
+using MPD.Core.Infrastructure.NetCore.Infrastructure.Api.Security.Nancy.v1_1;
+using MPD.Core.Infrastructure.NetCore.Infrastructure.Caching;
+using MPD.Core.Infrastructure.NetCore.Infrastructure.Caching.CacheProviders.Redis;
+using MPD.Core.Infrastructure.NetCore.Infrastructure.Caching.Managers;
+using MPD.Core.Infrastructure.NetCore.Infrastructure.Caching.Managers.Interfaces;
 using MPD.Core.Infrastructure.NetCore.Infrastructure.Logging;
 using MPD.Core.Infrastructure.NetCore.Interfaces;
 using MPD.Electio.SDK.NetCore;
-using MPD.Electio.SDK.NetCore.Endpoints;
 using MPD.Electio.SDK.NetCore.Interfaces;
-using MPD.Electio.SDK.NetCore.Internal.Endpoints;
+using MPD.Electio.SDK.NetCore.Interfaces.v1_1.Services;
 using MPD.Electio.SDK.NetCore.Internal.Interfaces;
 using MPD.Electio.SDK.NetCore.Internal.Services;
+using MPD.Electio.SDK.NetCore.Services.v1_1;
 using Spa.StarterKit.React.Config;
+using Spa.StarterKit.React.Config.Mapping;
 using StructureMap;
 using StructureMap.Pipeline;
 using ConsignmentService = MPD.Electio.SDK.NetCore.Services.v1_1.ConsignmentService;
@@ -40,12 +51,55 @@ namespace Spa.StarterKit.React.Ioc
                 });
 
                 config.For<ILogger>().Use<SdkReferenceLogger>().LifecycleIs<SingletonLifecycle>();
+                config.For<MPD.Core.Infrastructure.NetCore.Interfaces.ILogger>()
+                    .Use<MPD.Core.Infrastructure.NetCore.Infrastructure.Logging.NLogLogger>()
+                    .LifecycleIs<SingletonLifecycle>();
+                config.For<IUserMetadata>()
+                    .Use<UserMetadata>()
+                    .LifecycleIs<TransientLifecycle>();
+                config
+                    .For<IContextFactory<MPD.Core.Infrastructure.NetCore.Infrastructure.Api.Security.Context.IContext>>()
+                    .Use<RequestContextFactory>()
+                    .LifecycleIs<TransientLifecycle>();
                 //For<Application>().Use<Application>().LifecycleIs<SingletonLifecycle>();
                 config.For<IConfiguration>().Use(ctx => configuration).LifecycleIs<SingletonLifecycle>();
                 //config.For<IEndpoints>().Use<EndpointsFromConfiguration>().LifecycleIs<SingletonLifecycle>();
                 config.For<IEndpoints>().Use<Endpoints>().LifecycleIs<SingletonLifecycle>();
                 //config.For<IEndpoints>().Use(Production.Instance).LifecycleIs<SingletonLifecycle>();
-                config.For<IConsignmentService>().Use<ConsignmentService>().Ctor<string>("apiKey").Is(apiKey);
+                config.For<MPD.Electio.SDK.NetCore.Internal.Interfaces.IConsignmentService>()
+                    .Use<MPD.Electio.SDK.NetCore.Internal.Services.ConsignmentService>()
+                    .Ctor<string>("apiKey").Is(apiKey);
+                config.For<IConsignmentAllocationService>()
+                    .Use<ConsignmentAllocationService>()
+                    .Ctor<string>("apiKey").Is(apiKey);
+                config.For<MPD.Electio.SDK.NetCore.Interfaces.Services.IConsignmentAllocationService>()
+                    .Use<MPD.Electio.SDK.NetCore.Services.ConsignmentAllocationService>()
+                    .Ctor<string>("apiKey").Is(apiKey);
+                config.For<IConsignmentService>()
+                    .Use<ConsignmentService>()
+                    .Ctor<string>("apiKey").Is(apiKey);
+                config.For<IPackageSizeService>()
+                    .Use<PackageSizeService>()
+                    .Ctor<string>("apiKey").Is(apiKey);
+                config.For<IPackagesService>()
+                    .Use<PackagesService>()
+                    .Ctor<string>("apiKey").Is(apiKey);
+                config.For<IItemsService>()
+                    .Use<ItemsService>()
+                    .Ctor<string>("apiKey").Is(apiKey);
+                config.For<IShippingLocationsService>()
+                    .Use<ShippingLocationsServiceService>()
+                    .Ctor<string>("apiKey").Is(apiKey);
+                config.For<MPD.Electio.SDK.NetCore.Interfaces.Services.IShippingLocationsService>()
+                    .Use<MPD.Electio.SDK.NetCore.Services.ShippingLocationsServiceService>()
+                    .Ctor<string>("apiKey").Is(apiKey);
+                //for getting current user, context etc
+                //see http://stackoverflow.com/questions/36641338/how-get-current-user-in-asp-net-core
+                config.For<IHttpContextAccessor>().Use<HttpContextAccessor>().LifecycleIs<SingletonLifecycle>();
+
+                config.For<AutoMapper.IMapper>()
+                    .Use(() => ConfigureMappings.ConfigureMaps())
+                    .LifecycleIs<SingletonLifecycle>();
 
                 config
                     .For<IAuthenticationService>()
@@ -64,6 +118,29 @@ namespace Spa.StarterKit.React.Ioc
                     .For<ISystemLogger>()
                     .Use<NLogSystemLogger>();
 
+                config
+                    .For<IMpdStatelessAuthentication>()
+                    .Use<MpdStatelessAuthentication>()
+                    .LifecycleIs<TransientLifecycle>();
+
+                config
+                    .For<MPD.Core.Infrastructure.NetCore.Infrastructure.Api.Security.Nancy.IMpdStatelessAuthentication>()
+                    .Use<MPD.Core.Infrastructure.NetCore.Infrastructure.Api.Security.Nancy.MpdStatelessAuthentication>()
+                    .LifecycleIs<TransientLifecycle>();
+
+                config
+                    .For<ISecurityTokenCacheManager>()
+                    .Use<SecurityTokenCacheManager>()
+                    .LifecycleIs<TransientLifecycle>();
+
+                config
+                    .For<ICacheProvider>()
+                    .Use(new RedisCacheProvider(RedisCacheConnector.Connection, new NLogSystemLogger()));
+
+                config
+                    .For<IMpdSecurityConfigSettings>()
+                    .Use<MpdSecurityConfigSettings>()
+                    .LifecycleIs<SingletonLifecycle>();
                 //add existing service collection
                 config.Populate(services);
             });

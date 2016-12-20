@@ -1781,13 +1781,13 @@
           }
         }
       },
-      "MPD.Core.Infrastructure.NetCore/1.0.0": {
+      "MPD.Core.Infrastructure.NetCore/1.1.0": {
         "type": "package",
         "dependencies": {
           "DogStatsD-CSharp-Client-Core": "1.0.0",
-          "MPD.Electio.SDK.NetCore": "1.0.0",
-          "MPD.Electio.SDK.NetCore.DataTypes": "1.0.0",
-          "MPD.Electio.SDK.NetCore.Internal": "1.0.0",
+          "MPD.Electio.SDK.NetCore": "1.1.0",
+          "MPD.Electio.SDK.NetCore.DataTypes": "1.1.0",
+          "MPD.Electio.SDK.NetCore.Internal": "1.1.0",
           "Microsoft.Extensions.Caching.Memory": "1.1.0",
           "Microsoft.IdentityModel.Tokens": "5.0.0",
           "NETStandard.Library": "1.6.1",
@@ -1806,14 +1806,14 @@
           "lib/netstandard1.6/MPD.Core.Infrastructure.NetCore.dll": {}
         }
       },
-      "MPD.Electio.SDK.NetCore/1.0.0": {
+      "MPD.Electio.SDK.NetCore/1.1.0": {
         "type": "package",
         "dependencies": {
-          "MPD.Electio.SDK.NetCore.DataTypes": "1.0.0",
-          "NETStandard.Library": "1.6.0",
+          "MPD.Electio.SDK.NetCore.DataTypes": "1.1.0",
+          "NETStandard.Library": "1.6.1",
           "Newtonsoft.Json": "9.0.2-beta1",
           "OctoPack": "3.4.6",
-          "System.Linq": "4.1.0"
+          "System.Linq": "4.3.0"
         },
         "compile": {
           "lib/netstandard1.6/MPD.Electio.SDK.NetCore.dll": {}
@@ -1822,18 +1822,18 @@
           "lib/netstandard1.6/MPD.Electio.SDK.NetCore.dll": {}
         }
       },
-      "MPD.Electio.SDK.NetCore.DataTypes/1.0.0": {
+      "MPD.Electio.SDK.NetCore.DataTypes/1.1.0": {
         "type": "package",
         "dependencies": {
-          "NETStandard.Library": "1.6.0",
+          "NETStandard.Library": "1.6.1",
           "Newtonsoft.Json": "9.0.2-beta1",
           "OctoPack": "3.4.6",
-          "System.Collections.Specialized": "4.0.1",
-          "System.ComponentModel.Annotations": "4.1.0",
-          "System.ComponentModel.Primitives": "4.1.0",
-          "System.Private.DataContractSerialization": "4.1.1",
-          "System.Runtime.Serialization.Primitives": "4.1.1",
-          "System.Runtime.Serialization.Xml": "4.1.1"
+          "System.Collections.Specialized": "4.3.0",
+          "System.ComponentModel.Annotations": "4.3.0",
+          "System.ComponentModel.Primitives": "4.3.0",
+          "System.Private.DataContractSerialization": "4.3.0",
+          "System.Runtime.Serialization.Primitives": "4.3.0",
+          "System.Runtime.Serialization.Xml": "4.3.0"
         },
         "compile": {
           "lib/netstandard1.6/MPD.Electio.SDK.NetCore.DataTypes.dll": {}
@@ -1842,15 +1842,15 @@
           "lib/netstandard1.6/MPD.Electio.SDK.NetCore.DataTypes.dll": {}
         }
       },
-      "MPD.Electio.SDK.NetCore.Internal/1.0.0": {
+      "MPD.Electio.SDK.NetCore.Internal/1.1.0": {
         "type": "package",
         "dependencies": {
           "AutoMapper": "5.2.0",
           "Dapper": "1.50.2",
           "FastMember": "1.1.0",
           "FluentValidation": "6.4.0-beta9",
-          "MPD.Electio.SDK.NetCore": "1.0.0",
-          "MPD.Electio.SDK.NetCore.DataTypes": "1.0.0",
+          "MPD.Electio.SDK.NetCore": "1.1.0",
+          "MPD.Electio.SDK.NetCore.DataTypes": "1.1.0",
           "Microsoft.Extensions.Configuration": "1.1.0",
           "Microsoft.Extensions.Configuration.Abstractions": "1.1.0",
           "Microsoft.Extensions.Configuration.FileExtensions": "1.0.0",
@@ -6264,42 +6264,42 @@
         "runtimes/win/lib/netstandard1.3/Microsoft.Win32.Registry.dll"
       ]
     },
-    "MPD.Core.Infrastructure.NetCore/1.0.0": {
-      "sha512": "yqV12jaYzCoiiK72Rb8j2m3R8UqGO8NllTWEPh4B7FHcy3Ejs+/VW28MQTsS5CDrzuvZ/5ZtDYlbk8gcZ0k+aw==",
+    "MPD.Core.Infrastructure.NetCore/1.1.0": {
+      "sha512": "Z9oB+YRGxsA0B7ktuqSfwGMta5bEuEZHEDfUszts0i5R9324HC97oL6PHjkEQI/K8Qq4gnajIZvdy2BOZ34iag==",
       "type": "package",
-      "path": "MPD.Core.Infrastructure.NetCore/1.0.0",
+      "path": "MPD.Core.Infrastructure.NetCore/1.1.0",
       "files": [
-        "MPD.Core.Infrastructure.NetCore.1.0.0.nupkg.sha512",
+        "MPD.Core.Infrastructure.NetCore.1.1.0.nupkg.sha512",
         "MPD.Core.Infrastructure.NetCore.nuspec",
         "lib/netstandard1.6/MPD.Core.Infrastructure.NetCore.dll"
       ]
     },
-    "MPD.Electio.SDK.NetCore/1.0.0": {
-      "sha512": "usD7Y8GgmLp6csWfK8YsTluZrd1bcbDCrKcdwHoO9epLAp6PqHr+xAUidyPMOMuaWMWfkIbJ7VyQNd/LMnafQA==",
+    "MPD.Electio.SDK.NetCore/1.1.0": {
+      "sha512": "bgu2agbAPBTwIPKRrfssqOAIIuA4SUP6zxVM+QQNV6nNRUManIMEeAWdLIc94xqIpo++gwslD0LX4gY0M9ZX9w==",
       "type": "package",
-      "path": "MPD.Electio.SDK.NetCore/1.0.0",
+      "path": "MPD.Electio.SDK.NetCore/1.1.0",
       "files": [
-        "MPD.Electio.SDK.NetCore.1.0.0.nupkg.sha512",
+        "MPD.Electio.SDK.NetCore.1.1.0.nupkg.sha512",
         "MPD.Electio.SDK.NetCore.nuspec",
         "lib/netstandard1.6/MPD.Electio.SDK.NetCore.dll"
       ]
     },
-    "MPD.Electio.SDK.NetCore.DataTypes/1.0.0": {
-      "sha512": "6rq+AUj0pbrCpNH6AXynlzoyHUw3LilkmlxHGl6Sd8LlcIzRw4xT8mnqT7YgdB0ZdoS0XpiMgEYc9VhtLLw2Iw==",
+    "MPD.Electio.SDK.NetCore.DataTypes/1.1.0": {
+      "sha512": "agi/7Libwfctux/lr6Po7cbKjs+SP5k/NGCWVmuYV5lbm3YcyItm5AdRgMpCRwOg73Zxf/j7DtbSlAJ/Ld3pYA==",
       "type": "package",
-      "path": "MPD.Electio.SDK.NetCore.DataTypes/1.0.0",
+      "path": "MPD.Electio.SDK.NetCore.DataTypes/1.1.0",
       "files": [
-        "MPD.Electio.SDK.NetCore.DataTypes.1.0.0.nupkg.sha512",
+        "MPD.Electio.SDK.NetCore.DataTypes.1.1.0.nupkg.sha512",
         "MPD.Electio.SDK.NetCore.DataTypes.nuspec",
         "lib/netstandard1.6/MPD.Electio.SDK.NetCore.DataTypes.dll"
       ]
     },
-    "MPD.Electio.SDK.NetCore.Internal/1.0.0": {
-      "sha512": "dzt0VWZ5gwhJTSqkFzkJDnBAVwBXDHs1X7pjX4+bwf3ubZ6BxhWpzTHLAd1a/rtUESBQsxnbOg7ZGUmrXD3ZAA==",
+    "MPD.Electio.SDK.NetCore.Internal/1.1.0": {
+      "sha512": "BEDlCaoQKi1AYjBRuBpPav+P8GAPoInd1zpRB+bW6CB89umRALR5qiHAc7mnkO56/JkEZHH0J2MR7q0eacXHqA==",
       "type": "package",
-      "path": "MPD.Electio.SDK.NetCore.Internal/1.0.0",
+      "path": "MPD.Electio.SDK.NetCore.Internal/1.1.0",
       "files": [
-        "MPD.Electio.SDK.NetCore.Internal.1.0.0.nupkg.sha512",
+        "MPD.Electio.SDK.NetCore.Internal.1.1.0.nupkg.sha512",
         "MPD.Electio.SDK.NetCore.Internal.nuspec",
         "lib/netstandard1.6/MPD.Electio.SDK.NetCore.Internal.dll"
       ]
@@ -11861,10 +11861,10 @@
   },
   "projectFileDependencyGroups": {
     "": [
-      "MPD.Core.Infrastructure.NetCore >= 1.0.0",
-      "MPD.Electio.SDK.NetCore >= 1.0.0",
-      "MPD.Electio.SDK.NetCore.DataTypes >= 1.0.0",
-      "MPD.Electio.SDK.NetCore.Internal >= 1.0.0",
+      "MPD.Core.Infrastructure.NetCore >= 1.1.0",
+      "MPD.Electio.SDK.NetCore >= 1.1.0",
+      "MPD.Electio.SDK.NetCore.DataTypes >= 1.1.0",
+      "MPD.Electio.SDK.NetCore.Internal >= 1.1.0",
       "Microsoft.AspNetCore.Authentication.Cookies >= 1.1.0",
       "Microsoft.AspNetCore.Authorization >= 1.1.0",
       "Microsoft.AspNetCore.Diagnostics >= 1.1.0",

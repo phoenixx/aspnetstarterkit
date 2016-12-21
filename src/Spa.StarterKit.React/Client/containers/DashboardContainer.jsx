@@ -60,17 +60,17 @@ class DashboardContainer extends React.Component {
                     </Tabs>
                     {this.state.activeTab === 0 ? (
                     <Grid>
-                        <Cell col={6}>
+                        <Cell col={6} tablet={12} phone={12}>
                             <Card shadow={0} style={{width: '100%' , height: '320px', padding: '20px'}}>
                               <Line data={this.state.preDespatchOverview} height={100} options={{maintainAspectRatio: false}} />
                             </Card>
                             </Cell>
-                            <Cell col={6}>
+                            <Cell col={6} tablet={12} phone={12}>
                                 <Card shadow={0} style={{width: '100%' , height: '320px', padding: '20px'}}>
                                                             <HorizontalBar data={this.state.allocatedCarriers} options={{maintainAspectRatio: false}} />
                             </Card>
                             </Cell>
-                            <Cell col={12}>
+                            <Cell col={12} phone={12}>
                                 <Card shadow={0} style={{width: '100%' , height: '320px', padding: '20px'}}>
                                                             <HorizontalBar data={this.state.allocatedCarrierServices} height={100} options={{maintainAspectRatio: false}} />
                             </Card>

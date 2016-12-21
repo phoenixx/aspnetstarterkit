@@ -8,3 +8,7 @@ $light-grey: #ddd;
 .electio-color--red {
     background-color: $electio-red;
 }
+
+.mdl-tabs.is-upgraded .mdl-tabs__tab.is-active:after  {
+    background: $electio-red;
+}

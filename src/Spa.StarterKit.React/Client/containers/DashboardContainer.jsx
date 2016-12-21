@@ -17,6 +17,7 @@ import {
 import Loading from '../components/Loading';
 import {Doughnut, HorizontalBar, Line, Polar, Bar, Pie} from 'react-chartjs-2';
 import '../sass/dashboard.scss';
+import Utils from '../utilities/utils';
 
 class DashboardContainer extends React.Component {
     constructor(props) {
@@ -29,20 +30,30 @@ class DashboardContainer extends React.Component {
             data: null,
             preDespatchOverview: null,
             allocatedCarriers: null,
-            allocatedCarrierServices: null
-        }
+            allocatedCarrierServices: null,
+            unallocatedRadial: null,
+            allocationFailedRadial: null,
+            manifestFailedRadial: null
+    }
     }
     componentDidMount() {
         getDashboardData().then((data) => {
             const overview = transformPreDespatchOverview(data.data);
             const allocatedCarriers = transformAllocatedCarriers(data.data);
             const allocatedCarrierServices = transformAllocatedCarrierServices(data.data);
+            const unallocatedRadial = transformRadial(data.data.issuesRadialCharts, 'Unallocated');
+            const allocationFailed = transformRadial(data.data.issuesRadialCharts, 'Allocation Failed');
+            const manifestFailed = transformRadial(data.data.issuesRadialCharts, 'Manifest Failed');
+
             this.setState({
                 data: data.data,
                 hasLoaded: true,
                 preDespatchOverview: overview,
                 allocatedCarriers: allocatedCarriers,
-                allocatedCarrierServices: allocatedCarrierServices
+                allocatedCarrierServices: allocatedCarrierServices,
+                unallocatedRadial: unallocatedRadial,
+                allocationFailedRadial: allocationFailed,
+                manifestFailedRadial: manifestFailed
             });
         });
     }
@@ -55,11 +66,26 @@ class DashboardContainer extends React.Component {
             (
                 <div>
                     <Tabs activeTab={this.state.activeTab} onChange={(tabId) => this.setState({ activeTab: tabId })} ripple>
-                        <Tab>Pre-Despatch</Tab>
-                        <Tab>Post-Despatch</Tab>
+                        <Tab>Not Shipped</Tab>
+                        <Tab>Shipped</Tab>
                     </Tabs>
                     {this.state.activeTab === 0 ? (
                     <Grid>
+                        <Cell col={4} tablet={12} phone={12}>
+                            <Card shadow={0} style={{width: '100%' , height: '200px', padding: '20px'}}>
+                              <Doughnut data={this.state.unallocatedRadial} height={100} options={{maintainAspectRatio: false}} />
+                            </Card>
+                        </Cell>
+                        <Cell col={4} tablet={12} phone={12}>
+                            <Card shadow={0} style={{width: '100%' , height: '200px', padding: '20px'}}>
+                              <Doughnut data={this.state.allocationFailedRadial} height={100} options={{maintainAspectRatio: false}} />
+                            </Card>
+                        </Cell>
+                        <Cell col={4} tablet={12} phone={12}>
+                            <Card shadow={0} style={{width: '100%' , height: '200px', padding: '20px'}}>
+                              <Doughnut data={this.state.manifestFailedRadial} height={100} options={{maintainAspectRatio: false}} />
+                            </Card>
+                        </Cell>
                         <Cell col={6} tablet={12} phone={12}>
                             <Card shadow={0} style={{width: '100%' , height: '320px', padding: '20px'}}>
                               <Line data={this.state.preDespatchOverview} height={100} options={{maintainAspectRatio: false}} />
@@ -109,19 +135,20 @@ function transformPreDespatchOverview(inputData) {
           {
               label: 'Status',
               fill: true,
-              lineTension: 0.5,
-              backgroundColor: 'rgba(75,192,192,0.4)',
-              borderColor: 'rgba(75,192,192,1)',
+              borderWidth: 0.8,
+              lineTension: 0.3,
+              backgroundColor: Utils.colors.charts.blue_fade,
+              borderColor: Utils.colors.charts.blue,
               borderCapStyle: 'butt',
               borderDash: [],
               borderDashOffset: 0.0,
               borderJoinStyle: 'miter',
-              pointBorderColor: 'rgba(75,192,192,1)',
+              pointBorderColor: Utils.colors.charts.blue,
               pointBackgroundColor: '#fff',
               pointBorderWidth: 1,
               pointHoverRadius: 5,
-              pointHoverBackgroundColor: 'rgba(75,192,192,1)',
-              pointHoverBorderColor: 'rgba(220,220,220,1)',
+              pointHoverBackgroundColor: Utils.colors.charts.blue,
+              pointHoverBorderColor: Utils.colors.charts.blue,
               pointHoverBorderWidth: 2,
               pointRadius: 6,
               pointHitRadius: 40,
@@ -148,11 +175,11 @@ function transformAllocatedCarriers(inputData) {
         [
             {
                 label: 'Allocated Carriers',
-                backgroundColor: 'rgba(255,99,132,0.2)',
-                borderColor: 'rgba(255,99,132,1)',
+                backgroundColor: Utils.colors.charts.blue,
+                borderColor: Utils.colors.charts.blue,
                 borderWidth: 1,
-                hoverBackgroundColor: 'rgba(255,99,132,0.4)',
-                hoverBorderColor: 'rgba(255,99,132,1)',
+                hoverBackgroundColor: Utils.colors.charts.blue_fade,
+                hoverBorderColor: Utils.colors.charts.blue,
                 data: data
             }
         ]
@@ -177,11 +204,11 @@ function transformAllocatedCarrierServices(inputData) {
         [
             {
                 label: 'Allocated Carrier Services',
-                backgroundColor: 'rgba(255,99,132,0.2)',
-                borderColor: 'rgba(255,99,132,1)',
+                backgroundColor: Utils.colors.charts.blue,
+                borderColor: Utils.colors.charts.blue,
                 borderWidth: 1,
-                hoverBackgroundColor: 'rgba(255,99,132,0.4)',
-                hoverBorderColor: 'rgba(255,99,132,1)',
+                hoverBackgroundColor: Utils.colors.charts.blue_fade,
+                hoverBorderColor: Utils.colors.charts.blue,
                 data: data
             }
         ]
@@ -190,5 +217,39 @@ function transformAllocatedCarrierServices(inputData) {
     return allocatedCarrierServicesBarData;
 
 }
+let transformRadial = (source, label) => {
+    //const source = inputData.issuesRadialCharts;
+    const radialSource = source.filter((r) => {
+        return r.label === label;
+    });
+    var labels = [label, 'Others'];
+    var data = [];
+    data.push(radialSource[0].numerator);
+    data.push(radialSource[0].denominator - radialSource[0].numerator);
+    
+    const unallocatedRadial = {
+        labels: labels,
+        datasets:
+        [
+            {
+                label: label,
+                backgroundColor: data[0] > 0 
+                    ? [Utils.colors.charts.red, Utils.colors.charts.grey]
+                    : [Utils.colors.charts.green, Utils.colors.charts.green ],
+                borderColor: '#FFF',
+                borderWidth: 1,
+                hoverBackgroundColor: [Utils.colors.charts.red_dark, Utils.colors.charts.grey_dark],
+                hoverBorderColor: Utils.colors.charts.red_dark,
+                data: data
+                
+            }
+        ],
+        cutoutPercentage: 90
+    };
+    return unallocatedRadial;
+}
+//function transformUnallocatedRadial(inputData) {
+    
+//}
 
 export default DashboardContainer;

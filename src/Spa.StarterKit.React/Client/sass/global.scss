@@ -12,3 +12,7 @@ $light-grey: #ddd;
 .mdl-tabs.is-upgraded .mdl-tabs__tab.is-active:after  {
     background: $electio-red;
 }
+
+.mdl-textfield__label:after {
+    background: $electio-red;
+}

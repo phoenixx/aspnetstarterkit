@@ -17,12 +17,26 @@
         .logo > img {
             width: 150px;
         }
-         .mdl-card--full-width {
-             width: 100%;
-         }
-          .form-field-container {
-              width: 100%;
-          }
+        .mdl-card--full-width {
+            width: 100%;
+        }
+        .form-field-container {
+            width: 100%;
+        }
+        .mdl-textfield__label:after {
+            background: #df3900 !important;
+        }
+        .mdl-textfield__label {
+            color: #df3900 !important;
+        }
+        .mdl-button.mdl-button--electioaccent {
+            color: #df3900;
+        }
+        .mdl-button.mdl-button--electioaccent:hover {
+            background-color: #df3900;
+            color: #fff;
+        }
+        
     </style>
 }
 
@@ -58,7 +72,7 @@
                     @Html.HiddenFor(m => m.ReturnUrl)
                 </div>
                 <div class="mdl-card__actions mdl-card--border">
-                    <input type="submit" value="Login" class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect"/>
+                    <input type="submit" value="Login" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--electioaccent"/>
                 </div>
                 <div class="mdl-card__menu">
                     <button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect">

@@ -10,7 +10,9 @@
             grey: 'rgba(225,225,225, 1)',
             red_dark: 'rgba(150, 0, 0, 1)',
             grey_dark: 'rgba(63, 63, 63, 1)',
-            green: 'rgba(77,175,124, 1)'
+            green: 'rgba(77,175,124, 1)',
+            white: 'rgba(255,255,255,1)',
+            none: 'rgba(0,0,0,0)'
         }
     }
 }

@@ -73,33 +73,33 @@ class DashboardContainer extends React.Component {
                     <Grid>
                         <Cell col={4} tablet={12} phone={12}>
                             <Card shadow={0} style={{width: '100%' , height: '200px', padding: '20px'}}>
-                              <Doughnut data={this.state.unallocatedRadial} height={100} options={{maintainAspectRatio: false}} />
+                              <Doughnut data={this.state.unallocatedRadial} height={100} options={{maintainAspectRatio: false, cutoutPercentage: 80, legend: {display: false}, tooltips: {enabled: false}}} />
                             </Card>
                         </Cell>
                         <Cell col={4} tablet={12} phone={12}>
                             <Card shadow={0} style={{width: '100%' , height: '200px', padding: '20px'}}>
-                              <Doughnut data={this.state.allocationFailedRadial} height={100} options={{maintainAspectRatio: false}} />
+                              <Doughnut data={this.state.allocationFailedRadial} height={100} options={{maintainAspectRatio: false, cutoutPercentage: 80, legend: {display: false}, tooltips: {enabled: false}}} />
                             </Card>
                         </Cell>
                         <Cell col={4} tablet={12} phone={12}>
                             <Card shadow={0} style={{width: '100%' , height: '200px', padding: '20px'}}>
-                              <Doughnut data={this.state.manifestFailedRadial} height={100} options={{maintainAspectRatio: false}} />
+                              <Doughnut data={this.state.manifestFailedRadial} height={100} options={{maintainAspectRatio: false, cutoutPercentage: 80, legend: {display: false}, tooltips: {enabled: false}}} />
                             </Card>
                         </Cell>
                         <Cell col={6} tablet={12} phone={12}>
                             <Card shadow={0} style={{width: '100%' , height: '320px', padding: '20px'}}>
-                              <Line data={this.state.preDespatchOverview} height={100} options={{maintainAspectRatio: false}} />
+                              <Line data={this.state.preDespatchOverview} height={100} options={{maintainAspectRatio: false, legend: {display: false}}} />
                             </Card>
                             </Cell>
                             <Cell col={6} tablet={12} phone={12}>
                                 <Card shadow={0} style={{width: '100%' , height: '320px', padding: '20px'}}>
-                                                            <HorizontalBar data={this.state.allocatedCarriers} options={{maintainAspectRatio: false}} />
+                                                            <HorizontalBar data={this.state.allocatedCarriers} options={{maintainAspectRatio: false, legend: {display: false}}} />
                             </Card>
                             </Cell>
                             <Cell col={12} phone={12}>
                                 <Card shadow={0} style={{width: '100%' , height: '320px', padding: '20px'}}>
-                                                            <HorizontalBar data={this.state.allocatedCarrierServices} height={100} options={{maintainAspectRatio: false}} />
-                            </Card>
+                                    <HorizontalBar data={this.state.allocatedCarrierServices} height={100} options={{maintainAspectRatio: false, legend: {display: false}}} />
+                                </Card>
                             </Cell>
                         </Grid>
                     ) : (
@@ -226,20 +226,24 @@ let transformRadial = (source, label) => {
     var data = [];
     data.push(radialSource[0].numerator);
     data.push(radialSource[0].denominator - radialSource[0].numerator);
-    
+
+    const hasData = data[0] > 0;
+
     const unallocatedRadial = {
         labels: labels,
         datasets:
         [
             {
                 label: label,
-                backgroundColor: data[0] > 0 
+                backgroundColor: hasData 
                     ? [Utils.colors.charts.red, Utils.colors.charts.grey]
                     : [Utils.colors.charts.green, Utils.colors.charts.green ],
-                borderColor: '#FFF',
+                borderColor: Utils.colors.charts.none,
                 borderWidth: 1,
-                hoverBackgroundColor: [Utils.colors.charts.red_dark, Utils.colors.charts.grey_dark],
-                hoverBorderColor: Utils.colors.charts.red_dark,
+                hoverBackgroundColor: hasData 
+                    ? [Utils.colors.charts.red_dark, Utils.colors.charts.grey]
+                    : [Utils.colors.charts.green, Utils.colors.charts.green],
+                hoverBorderColor: hasData ? Utils.colors.charts.none : Utils.colors.charts.green,
                 data: data
                 
             }

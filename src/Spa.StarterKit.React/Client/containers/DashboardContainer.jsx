@@ -1,19 +1,15 @@
 ﻿import React from 'react';
 import axios from 'axios';
 import {
-    Layout,
-    Header,
-    HeaderRow,
-    Navigation,
-    Drawer,
+    Button,
     Content,
     Grid,
     Cell,
     Card,
-    Footer,
-    FooterSection,
-    FooterDropDownSection,
-    FooterLinkList, Tabs, Tab } from 'react-mdl';
+    CardTitle,
+    CardActions,
+    Tabs,
+    Tab } from 'react-mdl';
 import Loading from '../components/Loading';
 import {Doughnut, HorizontalBar, Line, Polar, Bar, Pie} from 'react-chartjs-2';
 import '../sass/dashboard.scss';
@@ -34,7 +30,7 @@ class DashboardContainer extends React.Component {
             unallocatedRadial: null,
             allocationFailedRadial: null,
             manifestFailedRadial: null
-    }
+        }
     }
     componentDidMount() {
         getDashboardData().then((data) => {
@@ -72,40 +68,61 @@ class DashboardContainer extends React.Component {
                     {this.state.activeTab === 0 ? (
                     <Grid>
                         <Cell col={4} tablet={12} phone={12}>
-                            <Card shadow={0} style={{width: '100%' , height: '200px', padding: '20px'}}>
-                              <Doughnut data={this.state.unallocatedRadial} height={100} options={{maintainAspectRatio: false, cutoutPercentage: 80, legend: {display: false}, tooltips: {enabled: false}}} />
+                            <Card shadow={0} style={{width: '100%' , height: '280px', padding: '20px 20px 10px 20px'}}>
+                                <CardTitle style={{color: Utils.colors.black, height: '40px', textAlign: 'center'}} className='mdl-card__title--center'>Unallocated</CardTitle>
+                                <span className="radial-number">60</span>
+                                <Doughnut data={this.state.unallocatedRadial} height={115} options={{cutoutPercentage: 80, legend: {display: false}, tooltips: {enabled: false}}} />
+                                <CardActions style={{textAlign: 'center'}}>
+                                    <Button raised className="mdl-button--dark-red">
+                                        resolve
+                                    </Button>
+                                </CardActions>
                             </Card>
                         </Cell>
                         <Cell col={4} tablet={12} phone={12}>
-                            <Card shadow={0} style={{width: '100%' , height: '200px', padding: '20px'}}>
-                              <Doughnut data={this.state.allocationFailedRadial} height={100} options={{maintainAspectRatio: false, cutoutPercentage: 80, legend: {display: false}, tooltips: {enabled: false}}} />
+                            <Card shadow={0} style={{width: '100%' , height: '280px', padding: '20px 20px 10px 20px'}}>
+                                <CardTitle style={{color: Utils.colors.black, height: '40px', textAlign: 'center'}} className='mdl-card__title--center'>Allocation Failed</CardTitle>
+                                <span className="radial-number">60</span>
+                                <Doughnut data={this.state.allocationFailedRadial} height={115} options={{cutoutPercentage: 80, legend: {display: false}, tooltips: {enabled: false}}} />
+                                <CardActions style={{textAlign: 'center'}}>
+                                    <Button raised className="mdl-button--dark-red">
+                                        resolve
+                                    </Button>
+                                </CardActions>
                             </Card>
                         </Cell>
                         <Cell col={4} tablet={12} phone={12}>
-                            <Card shadow={0} style={{width: '100%' , height: '200px', padding: '20px'}}>
-                              <Doughnut data={this.state.manifestFailedRadial} height={100} options={{maintainAspectRatio: false, cutoutPercentage: 80, legend: {display: false}, tooltips: {enabled: false}}} />
+                            <Card shadow={0} style={{width: '100%' , height: '280px', padding: '20px 20px 10px 20px'}}>
+                                <CardTitle style={{color: Utils.colors.black, height: '40px', textAlign: 'center'}} className='mdl-card__title--center'>Manifest Failed</CardTitle>
+                                <span className="radial-number">0</span>
+                                <Doughnut data={this.state.manifestFailedRadial} height={115} options={{cutoutPercentage: 80, legend: {display: false}, tooltips: {enabled: false}}} />
+                                <CardActions style={{textAlign: 'center'}}>
+                                    <Button raised disabled>
+                                        resolve
+                                    </Button>
+                                </CardActions>
                             </Card>
                         </Cell>
                         <Cell col={6} tablet={12} phone={12}>
                             <Card shadow={0} style={{width: '100%' , height: '320px', padding: '20px'}}>
                               <Line data={this.state.preDespatchOverview} height={100} options={{maintainAspectRatio: false, legend: {display: false}}} />
                             </Card>
-                            </Cell>
+                        </Cell>
                             <Cell col={6} tablet={12} phone={12}>
                                 <Card shadow={0} style={{width: '100%' , height: '320px', padding: '20px'}}>
                                                             <HorizontalBar data={this.state.allocatedCarriers} options={{maintainAspectRatio: false, legend: {display: false}}} />
-                            </Card>
+                                </Card>
                             </Cell>
                             <Cell col={12} phone={12}>
                                 <Card shadow={0} style={{width: '100%' , height: '320px', padding: '20px'}}>
                                     <HorizontalBar data={this.state.allocatedCarrierServices} height={100} options={{maintainAspectRatio: false, legend: {display: false}}} />
                                 </Card>
                             </Cell>
-                        </Grid>
+                    </Grid>
                     ) : (
                         <div>post, bitch</div>
                     )}
-                    
+
                 </div>
             )
         );
@@ -175,10 +192,10 @@ function transformAllocatedCarriers(inputData) {
         [
             {
                 label: 'Allocated Carriers',
-                backgroundColor: Utils.colors.charts.blue,
+                backgroundColor: Utils.colors.charts.blue_fade,
                 borderColor: Utils.colors.charts.blue,
                 borderWidth: 1,
-                hoverBackgroundColor: Utils.colors.charts.blue_fade,
+                hoverBackgroundColor: Utils.colors.charts.blue,
                 hoverBorderColor: Utils.colors.charts.blue,
                 data: data
             }
@@ -204,10 +221,10 @@ function transformAllocatedCarrierServices(inputData) {
         [
             {
                 label: 'Allocated Carrier Services',
-                backgroundColor: Utils.colors.charts.blue,
+                backgroundColor: Utils.colors.charts.blue_fade,
                 borderColor: Utils.colors.charts.blue,
                 borderWidth: 1,
-                hoverBackgroundColor: Utils.colors.charts.blue_fade,
+                hoverBackgroundColor: Utils.colors.charts.blue,
                 hoverBorderColor: Utils.colors.charts.blue,
                 data: data
             }
@@ -218,7 +235,6 @@ function transformAllocatedCarrierServices(inputData) {
 
 }
 let transformRadial = (source, label) => {
-    //const source = inputData.issuesRadialCharts;
     const radialSource = source.filter((r) => {
         return r.label === label;
     });
@@ -235,25 +251,22 @@ let transformRadial = (source, label) => {
         [
             {
                 label: label,
-                backgroundColor: hasData 
+                backgroundColor: hasData
                     ? [Utils.colors.charts.red, Utils.colors.charts.grey]
                     : [Utils.colors.charts.green, Utils.colors.charts.green ],
                 borderColor: Utils.colors.charts.none,
                 borderWidth: 1,
-                hoverBackgroundColor: hasData 
+                hoverBackgroundColor: hasData
                     ? [Utils.colors.charts.red_dark, Utils.colors.charts.grey]
                     : [Utils.colors.charts.green, Utils.colors.charts.green],
                 hoverBorderColor: hasData ? Utils.colors.charts.none : Utils.colors.charts.green,
                 data: data
-                
+
             }
         ],
         cutoutPercentage: 90
     };
     return unallocatedRadial;
 }
-//function transformUnallocatedRadial(inputData) {
-    
-//}
 
 export default DashboardContainer;

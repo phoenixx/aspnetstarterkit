@@ -2,6 +2,7 @@
     colors: {
         red: 'rgba(223, 57, 0, 1)',
         red_fade: 'rgba(223, 57, 0, 0.5)',
+        black: 'rgba(0,0,0,1)',
         charts: {
             blue: 'rgba(0, 154, 205, 1)',
             blue_fade: 'rgba(0, 154, 205, 0.4)',

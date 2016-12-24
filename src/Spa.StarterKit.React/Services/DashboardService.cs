@@ -54,6 +54,7 @@ namespace Spa.StarterKit.React.Services
                 var getIssuesByCarrierChart = GetIssuesByCarrierStackedChartDataOperationAsync(carrierSummary);
                 var getPostDespatchOverview = GetPostDespatchOverviewDataOperationAsync(statusSummary);
                 var getConsignmentVolumeChart = GetAllocationByCarrierServiceByDateOperation(carrierSummary);
+                var getAllocationByCarrierServiceChart = AllocationByCarrierServiceByDateOperation(carrierSummary);
                 var getLateConsignmentsBarChart = GetLateConsignmentsBarChartDataOperationAsync(lateData);
                 var getLateConsignmentsPieChart = GetLateConsignmentsPieChartDataOperationAsync(lateData);
                 var getLateConsignmentsByCarrierStackedChart = GetLateConsignmentsStackedChartDataByCarrierOperationAsync(lateData);
@@ -68,6 +69,7 @@ namespace Spa.StarterKit.React.Services
                     getIssuesByCarrierChart,
                     getPostDespatchOverview,
                     getConsignmentVolumeChart,
+                    getAllocationByCarrierServiceChart,
                     getLateConsignmentsBarChart,
                     getLateConsignmentsPieChart,
                     getLateConsignmentsByCarrierStackedChart,
@@ -87,7 +89,8 @@ namespace Spa.StarterKit.React.Services
                     LateConsignmentsPieChart = await getLateConsignmentsPieChart,
                     LateConsignmentsByCarrierStackedChart = await getLateConsignmentsByCarrierStackedChart,
                     LateConsignmentsStackedChart = await getLateConsignmentsStackedChart,
-                    AllocationByCarrierserviceByDate = await getConsignmentVolumeChart
+                    AllocationByCarrierserviceByDate = await getConsignmentVolumeChart,
+                    AllocationByCarrierService = await getAllocationByCarrierServiceChart
                 };
             }
             catch (Exception ex)
@@ -115,6 +118,7 @@ namespace Spa.StarterKit.React.Services
                 var getAllocatedCarrierServices = GetCarrierServiceBarChartDataOperation(carrierSummary);
                 var getIssuesByCarrierChart = GetIssuesByCarrierStackedChartDataOperationAsync(carrierSummary);
                 var getConsignmentVolumeChart = GetAllocationByCarrierServiceByDateOperation(carrierSummary);
+                var getAllocationByCarrierServiceChart = AllocationByCarrierServiceByDateOperation(carrierSummary);
 
                 await Task.WhenAll(
                     getIssuesRadialsTask,
@@ -122,7 +126,8 @@ namespace Spa.StarterKit.React.Services
                     getAllocatedCarriersChart,
                     getAllocatedCarrierServices,
                     getIssuesByCarrierChart,
-                    getConsignmentVolumeChart).ConfigureAwait(false);
+                    getConsignmentVolumeChart,
+                    getAllocationByCarrierServiceChart).ConfigureAwait(false);
 
                 return new DashboardViewModel()
                 {
@@ -132,6 +137,7 @@ namespace Spa.StarterKit.React.Services
                     AllocatedCarrierServicesBarChart = await getAllocatedCarrierServices,
                     IssuesByCarrierStackedChart = await getIssuesByCarrierChart,
                     AllocationByCarrierserviceByDate = await getConsignmentVolumeChart,
+                    AllocationByCarrierService = await getAllocationByCarrierServiceChart,
                     AssignedShippingLocations = shippingLocationWhiteList,
                     SelectedShippingLocation = shippingLocationReference
                 };
@@ -551,6 +557,58 @@ namespace Spa.StarterKit.React.Services
 
                 return stackedChart;
             }).ConfigureAwait(false);
+        }
+
+        private async Task<MixedChartViewModel> AllocationByCarrierServiceByDateOperation(CarrierStatusResponseModel carrierStatusSummary)
+        {
+            return await Task.Run(() =>
+            {
+                var chartResult = new MixedChartViewModel();
+                if (carrierStatusSummary == null)
+                {
+                    return chartResult;
+                }
+
+                var carriersStatusByWeek = carrierStatusSummary.Summary.OrderBy(x => x.Created).GroupBy(x =>
+                        CultureInfo.InvariantCulture.Calendar.GetWeekOfYear(x.Created.UtcDateTime, CalendarWeekRule.FirstDay, DayOfWeek.Monday)
+                        ).ToList();
+
+                var weeks = carriersStatusByWeek.Select(x => x.Key).ToList();
+                var carriers = carrierStatusSummary.Summary.GroupBy(x => x.MpdCarrierName).ToList().Distinct().Select(x => x.Key).ToList();//.Select(c => string.IsNullOrWhiteSpace(c.Key) ? "Not allocated" : c.Key);
+
+                chartResult.Labels = weeks.Select(x => x.ToString()).ToList();
+
+                foreach (var carrier in carriers)
+                {
+                    chartResult.Datasets.Add(new MixedChartDatasetViewModel()
+                    {
+                        Label = carrier,
+                        Values = new List<double>()
+                    });
+                }
+
+                foreach (var week in weeks)
+                {
+                    var weekData = carriersStatusByWeek
+                                    .Where(x => x.Key == week)
+                                    .Select(x => x.ToList()).FirstOrDefault()
+                                    ;
+                    
+                    foreach (var carrier in carriers)
+                    {
+                        var dataset = chartResult.Datasets.FirstOrDefault(x => x.Label == carrier);
+                        if (dataset != null)
+                        {
+                            var sum =
+                                weekData.Where(x => x.MpdCarrierName == carrier).Sum(x => x.NumberOfConsignments);
+                            dataset.Values.Add(sum);
+                        }
+                    }
+                }
+
+                return chartResult;
+            });
+            
         }
 
         #endregion Pre-Despatch

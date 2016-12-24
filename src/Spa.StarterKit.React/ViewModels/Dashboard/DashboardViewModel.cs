@@ -31,6 +31,7 @@ namespace Spa.StarterKit.React.ViewModels.Dashboard
         public StackedChartViewModel LateConsignmentsStackedChart { get; set; }
         public StackedChartViewModel LateConsignmentsByCarrierStackedChart { get; set; }
 
+        public MixedChartViewModel AllocationByCarrierService { get; set; }
         public StackedChartViewModel AllocationByCarrierserviceByDate { get; set; }
 
         #endregion Post-Despatch

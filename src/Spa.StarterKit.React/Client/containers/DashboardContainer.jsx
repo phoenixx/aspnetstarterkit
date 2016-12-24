@@ -40,6 +40,7 @@ class DashboardContainer extends React.Component {
             const unallocatedRadial = transformRadial(data.data.issuesRadialCharts, 'Unallocated');
             const allocationFailed = transformRadial(data.data.issuesRadialCharts, 'Allocation Failed');
             const manifestFailed = transformRadial(data.data.issuesRadialCharts, 'Manifest Failed');
+            allocationByCarrierServiceByDate(data.data);
 
             this.setState({
                 data: data.data,
@@ -69,7 +70,7 @@ class DashboardContainer extends React.Component {
                     <Grid>
                         <Cell col={4} tablet={12} phone={12}>
                             <Card shadow={0} style={{width: '100%' , height: '280px', padding: '20px 20px 10px 20px'}}>
-                                <CardTitle style={{color: Utils.colors.black, height: '40px', textAlign: 'center'}} className='mdl-card__title--center'>Unallocated</CardTitle>
+                                <CardTitle style={{color: Utils.colors.black, height: '40px', textAlign: 'center'}} className="mdl-card__title--center">Unallocated</CardTitle>
                                 <span className="radial-number">60</span>
                                 <Doughnut data={this.state.unallocatedRadial} height={115} options={{cutoutPercentage: 80, legend: {display: false}, tooltips: {enabled: false}}} />
                                 <CardActions style={{textAlign: 'center'}}>
@@ -81,7 +82,7 @@ class DashboardContainer extends React.Component {
                         </Cell>
                         <Cell col={4} tablet={12} phone={12}>
                             <Card shadow={0} style={{width: '100%' , height: '280px', padding: '20px 20px 10px 20px'}}>
-                                <CardTitle style={{color: Utils.colors.black, height: '40px', textAlign: 'center'}} className='mdl-card__title--center'>Allocation Failed</CardTitle>
+                                <CardTitle style={{color: Utils.colors.black, height: '40px', textAlign: 'center'}} className="mdl-card__title--center">Allocation Failed</CardTitle>
                                 <span className="radial-number">60</span>
                                 <Doughnut data={this.state.allocationFailedRadial} height={115} options={{cutoutPercentage: 80, legend: {display: false}, tooltips: {enabled: false}}} />
                                 <CardActions style={{textAlign: 'center'}}>
@@ -93,7 +94,7 @@ class DashboardContainer extends React.Component {
                         </Cell>
                         <Cell col={4} tablet={12} phone={12}>
                             <Card shadow={0} style={{width: '100%' , height: '280px', padding: '20px 20px 10px 20px'}}>
-                                <CardTitle style={{color: Utils.colors.black, height: '40px', textAlign: 'center'}} className='mdl-card__title--center'>Manifest Failed</CardTitle>
+                                <CardTitle style={{color: Utils.colors.black, height: '40px', textAlign: 'center'}} className="mdl-card__title--center">Manifest Failed</CardTitle>
                                 <span className="radial-number">0</span>
                                 <Doughnut data={this.state.manifestFailedRadial} height={115} options={{cutoutPercentage: 80, legend: {display: false}, tooltips: {enabled: false}}} />
                                 <CardActions style={{textAlign: 'center'}}>
@@ -267,6 +268,80 @@ let transformRadial = (source, label) => {
         cutoutPercentage: 90
     };
     return unallocatedRadial;
+}
+
+const allocationByCarrierServiceByDate = (input) => {
+    const source = input.allocationByCarrierserviceByDate.chartData;
+    var weeks = source.filter((c) => {
+        console.log(c);
+        return c.Week;
+    });
+
+    console.log(weeks);
+
+
+
+    var x;
+    var y = [];
+    var i = 0;
+
+    var sourceArray = [];
+    for (var j = 0; j < source.length; j++) {
+        sourceArray.push(Object.keys(source[j]).length);
+    }
+
+    var max = sourceArray[0];
+    var maxIndex = 0;
+
+    for (var k = 1; k < sourceArray.length; k++) {
+        if (sourceArray[k] > max) {
+            maxIndex = k;
+            max = sourceArray[k];
+        }
+    }
+
+    var dataDefinition = source[maxIndex];
+    for (var key in dataDefinition) {
+        if (x === undefined) {
+            x = key;
+        } else {
+            y[i] = key;
+            i++;
+        }
+    }
+
+    for (var l = 0; l < max; l++) {
+        var sourceDataItem = source[l];
+        for (var datakey in sourceDataItem) {
+            if (sourceDataItem.hasOwnProperty(datakey)) {
+                if (y.indexOf(datakey) === -1 && datakey.toLowerCase() !== 'week') {
+                    y.push(datakey);
+                }
+            }
+        }
+    }
+
+    //console.log(x);
+    console.log(y);
+
+    //labels = weeks
+    //dataset per carrier see https://github.com/gor181/react-chartjs-2/blob/master/example/src/components/mix.js
+    const lbls = source.map((s) => {
+        return s['Week'];
+    });
+
+
+
+    console.log('lbls', lbls);
+
+    //const p = y.map((inp) => {
+    //    const data
+    //});
+    //for each property p in y, for each item i in dataarray
+    //get i[p] if exists otherwise 0 and return as array
+    //e.g. if p == 2 in y[0] and y[2] but not y[1]:
+    //return [2, 0 , 2]
+    //should prob do in c# and return new object type...would be easier...
 }
 
 export default DashboardContainer;

@@ -1,10 +1,13 @@
 ﻿.radial-number {
     font-size: 1.8em;
     font-weight: bold;
+    display: block;
+    width: 100%;
     text-align: center; 
+    margin-top: 105px;
     z-index: 100;  
     position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translateX(-50%) translateY(-50%);
+    margin-left: -20px; 
+    display: table-cell;
+    vertical-align: middle;
 }

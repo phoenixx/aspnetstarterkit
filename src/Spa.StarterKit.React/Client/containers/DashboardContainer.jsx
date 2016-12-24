@@ -29,7 +29,8 @@ class DashboardContainer extends React.Component {
             allocatedCarrierServices: null,
             unallocatedRadial: null,
             allocationFailedRadial: null,
-            manifestFailedRadial: null
+            manifestFailedRadial: null,
+            allocationByCarrierService: null
         }
     }
     componentDidMount() {
@@ -40,7 +41,7 @@ class DashboardContainer extends React.Component {
             const unallocatedRadial = transformRadial(data.data.issuesRadialCharts, 'Unallocated');
             const allocationFailed = transformRadial(data.data.issuesRadialCharts, 'Allocation Failed');
             const manifestFailed = transformRadial(data.data.issuesRadialCharts, 'Manifest Failed');
-            allocationByCarrierServiceByDate(data.data);
+            const allocationByCarrierService = allocationByCarrierServiceByDate(data.data);
 
             this.setState({
                 data: data.data,
@@ -50,7 +51,8 @@ class DashboardContainer extends React.Component {
                 allocatedCarrierServices: allocatedCarrierServices,
                 unallocatedRadial: unallocatedRadial,
                 allocationFailedRadial: allocationFailed,
-                manifestFailedRadial: manifestFailed
+                manifestFailedRadial: manifestFailed,
+                allocationByCarrierService: allocationByCarrierService
             });
         });
     }
@@ -109,19 +111,24 @@ class DashboardContainer extends React.Component {
                               <Line data={this.state.preDespatchOverview} height={100} options={{maintainAspectRatio: false, legend: {display: false}}} />
                             </Card>
                         </Cell>
-                            <Cell col={6} tablet={12} phone={12}>
-                                <Card shadow={0} style={{width: '100%' , height: '320px', padding: '20px'}}>
-                                                            <HorizontalBar data={this.state.allocatedCarriers} options={{maintainAspectRatio: false, legend: {display: false}}} />
-                                </Card>
-                            </Cell>
-                            <Cell col={12} phone={12}>
-                                <Card shadow={0} style={{width: '100%' , height: '320px', padding: '20px'}}>
-                                    <HorizontalBar data={this.state.allocatedCarrierServices} height={100} options={{maintainAspectRatio: false, legend: {display: false}}} />
-                                </Card>
-                            </Cell>
+                        <Cell col={6} tablet={12} phone={12}>
+                            <Card shadow={0} style={{width: '100%' , height: '320px', padding: '20px'}}>
+                                <HorizontalBar data={this.state.allocatedCarriers} options={{maintainAspectRatio: false, legend: {display: false}}} />
+                            </Card>
+                        </Cell>
+                        <Cell col={12} phone={12}>
+                            <Card shadow={0} style={{width: '100%' , height: '320px', padding: '20px'}}>
+                                <HorizontalBar data={this.state.allocatedCarrierServices} height={100} options={{maintainAspectRatio: false, legend: {display: false}}} />
+                            </Card>
+                        </Cell>
+                        <Cell col={12} phone={12}>
+                           <Card shadow={0} style={{width: '100%' , height: '320px' , padding: '20px' }}>
+                               <Line data={this.state.allocationByCarrierService} height={100} options={{maintainAspectRatio: false, legend: {display: true}}} />
+                            </Card>
+                        </Cell>
                     </Grid>
                     ) : (
-                        <div>post, bitch</div>
+                        <div>post despatch</div>
                     )}
 
                 </div>
@@ -130,7 +137,7 @@ class DashboardContainer extends React.Component {
     }
 }
 
-function getDashboardData() {
+const getDashboardData = () => {
     return axios.get('/dashboard/predespatch/')
     .then(function(dashboardResponse) {
         console.log(dashboardResponse);
@@ -139,7 +146,7 @@ function getDashboardData() {
 }
 
 //TODO abstract into reusable utility funtions
-function transformPreDespatchOverview(inputData) {
+const transformPreDespatchOverview = (inputData) => {
     const source = inputData.preDespatchOverviewBarChart;
     const labels = source.map(item => {
         return item.name;
@@ -178,7 +185,7 @@ function transformPreDespatchOverview(inputData) {
     return chartSourceData;
 }
 
-function transformAllocatedCarriers(inputData) {
+const transformAllocatedCarriers = (inputData) => {
     const source = inputData.allocatedCarriersBarChart;
     const labels = source.map(item => {
         return item.name;
@@ -207,7 +214,7 @@ function transformAllocatedCarriers(inputData) {
 
 }
 
-function transformAllocatedCarrierServices(inputData) {
+const transformAllocatedCarrierServices = (inputData) => {
     const source = inputData.allocatedCarrierServicesBarChart;
     const labels = source.map(item => {
         return item.name;
@@ -235,7 +242,8 @@ function transformAllocatedCarrierServices(inputData) {
     return allocatedCarrierServicesBarData;
 
 }
-let transformRadial = (source, label) => {
+
+const transformRadial = (source, label) => {
     const radialSource = source.filter((r) => {
         return r.label === label;
     });
@@ -271,77 +279,34 @@ let transformRadial = (source, label) => {
 }
 
 const allocationByCarrierServiceByDate = (input) => {
-    const source = input.allocationByCarrierserviceByDate.chartData;
-    var weeks = source.filter((c) => {
-        console.log(c);
-        return c.Week;
+    const source = input.allocationByCarrierService;
+
+    const allocationChartData = {
+        labels: source.labels.map((lbl) => {
+            return `Week ${lbl}`;
+        }),
+        datasets: []
+    };
+
+    let i = 0;
+    source.datasets.map((ds) => {
+       allocationChartData.datasets.push({
+            label: ds.label == null ? 'Not allocated' : ds.label,
+            data: ds.values,
+            borderColor: Utils.colors.charts.foreground_colours[i],
+            backgroundColor: Utils.colors.charts.background_colours[i],
+            pointBorderColor: Utils.colors.charts.background_colours[i],
+            pointBackgroundColor: Utils.colors.white,
+            pointHoverBackgroundColor: Utils.colors.charts.foreground_colours[i],
+            pointHoverBorderColor: Utils.colors.charts.foreground_colours[i],
+            hoverBackgroundColor: Utils.colors.white,
+            hoverBorderColor: Utils.colors.red,
+            fill: true
+       });
+        i += 1;
     });
 
-    console.log(weeks);
-
-
-
-    var x;
-    var y = [];
-    var i = 0;
-
-    var sourceArray = [];
-    for (var j = 0; j < source.length; j++) {
-        sourceArray.push(Object.keys(source[j]).length);
-    }
-
-    var max = sourceArray[0];
-    var maxIndex = 0;
-
-    for (var k = 1; k < sourceArray.length; k++) {
-        if (sourceArray[k] > max) {
-            maxIndex = k;
-            max = sourceArray[k];
-        }
-    }
-
-    var dataDefinition = source[maxIndex];
-    for (var key in dataDefinition) {
-        if (x === undefined) {
-            x = key;
-        } else {
-            y[i] = key;
-            i++;
-        }
-    }
-
-    for (var l = 0; l < max; l++) {
-        var sourceDataItem = source[l];
-        for (var datakey in sourceDataItem) {
-            if (sourceDataItem.hasOwnProperty(datakey)) {
-                if (y.indexOf(datakey) === -1 && datakey.toLowerCase() !== 'week') {
-                    y.push(datakey);
-                }
-            }
-        }
-    }
-
-    //console.log(x);
-    console.log(y);
-
-    //labels = weeks
-    //dataset per carrier see https://github.com/gor181/react-chartjs-2/blob/master/example/src/components/mix.js
-    const lbls = source.map((s) => {
-        return s['Week'];
-    });
-
-
-
-    console.log('lbls', lbls);
-
-    //const p = y.map((inp) => {
-    //    const data
-    //});
-    //for each property p in y, for each item i in dataarray
-    //get i[p] if exists otherwise 0 and return as array
-    //e.g. if p == 2 in y[0] and y[2] but not y[1]:
-    //return [2, 0 , 2]
-    //should prob do in c# and return new object type...would be easier...
+    return allocationChartData;
 }
 
 export default DashboardContainer;

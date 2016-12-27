@@ -14,6 +14,7 @@ import Loading from '../components/Loading';
 import {Doughnut, HorizontalBar, Line, Polar, Bar, Pie} from 'react-chartjs-2';
 import '../sass/dashboard.scss';
 import Utils from '../utilities/utils';
+import SimpleChart from '../components/charts/SimpleChart';
 
 class DashboardContainer extends React.Component {
     constructor(props) {
@@ -23,36 +24,42 @@ class DashboardContainer extends React.Component {
             hasLoaded: false,
             globalStart: null,
             globalEnd: null,
-            data: null,
-            preDespatchOverview: null,
-            allocatedCarriers: null,
-            allocatedCarrierServices: null,
+            //data: null,
+            //preDespatchOverview: null,
+            //allocatedCarriers: null,
+            //allocatedCarrierServices: null,
             unallocatedRadial: null,
             allocationFailedRadial: null,
             manifestFailedRadial: null,
-            allocationByCarrierService: null
+            allocationByCarrierService: null,
+            preDespatchOverviewData: null,
+            allocatedCarriersData: null,
+            allocatedCarrierServicesData: null
         }
     }
     componentDidMount() {
         getDashboardData().then((data) => {
-            const overview = transformPreDespatchOverview(data.data);
-            const allocatedCarriers = transformAllocatedCarriers(data.data);
-            const allocatedCarrierServices = transformAllocatedCarrierServices(data.data);
+            //const overview = transformChartData(data.data.preDespatchOverviewBarChart);// transformPreDespatchOverview(data.data);
+            //const allocatedCarriers = transformChartData(data.data.allocatedCarriersBarChart, 'Allocated Carriers');// transformAllocatedCarriers(data.data);
+            //const allocatedCarrierServices = transformChartData(data.data.allocatedCarrierServicesBarChart, 'Allocated Carrier Services');// transformAllocatedCarrierServices(data.data);
             const unallocatedRadial = transformRadial(data.data.issuesRadialCharts, 'Unallocated');
             const allocationFailed = transformRadial(data.data.issuesRadialCharts, 'Allocation Failed');
             const manifestFailed = transformRadial(data.data.issuesRadialCharts, 'Manifest Failed');
             const allocationByCarrierService = allocationByCarrierServiceByDate(data.data);
 
             this.setState({
-                data: data.data,
+                //data: data.data,
                 hasLoaded: true,
-                preDespatchOverview: overview,
-                allocatedCarriers: allocatedCarriers,
-                allocatedCarrierServices: allocatedCarrierServices,
+                //preDespatchOverview: overview,
+                //allocatedCarriers: allocatedCarriers,
+                //allocatedCarrierServices: allocatedCarrierServices,
                 unallocatedRadial: unallocatedRadial,
                 allocationFailedRadial: allocationFailed,
                 manifestFailedRadial: manifestFailed,
-                allocationByCarrierService: allocationByCarrierService
+                allocationByCarrierService: allocationByCarrierService,
+                preDespatchOverviewData: data.data.preDespatchOverviewBarChart,
+                allocatedCarriersData: data.data.allocatedCarriersBarChart,
+                allocatedCarrierServicesData: data.data.allocatedCarrierServicesBarChart
             });
         });
     }
@@ -108,17 +115,25 @@ class DashboardContainer extends React.Component {
                         </Cell>
                         <Cell col={6} tablet={12} phone={12}>
                             <Card shadow={0} style={{width: '100%' , height: '320px', padding: '20px'}}>
-                              <Line data={this.state.preDespatchOverview} height={100} options={{maintainAspectRatio: false, legend: {display: false}}} />
+                                <SimpleChart
+                                    label="State" 
+                                    sourceData={this.state.preDespatchOverviewData}
+                                    chartType="Line"/>
                             </Card>
                         </Cell>
                         <Cell col={6} tablet={12} phone={12}>
                             <Card shadow={0} style={{width: '100%' , height: '320px', padding: '20px'}}>
-                                <HorizontalBar data={this.state.allocatedCarriers} options={{maintainAspectRatio: false, legend: {display: false}}} />
+                                <SimpleChart
+                                    label="Allocated Carrier" 
+                                    sourceData={this.state.allocatedCarriersData}
+                                    chartType="HorizontalBar"/>
                             </Card>
                         </Cell>
                         <Cell col={12} phone={12}>
                             <Card shadow={0} style={{width: '100%' , height: '320px', padding: '20px'}}>
-                                <HorizontalBar data={this.state.allocatedCarrierServices} height={100} options={{maintainAspectRatio: false, legend: {display: false}}} />
+                                <SimpleChart label="Allocated Carrier Services"
+                                    sourceData={this.state.allocatedCarrierServicesData}
+                                    chartType="HorizontalBar" />
                             </Card>
                         </Cell>
                         <Cell col={12} phone={12}>
@@ -140,108 +155,151 @@ class DashboardContainer extends React.Component {
 const getDashboardData = () => {
     return axios.get('/dashboard/predespatch/')
     .then(function(dashboardResponse) {
-        console.log(dashboardResponse);
+        //console.log(dashboardResponse);
         return dashboardResponse;
     });
 }
+//extract radial
+//extract mixed chart
+//allow type selector
+//allow filtering of dates
+//separate logic and view into separate components (smart/sumb)
+
+//const transformChartData = (source, label) => {
+//    const labels = source.map(item => {
+//        return item.name;
+//    });
+//    const datapoints = source.map(item => {
+//        return item.value;
+//    });
+//    const chartSourceData = {
+//        labels: labels,
+//        datasets: [
+//          {
+//              label: 'Status',
+//              fill: true,
+//              borderWidth: 0.8,
+//              lineTension: 0.3,
+//              backgroundColor: Utils.colors.charts.blue_fade,
+//              borderColor: Utils.colors.charts.blue,
+//              borderCapStyle: 'butt',
+//              borderDash: [],
+//              borderDashOffset: 0.0,
+//              borderJoinStyle: 'miter',
+//              pointBorderColor: Utils.colors.charts.blue,
+//              pointBackgroundColor: '#fff',
+//              pointBorderWidth: 1,
+//              pointHoverRadius: 5,
+//              pointHoverBackgroundColor: Utils.colors.charts.blue,
+//              pointHoverBorderColor: Utils.colors.charts.blue,
+//              pointHoverBorderWidth: 2,
+//              pointRadius: 6,
+//              pointHitRadius: 40,
+//              data: datapoints,
+//              legend: false
+//          }]
+//    }
+
+//    return chartSourceData;
+//}
 
 //TODO abstract into reusable utility funtions
-const transformPreDespatchOverview = (inputData) => {
-    const source = inputData.preDespatchOverviewBarChart;
-    const labels = source.map(item => {
-        return item.name;
-    });
-    const datapoints = source.map(item => {
-        return item.value;
-    });
-    const chartSourceData = {
-        labels: labels,
-        datasets: [
-          {
-              label: 'Status',
-              fill: true,
-              borderWidth: 0.8,
-              lineTension: 0.3,
-              backgroundColor: Utils.colors.charts.blue_fade,
-              borderColor: Utils.colors.charts.blue,
-              borderCapStyle: 'butt',
-              borderDash: [],
-              borderDashOffset: 0.0,
-              borderJoinStyle: 'miter',
-              pointBorderColor: Utils.colors.charts.blue,
-              pointBackgroundColor: '#fff',
-              pointBorderWidth: 1,
-              pointHoverRadius: 5,
-              pointHoverBackgroundColor: Utils.colors.charts.blue,
-              pointHoverBorderColor: Utils.colors.charts.blue,
-              pointHoverBorderWidth: 2,
-              pointRadius: 6,
-              pointHitRadius: 40,
-              data: datapoints,
-              legend: false
-          }]
-    }
+//const transformPreDespatchOverview = (inputData) => {
+//    const source = inputData.preDespatchOverviewBarChart;
+//    const labels = source.map(item => {
+//        return item.name;
+//    });
+//    const datapoints = source.map(item => {
+//        return item.value;
+//    });
+//    const chartSourceData = {
+//        labels: labels,
+//        datasets: [
+//          {
+//              label: 'Status',
+//              fill: true,
+//              borderWidth: 0.8,
+//              lineTension: 0.3,
+//              backgroundColor: Utils.colors.charts.blue_fade,
+//              borderColor: Utils.colors.charts.blue,
+//              borderCapStyle: 'butt',
+//              borderDash: [],
+//              borderDashOffset: 0.0,
+//              borderJoinStyle: 'miter',
+//              pointBorderColor: Utils.colors.charts.blue,
+//              pointBackgroundColor: '#fff',
+//              pointBorderWidth: 1,
+//              pointHoverRadius: 5,
+//              pointHoverBackgroundColor: Utils.colors.charts.blue,
+//              pointHoverBorderColor: Utils.colors.charts.blue,
+//              pointHoverBorderWidth: 2,
+//              pointRadius: 6,
+//              pointHitRadius: 40,
+//              data: datapoints,
+//              legend: false
+//          }]
+//    }
 
-    return chartSourceData;
-}
+//    return chartSourceData;
+//}
 
-const transformAllocatedCarriers = (inputData) => {
-    const source = inputData.allocatedCarriersBarChart;
-    const labels = source.map(item => {
-        return item.name;
-    });
-    const data = source.map(item => {
-        return item.value;
-    });
+//const transformAllocatedCarriers = (inputData) => {
+//    const source = inputData.allocatedCarriersBarChart;
+//    const labels = source.map(item => {
+//        return item.name;
+//    });
+//    const data = source.map(item => {
+//        return item.value;
+//    });
 
-    const allocatedCarriersBarData = {
-        labels: labels,
-        datasets:
-        [
-            {
-                label: 'Allocated Carriers',
-                backgroundColor: Utils.colors.charts.blue_fade,
-                borderColor: Utils.colors.charts.blue,
-                borderWidth: 1,
-                hoverBackgroundColor: Utils.colors.charts.blue,
-                hoverBorderColor: Utils.colors.charts.blue,
-                data: data
-            }
-        ]
-    };
+//    const allocatedCarriersBarData = {
+//        labels: labels,
+//        datasets:
+//        [
+//            {
+//                label: 'Allocated Carriers',
+//                backgroundColor: Utils.colors.charts.blue_fade,
+//                borderColor: Utils.colors.charts.blue,
+//                borderWidth: 1,
+//                hoverBackgroundColor: Utils.colors.charts.blue,
+//                hoverBorderColor: Utils.colors.charts.blue,
+//                data: data
+//            }
+//        ]
+//    };
 
-    return allocatedCarriersBarData;
+//    return allocatedCarriersBarData;
 
-}
+//}
 
-const transformAllocatedCarrierServices = (inputData) => {
-    const source = inputData.allocatedCarrierServicesBarChart;
-    const labels = source.map(item => {
-        return item.name;
-    });
-    const data = source.map(item => {
-        return item.value;
-    });
+//const transformAllocatedCarrierServices = (inputData) => {
+//    const source = inputData.allocatedCarrierServicesBarChart;
+//    const labels = source.map(item => {
+//        return item.name;
+//    });
+//    const data = source.map(item => {
+//        return item.value;
+//    });
 
-    const allocatedCarrierServicesBarData = {
-        labels: labels,
-        datasets:
-        [
-            {
-                label: 'Allocated Carrier Services',
-                backgroundColor: Utils.colors.charts.blue_fade,
-                borderColor: Utils.colors.charts.blue,
-                borderWidth: 1,
-                hoverBackgroundColor: Utils.colors.charts.blue,
-                hoverBorderColor: Utils.colors.charts.blue,
-                data: data
-            }
-        ]
-    };
+//    const allocatedCarrierServicesBarData = {
+//        labels: labels,
+//        datasets:
+//        [
+//            {
+//                label: 'Allocated Carrier Services',
+//                backgroundColor: Utils.colors.charts.blue_fade,
+//                borderColor: Utils.colors.charts.blue,
+//                borderWidth: 1,
+//                hoverBackgroundColor: Utils.colors.charts.blue,
+//                hoverBorderColor: Utils.colors.charts.blue,
+//                data: data
+//            }
+//        ]
+//    };
 
-    return allocatedCarrierServicesBarData;
+//    return allocatedCarrierServicesBarData;
 
-}
+//}
 
 const transformRadial = (source, label) => {
     const radialSource = source.filter((r) => {

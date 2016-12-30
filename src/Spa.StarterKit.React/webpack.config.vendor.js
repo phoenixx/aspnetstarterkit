@@ -15,16 +15,10 @@ var sharedConfig = {
     },
     entry: {
         vendor: [
-            //'bootstrap',
-            //'bootstrap/dist/css/bootstrap.css',
             'react',
             'react-dom',
             'react-router',
             'react-mdl'
-            //'react-mdl/extra/material.css',
-            //'react-mdl/extra/material-grid.css',
-            //'react-mdl/extra/material.js'
-            //'jquery',
         ]
     },
     output: {
@@ -33,7 +27,6 @@ var sharedConfig = {
         library: '[name]_[hash]'
     },
     plugins: [
-        //new webpack.ProvidePlugin({ $: 'jquery', jQuery: 'jquery' }), // Maps these identifiers to the jQuery package (because Bootstrap expects it to be a global variable)
         new webpack.NormalModuleReplacementPlugin(/\/iconv-loader$/, require.resolve('node-noop')), // Workaround for https://github.com/andris9/encoding/issues/16
         new webpack.DefinePlugin({
             'process.env.NODE_ENV': isDevBuild ? '"development"' : '"production"'

@@ -53,6 +53,7 @@ class DashboardContainer extends React.Component {
 const getDashboardData = () => {
     return axios.get('/dashboard/predespatch/')
     .then(function(dashboardResponse) {
+            console.log(dashboardResponse);
         return dashboardResponse;
     });
 }

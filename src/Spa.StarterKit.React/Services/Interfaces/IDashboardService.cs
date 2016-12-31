@@ -10,7 +10,7 @@ namespace Spa.StarterKit.React.Services.Interfaces
     {
         #region Combined
 
-        Task<DashboardViewModel> GetDashboard(DateTime dateFrom, DateTime dateTo, string shippingLocationReference);
+        Task<DashboardViewModel> GetDashboard(DateTime dateFrom, DateTime dateTo, List<ShippingLocation> shippingLocationWhiteList, string shippingLocationReference);
         Task<LateConsignmentsChartsViewModel> GetLateConsignmentsCharts(DateTime dateFrom, DateTime dateTo, string shippingLocationReference);
 
         #endregion

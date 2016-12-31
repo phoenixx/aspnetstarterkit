@@ -14,6 +14,7 @@ class DashboardContainer extends React.Component {
             allocatedCarriersData: null,
             allocatedCarrierServicesData: null,
             radials: null,
+            shippedRadials: null,
             allocationByCarrierService: null
         }
         this._setTab = this._setTab.bind(this);
@@ -26,8 +27,11 @@ class DashboardContainer extends React.Component {
                 allocatedCarriersData: data.data.allocatedCarriersBarChart,
                 allocatedCarrierServicesData: data.data.allocatedCarrierServicesBarChart,
                 radials: data.data.issuesRadialCharts,
+                shippedRadials: data.data.postDespatchRadialCharts,
                 allocationByCarrierService: data.data.allocationByCarrierService
             });
+        }).then(() => {
+            console.log(this.state);
         });
     }
     _setTab(tabId) {
@@ -45,6 +49,7 @@ class DashboardContainer extends React.Component {
                 allocatedCarriersData={this.state.allocatedCarriersData}
                 allocatedCarrierServicesData={this.state.allocatedCarrierServicesData}
                 radials={this.state.radials}
+                shippedRadials={this.state.shippedRadials}
                 allocationByCarrierService={this.state.allocationByCarrierService}/>
         );
     }

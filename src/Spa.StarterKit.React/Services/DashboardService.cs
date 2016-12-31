@@ -32,7 +32,7 @@ namespace Spa.StarterKit.React.Services
 
         #region Combined
 
-        public async Task<DashboardViewModel> GetDashboard(DateTime dateFrom, DateTime dateTo, string shippingLocationReference)
+        public async Task<DashboardViewModel> GetDashboard(DateTime dateFrom, DateTime dateTo, List<ShippingLocation> shippingLocationWhiteList, string shippingLocationReference)
         {
             try
             {
@@ -90,7 +90,8 @@ namespace Spa.StarterKit.React.Services
                     LateConsignmentsByCarrierStackedChart = await getLateConsignmentsByCarrierStackedChart,
                     LateConsignmentsStackedChart = await getLateConsignmentsStackedChart,
                     AllocationByCarrierserviceByDate = await getConsignmentVolumeChart,
-                    AllocationByCarrierService = await getAllocationByCarrierServiceChart
+                    AllocationByCarrierService = await getAllocationByCarrierServiceChart,
+                    AssignedShippingLocations = shippingLocationWhiteList
                 };
             }
             catch (Exception ex)

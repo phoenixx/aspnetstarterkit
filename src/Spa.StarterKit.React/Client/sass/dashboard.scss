@@ -1,4 +1,7 @@
-﻿.radial-number {
+﻿$clr-background: #696969;
+$clr-white: #fff;
+
+.radial-number {
     font-size: 1.8em;
     font-weight: bold;
     display: block;
@@ -10,6 +13,35 @@
     margin-left: -20px; 
     display: table-cell;
     vertical-align: middle;
+}
+
+.chart-controls--card {
+    background: $clr-background;
+    /*color: $clr-white;*/
+    min-height: 80px;
+    line-height: 80px;
+    height: 80px;
+    overflow: visible;
+    z-index: 99999 !important;
+    .mdl-card__supporting-text {
+        color: $clr-white;
+        padding: 0;
+        overflow: visible;
+        z-index: 99999 !important;
+    }
+}
+.chart-controls--title {
+    color: $clr-white;
+    height: 80px;
+    padding: 0;
+    display: table-cell;
+    vertical-align: middle;
+    
+}
+
+.chart-controls--days {
+    font-size: 3em;
+    font-weight: bold;
 }
 
 @media (max-width: 992px) {

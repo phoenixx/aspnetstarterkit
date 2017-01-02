@@ -2,11 +2,13 @@
 import {
     Button,
     Card,
+    CardText,
     Grid,
     Cell } from 'react-mdl';
 import SimpleChart from '../charts/SimpleChart';
 import RadialChart from '../charts/RadialChart';
 import MultiChart from '../charts/MultiChart';
+import DateTime from 'react-datetime';
 
 class NotShippedDashboard extends React.Component {
     constructor(props) {
@@ -15,6 +17,15 @@ class NotShippedDashboard extends React.Component {
     render() {
         return(
             <Grid>
+                <Cell col={12} tablet={12} phone={12}>
+                                                <DateTime/>
+
+                    <Card style={{width: '100%'}} className='chart-controls--card'>
+                        <CardText>
+                            <DateTime style={{width: '200px'}}/>
+                        </CardText>
+                    </Card>
+                </Cell>
                 <Cell col={4} tablet={12} phone={12}>
                     <RadialChart Source={this.props.radials} Label="Unallocated" />
                 </Cell>

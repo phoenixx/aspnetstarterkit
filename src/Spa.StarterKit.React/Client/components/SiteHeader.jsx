@@ -1,5 +1,9 @@
 ﻿import React from 'react';
-import { Header, Navigation } from 'react-mdl';
+//import { Header, Navigation } from 'react-mdl';
+import { AppBar } from 'react-toolbox/lib/app_bar';
+import Navigation from 'react-toolbox/lib/navigation';
+import Link from 'react-toolbox/lib/Link';
+
 import stylePropType from 'react-style-proptype'
 
 class SiteHeader extends React.Component {
@@ -8,16 +12,12 @@ class SiteHeader extends React.Component {
     }
     render() {
         return(
-            <Header 
-                title={this.props.title}
-                className={this.props.className}
-                style={this.props.style}>
-                <Navigation>
-                    <a href="/Account/logout">
-                        Logout
-                    </a>
+            <AppBar title="Electio" leftIcon="menu" fixed="true">
+                <Navigation type='horizontal'>
+                  <Link href='/Logout' label='Logout' icon='exit_to_app' />
                 </Navigation>
-             </Header>
+            </AppBar>
+            
         );
     }
 }

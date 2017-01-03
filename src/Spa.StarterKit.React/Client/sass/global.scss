@@ -5,6 +5,10 @@ $dark-red: rgba(222,32,34, 1);
 $darker-red: rgba(150, 0, 0, 1);
 $clr-grey: #333;
 
+* {
+    font-size: 67%;
+}
+
 .mdl-layout__content {
     background-color: $light-grey;
 }

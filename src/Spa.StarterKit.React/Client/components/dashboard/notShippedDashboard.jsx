@@ -8,11 +8,21 @@ import {
 import SimpleChart from '../charts/SimpleChart';
 import RadialChart from '../charts/RadialChart';
 import MultiChart from '../charts/MultiChart';
-import DatePicker from 'react-toolbox/lib/date_picker';
+import MpdDatePicker from '../datepicker/mpdDatePicker';
 
 class NotShippedDashboard extends React.Component {
     constructor(props) {
         super(props);
+        this.state = {
+            startDate: null,
+            endDate: null
+        }
+    }
+    _handleChange(item, value) {
+        console.log('set ' + item + ' to ' + value);
+        this.setState({
+            [item]: value
+        });
     }
     render() {
         return(
@@ -20,7 +30,9 @@ class NotShippedDashboard extends React.Component {
                 <Cell col={12} tablet={12} phone={12}>
                     <Card style={{width: '100%'}} className='chart-controls--card'>
                         <CardText>
-                            <DatePicker label='Birthdate'/>
+
+                            <MpdDatePicker label="Start date" onChange={this._handleChange.bind(this, 'startDate')} value={this.state.startDate} />
+                            <MpdDatePicker label="End date" onChange={this._handleChange.bind(this, 'endDate')} value={this.state.endDate} />
                         </CardText>
                     </Card>
                 </Cell>

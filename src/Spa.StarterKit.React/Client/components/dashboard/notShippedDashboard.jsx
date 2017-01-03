@@ -8,7 +8,7 @@ import {
 import SimpleChart from '../charts/SimpleChart';
 import RadialChart from '../charts/RadialChart';
 import MultiChart from '../charts/MultiChart';
-import DateTime from 'react-datetime';
+import DatePicker from 'react-toolbox/lib/date_picker';
 
 class NotShippedDashboard extends React.Component {
     constructor(props) {
@@ -18,11 +18,9 @@ class NotShippedDashboard extends React.Component {
         return(
             <Grid>
                 <Cell col={12} tablet={12} phone={12}>
-                                                <DateTime/>
-
                     <Card style={{width: '100%'}} className='chart-controls--card'>
                         <CardText>
-                            <DateTime style={{width: '200px'}}/>
+                            <DatePicker label='Birthdate'/>
                         </CardText>
                     </Card>
                 </Cell>

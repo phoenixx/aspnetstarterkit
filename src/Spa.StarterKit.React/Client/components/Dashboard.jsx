@@ -3,7 +3,7 @@ import { Tabs, Tab } from 'react-mdl';
 import Loading from '../components/Loading';
 import NotShippedDashboard from '../components/dashboard/notShippedDashboard';
 import ShippedDashboard from '../components/dashboard/shippedDashboard';
-import '../sass/dashboard.scss';
+//import '../sass/dashboard.scss';
 
 class Dashboard extends React.Component {
     render() {

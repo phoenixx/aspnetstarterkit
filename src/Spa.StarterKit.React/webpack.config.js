@@ -130,6 +130,7 @@ var webpack = require('webpack');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 var merge = require('webpack-merge');
 var copyWebpackPlugin = require('copy-webpack-plugin');
+var autoprefixer = require('autoprefixer');
 
 // Configuration in common to both client-side and server-side bundles
 var sharedConfig = () => ({
@@ -145,9 +146,15 @@ var sharedConfig = () => ({
     }
 });
 
+
+console.log(path.resolve(__dirname, './node_modules/react-toolbox/'));
+
+console.log(path.resolve(__dirname, './theme.scss'));
+
 // Configuration for client-side bundle suitable for running in browsers
 var clientBundleOutputDir = './wwwroot/dist';
-var clientBundleConfig = merge(sharedConfig(), {
+var clientBundleConfig = merge(sharedConfig(),
+{
     entry: {
         'main-client': [
             './Client/Index.jsx'
@@ -159,18 +166,35 @@ var clientBundleConfig = merge(sharedConfig(), {
             { test: /\.(png|jpg|jpeg|gif|svg)$/, loader: 'url-loader', query: { limit: 25000 } },
             {
                 test: /\.scss$/,
+                exclude: [
+                    path.resolve(__dirname, './Client/sass/')
+
+                ],
                 loaders: [
                     'style',
                     'css?sourceMap&modules&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]!postcss!sass!toolbox'
                 ]
+            },
+            {
+                test: /\.scss$/,
+                include: [
+                    path.resolve(__dirname, './Client/sass/')
+                ],
+                loader: ExtractTextPlugin.extract(['style', 'css!postcss!sass'])
             }
+            
         ]
     },
+    postcss: function() {
+        return [autoprefixer];
+    },
+    //},
     sassLoader: {
-        includePaths: [path.resolve(__dirname, './sass')]
+        includePaths: [path.resolve(__dirname, './Client/sass')]
     },
     output: { path: path.join(__dirname, clientBundleOutputDir) },
     plugins: [
+        
         new ExtractTextPlugin('site.css'),
         new webpack.DllReferencePlugin({
             context: __dirname,

@@ -24,6 +24,7 @@ import { AppBar, Checkbox, IconButton } from 'react-toolbox';
 import { Layout, NavDrawer, Panel, Sidebar } from 'react-toolbox';
 
 import 'react-mdl/extra/material.js';
+import '../sass/global.scss';
 
 class Home extends React.Component {
     constructor(props) {

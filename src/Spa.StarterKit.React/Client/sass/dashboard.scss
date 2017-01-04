@@ -22,12 +22,12 @@ $clr-white: #fff;
     line-height: 80px;
     height: 80px;
     overflow: visible;
-    z-index: 99999 !important;
+    /*z-index: 99999 !important;*/
     .mdl-card__supporting-text {
         color: $clr-white;
         padding: 0;
         overflow: visible;
-        z-index: 99999 !important;
+        /*z-index: 99999 !important;*/
     }
 }
 .chart-controls--title {

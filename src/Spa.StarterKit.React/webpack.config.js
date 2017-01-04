@@ -151,6 +151,8 @@ console.log(path.resolve(__dirname, './node_modules/react-toolbox/'));
 
 console.log(path.resolve(__dirname, './theme.scss'));
 
+console.log(path.resolve(__dirname, './Client/sass/'));
+
 // Configuration for client-side bundle suitable for running in browsers
 var clientBundleOutputDir = './wwwroot/dist';
 var clientBundleConfig = merge(sharedConfig(),
@@ -168,7 +170,6 @@ var clientBundleConfig = merge(sharedConfig(),
                 test: /\.scss$/,
                 exclude: [
                     path.resolve(__dirname, './Client/sass/')
-
                 ],
                 loaders: [
                     'style',
@@ -180,7 +181,7 @@ var clientBundleConfig = merge(sharedConfig(),
                 include: [
                     path.resolve(__dirname, './Client/sass/')
                 ],
-                loader: ExtractTextPlugin.extract(['style', 'css!postcss!sass'])
+                loaders: ['style-loader', 'css-loader', 'postcss', 'sass-loader']
             }
             
         ]
@@ -189,9 +190,9 @@ var clientBundleConfig = merge(sharedConfig(),
         return [autoprefixer];
     },
     //},
-    sassLoader: {
-        includePaths: [path.resolve(__dirname, './Client/sass')]
-    },
+    //sassLoader: {
+    //    includePaths: [path.resolve(__dirname, './Client/sass')]
+    //},
     output: { path: path.join(__dirname, clientBundleOutputDir) },
     plugins: [
         

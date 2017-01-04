@@ -1,23 +1,11 @@
 ﻿import React from 'react';
 import ReactCssTransitionGroup from 'react-addons-css-transition-group';
-//import {
-//    Layout,
-//    Header,
-//    HeaderRow,
-//    Navigation,
-//    Drawer,
-//    Content,
-//    Grid,
-//    Cell,
-//    Footer,
-//    FooterSection,
-//    FooterDropDownSection,
-//    FooterLinkList } from 'react-mdl';
 import { Link } from 'react-router';
 import MainContainer from '../containers/MainContainer';
 import SideDrawer from '../components/SideDrawer';
 import SiteHeader from '../components/SiteHeader';
 import SiteFooter from '../components/SiteFooter';
+import MainAppBar from '../components/appbar/mainAppBar';
 
 
 import { AppBar, Checkbox, IconButton } from 'react-toolbox';
@@ -54,28 +42,27 @@ class Home extends React.Component {
         return(
             <Layout>
                 <NavDrawer active={this.state.drawerActive}
-                    pinned={this.state.drawerPinned} 
-                    onOverlayClick={ this.toggleDrawerActive }>
-                    <SideDrawer/>
+                           pinned={this.state.drawerPinned}
+                           onOverlayClick={ this.toggleDrawerActive }>
+                    <SideDrawer />
                 </NavDrawer>
                 <Panel>
-                    <AppBar leftIcon='menu' onLeftIconClick={ this.toggleDrawerActive }/>
-                    <div style={{ flex: 1, overflowY: 'auto', padding: '1.8rem' }}>
+                    <MainAppBar onLeftIconClick={this.toggleDrawerActive} leftIcon="menu" />
                         <ReactCssTransitionGroup transitionName="appear"
                                                  transitionEnterTimeout={500}
                                                  transitionLeaveTimeout={500}
-                                                 component={MainContainer}>{React.cloneElement(this.props.children, {key: this.props.location.pathname})}
+                                                 component={MainContainer}>
+                            {React.cloneElement(this.props.children, {key: this.props.location.pathname})}
                         </ReactCssTransitionGroup>
-                    </div>
                 </Panel>
                 <Sidebar pinned={ this.state.sidebarPinned } width={ 5 }>
-                    <div><IconButton icon='close' onClick={ this.toggleSidebar }/></div>
+                    <div><IconButton icon='close' onClick={ this.toggleSidebar } /></div>
                     <div style={{ flex: 1 }}>
                         <p>Supplemental content goes here.</p>
                     </div>
                 </Sidebar>
             </Layout>
-           
+
         );
     }
 };

@@ -27,7 +27,7 @@ class SideDrawer extends React.Component {
                               caption="Home"
                               legend="Your dashboard"
                               selectable
-                              onClick={() => {this._navigate('notshipped')}} />
+                              onClick={() => {this._navigate('')}} />
                     <ListItem leftIcon="file_upload"
                               key="upload"
                               caption="Upload"

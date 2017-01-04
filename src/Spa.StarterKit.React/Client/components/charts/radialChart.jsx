@@ -1,7 +1,9 @@
 ﻿import React from 'react';
 import {Doughnut} from 'react-chartjs-2';
-import { Button, Card, CardTitle, CardActions } from 'react-mdl';
+import { Card, CardTitle, CardActions } from 'react-mdl';
 import Utils from '../../utilities/utils';
+import { Button } from 'react-toolbox/lib/button';
+import RedButton from '../buttons/redbutton';
 
 class RadialChart extends React.Component {
     constructor(props) {
@@ -70,9 +72,10 @@ class RadialChart extends React.Component {
                 <span className="radial-number">{this.state.count}</span>
                 <Doughnut data={this.state.chartData} height={20} options={{maintainAspectRatio: false, cutoutPercentage: 80, legend: {display: false}, tooltips: {enabled: false}}} />
                 <CardActions style={{textAlign: 'center'}}>
-                    <Button raised className="mdl-button--dark-red" disabled={this.state.count === 0}>
+                    <RedButton raised disabled={this.state.count === 0} red>
                         resolve
-                    </Button>
+                    </RedButton>
+                    
                 </CardActions>
             </Card>
         );

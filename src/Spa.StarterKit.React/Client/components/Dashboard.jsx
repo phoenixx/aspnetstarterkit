@@ -16,10 +16,10 @@ class Dashboard extends React.Component {
             (
                 <div>
                     <Tabs index={this.props.activeTab} onChange={(tabId) => this.props.setActiveTab(tabId)} fixed>
-                        <Tab label="Not Shipped">
+                        <Tab label="Not Shipped" icon="assignment">
                             <NotShippedDashboard {...this.props} />
                         </Tab>
-                        <Tab label="Shipped">
+                        <Tab label="Shipped" icon="assignment_turned_in">
                             <ShippedDashboard {...this.props} />
                         </Tab>
                     </Tabs>

@@ -8,7 +8,6 @@ import {
 import SimpleChart from '../charts/SimpleChart';
 import RadialChart from '../charts/RadialChart';
 import MultiChart from '../charts/MultiChart';
-import MpdDatePicker from '../datepicker/mpdDatePicker';
 
 class NotShippedDashboard extends React.Component {
     constructor(props) {
@@ -27,15 +26,6 @@ class NotShippedDashboard extends React.Component {
     render() {
         return(
             <Grid>
-                <Cell col={12} tablet={12} phone={12}>
-                    <Card style={{width: '100%'}} className='chart-controls--card'>
-                        <CardText>
-
-                            <MpdDatePicker label="Start date" onChange={this._handleChange.bind(this, 'startDate')} value={this.state.startDate} />
-                            <MpdDatePicker label="End date" onChange={this._handleChange.bind(this, 'endDate')} value={this.state.endDate} />
-                        </CardText>
-                    </Card>
-                </Cell>
                 <Cell col={4} tablet={12} phone={12}>
                     <RadialChart Source={this.props.radials} Label="Unallocated" />
                 </Cell>

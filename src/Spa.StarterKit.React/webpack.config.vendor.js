@@ -18,7 +18,9 @@ var sharedConfig = {
             'react',
             'react-dom',
             'react-router',
-            'react-mdl'
+            'react-mdl',
+            'react-mdl/extra/material.min.css',
+            'react-mdl/extra/material-grid.min.css'
         ]
     },
     output: {

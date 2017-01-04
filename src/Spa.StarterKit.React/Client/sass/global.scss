@@ -5,6 +5,19 @@ $dark-red: rgba(222,32,34, 1);
 $darker-red: rgba(150, 0, 0, 1);
 $clr-grey: #333;
 
+html {
+    height: 100%;
+}
+
+#app {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow-y: auto;
+}
+
 .mdl-layout__content {
     background-color: $light-grey;
 }
@@ -42,5 +55,30 @@ $clr-grey: #333;
 .mdl-button--dark-red:hover {
     background: $darker-red;
 }
+
+/*main app layout components*/
+/*#app {
+    position: absolute;
+
+    .content {
+        flex: 1 1 auto;
+        overflow-y: auto;
+        position: relative;
+        width: 100%;
+    }
+
+    .header {
+        flex: 0 0 auto;
+    }
+}*/
+.menu--header {
+    font-size: 2.4em;
+    padding: 10px;
+    background: $electio-red;
+    color: $white;
+    min-height: 70px;
+    line-height: 70px;
+}
+
 
 /*overrides*/

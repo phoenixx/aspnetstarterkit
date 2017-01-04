@@ -54,12 +54,12 @@ class Home extends React.Component {
         return(
             <Layout>
                 <NavDrawer active={this.state.drawerActive}
-                    pinned={this.state.drawerPinned} permanentAt='xxxl'
+                    pinned={this.state.drawerPinned} 
                     onOverlayClick={ this.toggleDrawerActive }>
                     <SideDrawer/>
                 </NavDrawer>
                 <Panel>
-                    <AppBar leftIcon='menu' onLeftIconClick={ this.toggleDrawerActive } />
+                    <AppBar leftIcon='menu' onLeftIconClick={ this.toggleDrawerActive }/>
                     <div style={{ flex: 1, overflowY: 'auto', padding: '1.8rem' }}>
                         <ReactCssTransitionGroup transitionName="appear"
                                                  transitionEnterTimeout={500}

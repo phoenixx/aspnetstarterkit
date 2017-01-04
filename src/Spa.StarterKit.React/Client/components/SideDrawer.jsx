@@ -2,23 +2,23 @@
 import { Navigation, Drawer } from 'react-mdl';
 import { Link } from 'react-router';
 
+import { IconMenu, MenuItem, MenuDivider} from 'react-toolbox/lib/menu';
+
 class SideDrawer extends React.Component {
     constructor(props) {
         super(props);
     } 
     render() {
         return(
-           <Drawer title="Menu">
-            <Navigation>
-                <Link to="/">
-                    Home
-                </Link>
-                <Link to="NotShipped">Not Shipped</Link>
-                <Link to="Shipped">Shipped</Link>
-                <Link to="NewConsignment">New Consignment</Link>
-                <Link to="Tracking">Tracking</Link>
-            </Navigation>
-           </Drawer> 
+           <div>
+               <MenuItem value='Not Shipped' icon='assignment' caption='Not Shipped' />
+               <MenuItem value='Shipped' icon='assignment_turned_in' caption='Shipped' />
+               <MenuItem value='Manifests' icon='description' caption='Manifests' />
+               <MenuItem value='Search' icon='search' caption='Search' />
+               <MenuItem value='Reports' icon='insert_chart' caption='Reports' />
+               <MenuItem value='Reconciliation' icon='account_balance' caption='Reconciliation' />
+           </div>
+ 
         );
     }
 }

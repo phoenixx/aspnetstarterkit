@@ -56,9 +56,7 @@ class Home extends React.Component {
                 <NavDrawer active={this.state.drawerActive}
                     pinned={this.state.drawerPinned} permanentAt='xxxl'
                     onOverlayClick={ this.toggleDrawerActive }>
-                    <p>
-                        Navigation, account switcher, etc. go here.
-                    </p>
+                    <SideDrawer/>
                 </NavDrawer>
                 <Panel>
                     <AppBar leftIcon='menu' onLeftIconClick={ this.toggleDrawerActive } />

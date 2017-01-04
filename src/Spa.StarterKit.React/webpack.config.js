@@ -33,7 +33,7 @@ var clientBundleConfig = merge(sharedConfig(), {
             { test: /\.(png|jpg|jpeg|gif|svg)$/, loader: 'url-loader', query: { limit: 25000 } },
             {
                 test: /\.scss$/,
-                loaders: ['style-loader', 'css-loader', 'sass-loader']
+                loader: ExtractTextPlugin.extract(['style', 'css!sass'])
             }
         ]
     },

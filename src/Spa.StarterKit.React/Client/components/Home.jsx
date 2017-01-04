@@ -18,6 +18,7 @@ import MainContainer from '../containers/MainContainer';
 import SideDrawer from '../components/SideDrawer';
 import SiteHeader from '../components/SiteHeader';
 import SiteFooter from '../components/SiteFooter';
+import '../sass/global.scss';
 
 import 'react-mdl/extra/material.js';
 

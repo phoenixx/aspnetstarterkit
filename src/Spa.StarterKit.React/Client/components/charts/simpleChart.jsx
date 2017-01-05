@@ -49,21 +49,25 @@ class SimpleChart extends React.Component {
         switch (chartType) {
         case 'Line':
             return(
-                <Line
-                    data={this._transformChartData(this.props.sourceData, this.props.label)}
-                    height={100}
-                    options={{ maintainAspectRatio: false, legend: { display: false } }}/>
+                <div className="chart-container">
+                    <Line data={this._transformChartData(this.props.sourceData, this.props.label)}
+                          height={100}
+                          options={{ maintainAspectRatio: false, legend: { display: false } }} />
+                </div>
+                
             );
         case 'HorizontalBar':
             return(
-                <HorizontalBar
-                    data={this._transformChartData(this.props.sourceData, this.props.label)}
-                    height={100} 
-                    options={{maintainAspectRatio: false, legend: { display: false }}}/>
+                <div className="chart-container">
+                    <HorizontalBar
+                        data={this._transformChartData(this.props.sourceData, this.props.label)}
+                        height={100} 
+                        options={{maintainAspectRatio: false, legend: { display: false }}}/>
+                </div>
             );
         default:
             return(
-                <div>Invalid chart type '{this.props.chartType}'</div>
+                <div className="chart-container">Invalid chart type '{this.props.chartType}'</div>
             );
         }
     }

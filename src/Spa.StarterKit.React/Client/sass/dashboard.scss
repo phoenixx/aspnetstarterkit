@@ -14,6 +14,11 @@ $clr-white: #fff;
     vertical-align: middle;
 }
 
+.chart-container {
+    height: 100%;
+    padding: 20px;
+}
+
 .chart-controls--card {
     background: $clr-background;
     /*color: $clr-white;*/

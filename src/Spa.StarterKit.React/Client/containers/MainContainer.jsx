@@ -7,7 +7,7 @@ class MainContainer extends Component {
     }
     render() {
         return(
-            <div style={{ flex: 1, overflowY: 'auto', padding: '1.8rem' }}>
+            <div className="main-container">
                 {this.props.children}
             </div>
         );    

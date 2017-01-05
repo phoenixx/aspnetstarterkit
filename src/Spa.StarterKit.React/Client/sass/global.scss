@@ -18,6 +18,13 @@ font-size: 67.5%
   overflow-y: auto;
 }
 
+.main-container {
+     flex: 1;
+     overflow-y: auto;
+     padding: 1.8rem;
+     background: $light-grey;
+}
+
 .mdl-grid {
     max-width: 100%;
 }

@@ -48,7 +48,10 @@ class MultiChart extends React.Component {
     }
     render() {
         return(
-            <Line data={this.state.chartData} height={100} options={{maintainAspectRatio: false, legend: {display: true}}} />
+            <div className="chart-container">
+                <Line data={this.state.chartData} height={100} options={{maintainAspectRatio: false, legend: {display: true}}} />
+            </div>
+            
         );
     }
 }

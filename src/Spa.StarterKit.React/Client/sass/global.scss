@@ -18,6 +18,10 @@ font-size: 67.5%
   overflow-y: auto;
 }
 
+.mdl-grid {
+    max-width: 100%;
+}
+
 .mdl-layout__content {
     background-color: $light-grey;
 }

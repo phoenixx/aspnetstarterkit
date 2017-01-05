@@ -44,7 +44,10 @@ namespace Spa.StarterKit.React.Controllers.Dashboard
             var dashboard = await _dashboardService.GetDashboard(from.Value, to.Value, shippingLocationWhiteList, shippingLocationReference);
             //var dashboard = await _dashboardService.GetPreDespatchDashboard(from.Value, to.Value, shippingLocationWhiteList, shippingLocationReference);
 
-           return Json(dashboard);
+            dashboard.StartDate = from.Value.Date;
+            dashboard.EndDate = to.Value.Date;
+
+            return Json(dashboard);
         }
     }
 }

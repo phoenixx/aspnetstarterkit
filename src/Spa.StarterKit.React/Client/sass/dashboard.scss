@@ -19,6 +19,11 @@ $clr-white: #fff;
     padding: 20px;
 }
 
+.chart-controls--header {
+    font-size: 1.5em;
+    line-height: 1.5em;
+}
+
 .chart-controls--card {
     background: $clr-background;
     /*color: $clr-white;*/

@@ -15,9 +15,12 @@ class DashboardContainer extends React.Component {
             allocatedCarrierServicesData: null,
             radials: null,
             shippedRadials: null,
-            allocationByCarrierService: null
+            allocationByCarrierService: null,
+            startDate: null,
+            endDate: null
         }
         this._setTab = this._setTab.bind(this);
+        this._reloadData = this._reloadData.bind(this);
     }
     componentDidMount() {
         getDashboardData().then((data) => {
@@ -28,11 +31,36 @@ class DashboardContainer extends React.Component {
                 allocatedCarrierServicesData: data.data.allocatedCarrierServicesBarChart,
                 radials: data.data.issuesRadialCharts,
                 shippedRadials: data.data.postDespatchRadialCharts,
-                allocationByCarrierService: data.data.allocationByCarrierService
+                allocationByCarrierService: data.data.allocationByCarrierService,
+                startDate: data.data.startDate,
+                endDate: data.data.endDate
             });
         }).then(() => {
             console.log(this.state);
         });
+    }
+    _reloadData(start, end) {
+        this.setState({
+                hasLoaded: false
+            },
+            () => {
+                getDashboardData(start, end).then((data) => {
+                    this.setState({
+                        hasLoaded: true,
+                        preDespatchOverviewData: data.data.preDespatchOverviewBarChart,
+                        allocatedCarriersData: data.data.allocatedCarriersBarChart,
+                        allocatedCarrierServicesData: data.data.allocatedCarrierServicesBarChart,
+                        radials: data.data.issuesRadialCharts,
+                        shippedRadials: data.data.postDespatchRadialCharts,
+                        allocationByCarrierService: data.data.allocationByCarrierService,
+                        startDate: data.data.startDate,
+                        endDate: data.data.endDate
+                    });
+                }).then(() => {
+                    console.log(this.state);
+                });
+            });
+
     }
     _setTab(tabId) {
         this.setState({
@@ -50,13 +78,35 @@ class DashboardContainer extends React.Component {
                 allocatedCarrierServicesData={this.state.allocatedCarrierServicesData}
                 radials={this.state.radials}
                 shippedRadials={this.state.shippedRadials}
-                allocationByCarrierService={this.state.allocationByCarrierService}/>
+                allocationByCarrierService={this.state.allocationByCarrierService}
+                startDate={this.state.startDate}
+                endDate={this.state.endDate}
+                reload={this._reloadData}
+                       />
         );
     }
 }
 
-const getDashboardData = () => {
-    return axios.get('/dashboard/predespatch/')
+const getDashboardData = (start, end) => {
+
+    let baseUrl = '/dashboard/predespatch';
+
+    if (start) {
+        baseUrl = `${baseUrl}?from=${start}`;
+    }
+
+    if (end) {
+        let separator = '&';
+        if (!start) {
+            separator = '?';
+        }
+
+        baseUrl = `${baseUrl}${separator}to=${end}`;
+    }
+
+    console.log('getting data from: ', baseUrl);
+
+    return axios.get(baseUrl)
     .then(function(dashboardResponse) {
             console.log(dashboardResponse);
         return dashboardResponse;

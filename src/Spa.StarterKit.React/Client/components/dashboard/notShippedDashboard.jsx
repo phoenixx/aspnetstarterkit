@@ -3,6 +3,7 @@ import {
     Grid,
     Cell } from 'react-mdl';
 import { Card, CardMedia, CardTitle, CardText, CardActions } from 'react-toolbox/lib/card';
+import ChartControls from './chartControls';
 import SimpleChart from '../charts/SimpleChart';
 import RadialChart from '../charts/RadialChart';
 import MultiChart from '../charts/MultiChart';
@@ -15,15 +16,12 @@ class NotShippedDashboard extends React.Component {
             endDate: null
         }
     }
-    _handleChange(item, value) {
-        console.log('set ' + item + ' to ' + value);
-        this.setState({
-            [item]: value
-        });
-    }
     render() {
         return(
             <Grid>
+                <Cell col={12} tablet={12} phone={12}>
+                    <ChartControls startDate={this.props.startDate} endDate={this.props.endDate} reload={this.props.reload}/>
+                </Cell>
                 <Cell col={4} tablet={12} phone={12}>
                     <RadialChart Source={this.props.radials} Label="Unallocated" />
                 </Cell>

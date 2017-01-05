@@ -2,7 +2,7 @@
 import { browserHistory } from 'react-router'
 import { IconMenu, MenuItem, MenuDivider} from 'react-toolbox/lib/menu';
 import { List, ListItem, ListDivider, ListSubHeader } from 'react-toolbox';
-
+import '../sass/drawer.scss';
 
 class SideDrawer extends React.Component {
     constructor(props) {
@@ -17,7 +17,7 @@ class SideDrawer extends React.Component {
     }
     render() {
         return(
-            <aside>
+            <aside className="scrollable-drawer">
                 <div className="menu--header">
                     Menu
                 </div>

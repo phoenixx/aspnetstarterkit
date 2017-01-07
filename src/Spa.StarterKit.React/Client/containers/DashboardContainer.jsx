@@ -8,6 +8,7 @@ class DashboardContainer extends React.Component {
         this.state = {
             activeTab: 0,
             hasLoaded: false,
+            reloading: false,
             globalStart: null,
             globalEnd: null,
             preDespatchOverviewData: null,
@@ -21,11 +22,13 @@ class DashboardContainer extends React.Component {
         }
         this._setTab = this._setTab.bind(this);
         this._reloadData = this._reloadData.bind(this);
+        this._toggleLoadingState = this._toggleLoadingState.bind(this);
     }
     componentDidMount() {
         getDashboardData().then((data) => {
             this.setState({
                 hasLoaded: true,
+                reloading: false,
                 preDespatchOverviewData: data.data.preDespatchOverviewBarChart,
                 allocatedCarriersData: data.data.allocatedCarriersBarChart,
                 allocatedCarrierServicesData: data.data.allocatedCarrierServicesBarChart,
@@ -41,12 +44,12 @@ class DashboardContainer extends React.Component {
     }
     _reloadData(start, end) {
         this.setState({
-                hasLoaded: false
+                reloading: true
             },
             () => {
                 getDashboardData(start, end).then((data) => {
                     this.setState({
-                        hasLoaded: true,
+                        reloading: false,
                         preDespatchOverviewData: data.data.preDespatchOverviewBarChart,
                         allocatedCarriersData: data.data.allocatedCarriersBarChart,
                         allocatedCarrierServicesData: data.data.allocatedCarrierServicesBarChart,
@@ -67,6 +70,11 @@ class DashboardContainer extends React.Component {
             activeTab: tabId
         });
     }
+    _toggleLoadingState() {
+        this.setState({
+            reloading: true
+        });
+    }
     render() {
         return(
             <Dashboard 
@@ -82,6 +90,8 @@ class DashboardContainer extends React.Component {
                 startDate={this.state.startDate}
                 endDate={this.state.endDate}
                 reload={this._reloadData}
+                reloading={this.state.reloading}
+                toggleLoadingState={this._toggleLoadingState}
                        />
         );
     }

@@ -23,13 +23,13 @@ class NotShippedDashboard extends React.Component {
                     <ChartControls startDate={this.props.startDate} endDate={this.props.endDate} reload={this.props.reload}/>
                 </Cell>
                 <Cell col={4} tablet={12} phone={12}>
-                    <RadialChart Source={this.props.radials} Label="Unallocated" />
+                    <RadialChart source={this.props.radials} reloading={this.props.reloading} label="Unallocated" toggleLoadingState={this.props.toggleLoadingState} />
                 </Cell>
                 <Cell col={4} tablet={12} phone={12}>
-                    <RadialChart Source={this.props.radials} Label="Allocation Failed" />
+                    <RadialChart source={this.props.radials} reloading={this.props.reloading} label="Allocation Failed" />
                 </Cell>
                 <Cell col={4} tablet={12} phone={12}>
-                    <RadialChart Source={this.props.radials} Label="Manifest Failed" />
+                    <RadialChart source={this.props.radials} reloading={this.props.reloading} label="Manifest Failed" />
                 </Cell>
                 <Cell col={6} tablet={12} phone={12}>
                     <Card shadow={0} style={{width: '100%' , height: '320px'}} raised>

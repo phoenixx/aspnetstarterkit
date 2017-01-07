@@ -1,5 +1,4 @@
-﻿$clr-background: #696969;
-$clr-white: #fff;
+﻿@import './global.scss';
 
 .radial-number {
     font-size: 1.8em;
@@ -8,10 +7,19 @@ $clr-white: #fff;
     width: 100%;
     text-align: center; 
     margin-top: 90px;
-    z-index: 100;  
+    /*z-index: 100;*/  
     position: absolute;
     display: table-cell;
     vertical-align: middle;
+}
+
+.radial--loading {
+    position: relative;
+    z-index:30;
+    background-color: $light-grey;
+    width: 100%;
+    height: 100%;
+    text-align: center;
 }
 
 .chart-container {
@@ -25,7 +33,7 @@ $clr-white: #fff;
 }
 
 .chart-controls--card {
-    background: $clr-background;
+    background: $clr-spacegrey;
     /*color: $clr-white;*/
     min-height: 80px;
     line-height: 80px;
@@ -33,14 +41,14 @@ $clr-white: #fff;
     overflow: visible;
     /*z-index: 99999 !important;*/
     .mdl-card__supporting-text {
-        color: $clr-white;
+        color: $white;
         padding: 0;
         overflow: visible;
         /*z-index: 99999 !important;*/
     }
 }
 .chart-controls--title {
-    color: $clr-white;
+    color: $white;
     height: 80px;
     padding: 0;
     display: table-cell;

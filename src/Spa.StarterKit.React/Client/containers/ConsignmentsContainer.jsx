@@ -10,7 +10,6 @@ class ConsignmentsContainer extends Component {
         this._loadData = this._loadData.bind(this);
     }
     componentDidMount() {
-        console.log('route data : ' + this.props.route);
         this._loadData(this.props.route.consignmentState).then((data) => {
             this.setState({
                 data: data
@@ -20,7 +19,6 @@ class ConsignmentsContainer extends Component {
         });
     }
     _loadData(state, take, skip) {
-        debugger;
         const baseUrl = `/consignments/${state.toLowerCase()}`;
 
         //add take skip....

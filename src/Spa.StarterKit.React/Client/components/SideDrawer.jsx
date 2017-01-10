@@ -8,14 +8,21 @@ class SideDrawer extends React.Component {
     constructor(props) {
         super(props);
         this._navigate = this._navigate.bind(this);
+        this._toggleDrawer = this._toggleDrawer.bind(this);
     }
     _navigate(location) {
         console.log(`calling _navigate(${location})`);
+        this._toggleDrawer();
         this.context.router.push(location);
         //browserHistory.push(`#/${location}`);
     }
     _navigateUrl(location) {
         window.location.href = location;
+    }
+    _toggleDrawer() {
+        if (typeof this.props.toggleDrawer === 'function') {
+            this.props.toggleDrawer();
+        }
     }
     render() {
         return(

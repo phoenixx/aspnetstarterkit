@@ -44,7 +44,7 @@ class Home extends React.Component {
                 <NavDrawer active={this.state.drawerActive}
                            pinned={this.state.drawerPinned}
                            onOverlayClick={ this.toggleDrawerActive }>
-                    <SideDrawer />
+                    <SideDrawer toggleDrawer={this.toggleDrawerActive} />
                 </NavDrawer>
                 <Panel>
                     <MainAppBar onLeftIconClick={this.toggleDrawerActive} leftIcon="menu" />

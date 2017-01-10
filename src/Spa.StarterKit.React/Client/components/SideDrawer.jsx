@@ -10,7 +10,9 @@ class SideDrawer extends React.Component {
         this._navigate = this._navigate.bind(this);
     }
     _navigate(location) {
-        browserHistory.push(`#/${location}`);
+        console.log(`calling _navigate(${location})`);
+        this.context.router.push(location);
+        //browserHistory.push(`#/${location}`);
     }
     _navigateUrl(location) {
         window.location.href = location;
@@ -80,42 +82,8 @@ class SideDrawer extends React.Component {
     }
 };
 
-SideDrawer.propTypes = {
-    router: PropTypes.object
-};
-
-
-
-
-
-//class SideDrawer extends React.Component {
-//    constructor(props) {
-//        super(props);
-//        this._navigate = this._navigate.bind(this);
-//    } 
-//    _navigate(route) {
-//        alert(route);
-//        if (route) {
-//            browserHistory.push(route);
-//        }
-//    }
-//    render() {
-//        return(
-//           <div>
-//               <div className="menu--header">
-//                Menu
-//               </div>
-//               <MenuItem value='#Upload' icon='file_upload' caption='Upload' onSelect={this._navigate('#/upload')} />
-//               <MenuItem value='#Not Shipped' icon='assignment' caption='Not Shipped' />
-//               <MenuItem value='#Shipped' icon='assignment_turned_in' caption='Shipped' />
-//               <MenuItem value='#Manifests' icon='description' caption='Manifests' />
-//               <MenuItem value='#Search' icon='search' caption='Search' />
-//               <MenuItem value='#Reports' icon='insert_chart' caption='Reports' />
-//               <MenuItem value='#Reconciliation' icon='account_balance' caption='Reconciliation' />
-//           </div>
- 
-//        );
-//    }
-//}
+SideDrawer.contextTypes = {
+    router: PropTypes.func.isRequired
+}
 
 export default SideDrawer;

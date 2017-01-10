@@ -1,17 +1,42 @@
-﻿import React from 'react';
+﻿import React , { Component }from 'react';
 import { Router, Route, hashHistory, IndexRoute } from 'react-router';
 import Home from '../components/Home';
-import Sample from '../components/Sample';
 import DashboardContainer from '../containers/DashboardContainer';
 import Loading from '../components/Loading';
+import ConsignmentsContainer from '../containers/ConsignmentsContainer';
+import { IntlProvider } from 'react-intl';
 
-const routes = (
-    <Router history={hashHistory}>
-        <Route path="/" component={Home}>
-            <IndexRoute component={DashboardContainer}/>
-            <Route path="loading" component={Loading} />
-        </Route>
-    </Router>
-); 
+class RouteComponent extends Component {
+    constructor(props) {
+        super(props);
+    }
+    render() {
+        return(
+            <IntlProvider locale={'en-GB'}>
+                <Router history={hashHistory}>
+                    <Route path="/" component={Home}>
+                        <IndexRoute component={DashboardContainer}/>
+                        <Route path="loading" component={Loading}/>
+                        <Route path="shipped" consignmentState="shipped" component={ConsignmentsContainer}/>
+                        <Route path="notshipped" consignmentState="notshipped" component={ConsignmentsContainer} />
+                    </Route>
+                </Router>
+            </IntlProvider>
+        );
+    }
+}
 
-export default routes;
+//const routes = (
+//    <IntlProvider locale={'en-GB'}>
+//        <Router history={hashHistory}>
+//        <Route path="/" component={Home}>
+//            <IndexRoute component={DashboardContainer} />
+//            <Route path="loading" component={Loading} />
+//            <Route path="shipped" consignmentState="shipped" component={ConsignmentsContainer}/>
+//        </Route>
+//        </Router>
+//    </IntlProvider>
+    
+//); 
+
+export default RouteComponent;

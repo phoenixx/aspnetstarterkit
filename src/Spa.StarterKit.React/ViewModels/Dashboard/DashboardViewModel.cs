@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using MPD.Electio.SDK.NetCore.DataTypes.Profile.v1_1;
 
@@ -11,6 +12,11 @@ namespace Spa.StarterKit.React.ViewModels.Dashboard
         public List<ShippingLocation> AssignedShippingLocations { get; set; }
 
         public string SelectedShippingLocation { get; set; }
+
+        public DateTime StartDate { get; set; }
+
+        public DateTime EndDate { get; set; }
+        
 
         #region Pre-Despatch
 

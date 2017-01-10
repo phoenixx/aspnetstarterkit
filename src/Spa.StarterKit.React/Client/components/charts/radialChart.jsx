@@ -1,22 +1,29 @@
 ﻿import React from 'react';
 import {Doughnut} from 'react-chartjs-2';
-import { Button, Card, CardTitle, CardActions } from 'react-mdl';
+//import { Card, CardTitle, CardActions } from 'react-mdl';
+import { Card, CardMedia, CardTitle, CardText, CardActions } from 'react-toolbox/lib/card';
 import Utils from '../../utilities/utils';
+import { Button } from 'react-toolbox/lib/button';
+import RedButton from '../buttons/redbutton';
+import MpdCardTitle from '../cards/cardTitle';
+import Loading from '../Loading';
+import cardActionsTheme from '../cards/cardActions.scss';
 
 class RadialChart extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             chartData: null,
-            count: 0
+            count: 0,
+            reloading: false //used for self-trigger of reload...
         };
         this._transformRadial = this._transformRadial.bind(this);
         this._getNumerator = this._getNumerator.bind(this);
     }
     componentWillMount() {
         this.setState({
-            chartData: this._transformRadial(this.props.Source, this.props.Label),
-            count: this._getNumerator(this.props.Source, this.props.Label)
+            chartData: this._transformRadial(this.props.source, this.props.label),
+            count: this._getNumerator(this.props.source, this.props.label)
         });
     }
     _getNumerator(source, label) {
@@ -63,16 +70,23 @@ class RadialChart extends React.Component {
     }
     render() {
         return(
-            <Card shadow={0} style={{width: '100%' , height: '320px', padding: '20px 20px 100px 20px'}}>
-                <CardTitle style={{color: Utils.colors.black, height: '40px', textAlign: 'center'}} className="mdl-card__title--center">
-                    {this.props.Label}
-                </CardTitle>
-                <span className="radial-number">{this.state.count}</span>
-                <Doughnut data={this.state.chartData} height={20} options={{maintainAspectRatio: false, cutoutPercentage: 80, legend: {display: false}, tooltips: {enabled: false}}} />
-                <CardActions style={{textAlign: 'center'}}>
-                    <Button raised className="mdl-button--dark-red" disabled={this.state.count === 0}>
+            <Card shadow={0} style={{width: '100%' , height: '320px', padding: '0'}} raised>
+                {(this.props.reloading || this.state.reloading) ? (
+                    <div className="radial--loading">
+                        <Loading />
+                    </div>
+                ) : (null)}
+                <MpdCardTitle>
+                    {this.props.label}
+                </MpdCardTitle>
+                <div className="radial-container" style={{height: '80%', position: 'relative'}}>
+                    <span className="radial-number">{this.state.count}</span>
+                    <Doughnut data={this.state.chartData} options={{maintainAspectRatio: false, cutoutPercentage: 80, legend: {display: false}, tooltips: {enabled: false}}} />
+                </div>
+                <CardActions style={{textAlign: 'center'}} theme={cardActionsTheme}>
+                    <RedButton raised disabled={this.state.count === 0}>
                         resolve
-                    </Button>
+                    </RedButton>
                 </CardActions>
             </Card>
         );

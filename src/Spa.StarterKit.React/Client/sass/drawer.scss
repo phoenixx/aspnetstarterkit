@@ -1,0 +1,20 @@
+﻿.scrollable-drawer {
+    overflow-y: auto;
+}
+.scrollable-drawer::-webkit-scrollbar {
+      width: 6px;
+      height: 6px; 
+}
+
+.scrollable-drawer::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3); 
+  box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+}
+
+.scrollable-drawer::-webkit-scrollbar-thumb {
+  background: #ddd;
+}
+
+.scrollable-drawer::-webkit-scrollbar-thumb:window-inactive {
+  background: rgba(0, 0, 0, 0.5); 
+}

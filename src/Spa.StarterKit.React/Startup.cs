@@ -80,7 +80,10 @@ namespace Spa.StarterKit.React
                 AutomaticAuthenticate = true,
                 AutomaticChallenge = true,
                 CookieName = "ele.au",
-                ClaimsIssuer = "https://electioapp.com" //TODO config
+                ClaimsIssuer = "https://electioapp.com",//TODO config
+                SlidingExpiration = true,
+                ExpireTimeSpan = TimeSpan.FromMinutes(30)
+                
             });
 
             app.UseMvc(routes =>

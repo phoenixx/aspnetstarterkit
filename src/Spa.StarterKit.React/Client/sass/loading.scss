@@ -1,6 +1,11 @@
 ﻿$red: #df3900;
 $grey: rgb(66,66,66);
 
+.animation-loading {
+    min-height: 700px;
+    overflow: hidden;
+    
+}
 
 .animation-loading > ul{
 	height: 50%;

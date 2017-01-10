@@ -1,15 +1,85 @@
-﻿.radial-number {
+﻿@import './global.scss';
+
+.radial-number {
     font-size: 1.8em;
     font-weight: bold;
     display: block;
     width: 100%;
     text-align: center; 
-    margin-top: 100px;
-    z-index: 100;  
+    margin-top: 90px;
+    /*z-index: 100;*/  
     position: absolute;
-    margin-left: -20px; 
     display: table-cell;
     vertical-align: middle;
+}
+
+.radial--loading {
+    position: relative;
+}
+
+.chart--loading {
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+
+.radial--loading,
+.chart--loading {
+    
+    z-index:30;
+    background-color: $light-grey;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+}
+
+.chart-container {
+    padding: 0 20px 20px 20px;
+    position: relative;
+    height: 100%;
+}
+
+.chart-container--inner {
+    height: calc(100% - 20px); /*account for bottom padding*/
+    width: calc(100% - 40px);
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding: 0 20px 20px 20px;
+}
+
+.chart-controls--header {
+    font-size: 1.5em;
+    line-height: 1.5em;
+}
+
+.chart-controls--card {
+    background: $clr-spacegrey;
+    /*color: $clr-white;*/
+    min-height: 80px;
+    line-height: 80px;
+    height: 80px;
+    overflow: visible;
+    /*z-index: 99999 !important;*/
+    .mdl-card__supporting-text {
+        color: $white;
+        padding: 0;
+        overflow: visible;
+        /*z-index: 99999 !important;*/
+    }
+}
+.chart-controls--title {
+    color: $white;
+    height: 80px;
+    padding: 0;
+    display: table-cell;
+    vertical-align: middle;
+    
+}
+
+.chart-controls--days {
+    font-size: 3em;
+    font-weight: bold;
 }
 
 @media (max-width: 992px) {

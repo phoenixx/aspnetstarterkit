@@ -21,3 +21,4 @@ obj/
 _ReSharper*/
 [Nn]ode_[Mm]odules/
 **/[Dd]ist/*
+*.orig

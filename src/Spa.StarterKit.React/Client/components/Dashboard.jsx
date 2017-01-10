@@ -1,5 +1,6 @@
 ﻿import React from 'react';
-import { Tabs, Tab } from 'react-mdl';
+//import { Tabs, Tab } from 'react-mdl';
+import { Tab, Tabs } from 'react-toolbox';
 import Loading from '../components/Loading';
 import NotShippedDashboard from '../components/dashboard/notShippedDashboard';
 import ShippedDashboard from '../components/dashboard/shippedDashboard';
@@ -14,15 +15,14 @@ class Dashboard extends React.Component {
             :
             (
                 <div>
-                    <Tabs activeTab={this.props.activeTab} onChange={(tabId) => this.props.setActiveTab(tabId)} ripple>
-                        <Tab>Not Shipped</Tab>
-                        <Tab>Shipped</Tab>
+                    <Tabs index={this.props.activeTab} onChange={(tabId) => this.props.setActiveTab(tabId)} fixed>
+                        <Tab label="Not Shipped" icon="assignment">
+                            <NotShippedDashboard {...this.props} />
+                        </Tab>
+                        <Tab label="Shipped" icon="assignment_turned_in">
+                            <ShippedDashboard {...this.props} />
+                        </Tab>
                     </Tabs>
-                    {this.props.activeTab === 0 ? (
-                        <NotShippedDashboard {...this.props}/>
-                    ) : (
-                        <ShippedDashboard {...this.props}/>
-                    )}
             </div>
             ) 
         );

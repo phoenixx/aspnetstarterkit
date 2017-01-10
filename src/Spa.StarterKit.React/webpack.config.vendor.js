@@ -4,6 +4,8 @@ var webpack = require('webpack');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 var merge = require('webpack-merge');
 var extractCSS = new ExtractTextPlugin('vendor.css');
+var CleanWebpackPlugin = require('clean-webpack-plugin');
+
 
 var sharedConfig = {
     resolve: { extensions: ['', '.js'] },
@@ -29,6 +31,11 @@ var sharedConfig = {
         library: '[name]_[hash]'
     },
     plugins: [
+        new CleanWebpackPlugin(
+            [
+                './wwwroot/dist'
+            ]
+        ),
         new webpack.NormalModuleReplacementPlugin(/\/iconv-loader$/, require.resolve('node-noop')), // Workaround for https://github.com/andris9/encoding/issues/16
         new webpack.DefinePlugin({
             'process.env.NODE_ENV': isDevBuild ? '"development"' : '"production"'

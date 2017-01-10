@@ -3,6 +3,32 @@ $light-grey: #ddd;
 $white: #fff;
 $dark-red: rgba(222,32,34, 1);
 $darker-red: rgba(150, 0, 0, 1);
+$clr-grey: #333;
+$clr-spacegrey: #696969;
+
+html {
+font-size: 67.5%
+}
+
+#app {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow-y: auto;
+}
+
+.main-container {
+     flex: 1;
+     overflow-y: auto;
+     padding: 1.8rem;
+     background: $light-grey;
+}
+
+.mdl-grid {
+    max-width: 100%;
+}
 
 .mdl-layout__content {
     background-color: $light-grey;
@@ -41,3 +67,30 @@ $darker-red: rgba(150, 0, 0, 1);
 .mdl-button--dark-red:hover {
     background: $darker-red;
 }
+
+/*main app layout components*/
+/*#app {
+    position: absolute;
+
+    .content {
+        flex: 1 1 auto;
+        overflow-y: auto;
+        position: relative;
+        width: 100%;
+    }
+
+    .header {
+        flex: 0 0 auto;
+    }
+}*/
+.menu--header {
+    font-size: 2.4em;
+    padding: 10px;
+    background: $electio-red;
+    color: $white;
+    min-height: 70px;
+    line-height: 70px;
+}
+
+
+/*overrides*/

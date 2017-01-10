@@ -1,0 +1,13 @@
+﻿@import "../../sass/global.scss";
+
+.button:not(:disabled),
+.button:not(:disabled).raised {
+    background-color: $dark-red;
+    color: $white;
+
+}
+
+.button:not(:disabled):hover,
+.button:not(:disabled).raised:hover {
+        background-color: $darker-red;
+}

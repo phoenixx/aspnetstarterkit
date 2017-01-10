@@ -34,18 +34,18 @@
 }
 
 .chart-container {
-    padding: 20px;
+    padding: 0 20px 20px 20px;
     position: relative;
     height: 100%;
 }
 
 .chart-container--inner {
-    height: calc(100% - 40px);
+    height: calc(100% - 20px); /*account for bottom padding*/
     width: calc(100% - 40px);
     position: absolute;
     top: 0;
     left: 0;
-    padding: 20px;
+    padding: 0 20px 20px 20px;
 }
 
 .chart-controls--header {

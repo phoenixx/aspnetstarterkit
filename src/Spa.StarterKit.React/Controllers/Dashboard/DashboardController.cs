@@ -17,7 +17,7 @@ namespace Spa.StarterKit.React.Controllers.Dashboard
         }
 
 #warning fixed const should be config
-        private const int DAYS_DATA_TO_DISPLAY = 101;// 30;
+        private const int DAYS_DATA_TO_DISPLAY = 30;
 
         [Route("dashboard/predespatch")]
         public async Task<IActionResult> PreDespatch(DateTime? from, DateTime? to, string shippingLocationReference)

@@ -2,7 +2,9 @@
 .cardTitle .large {
     display: block;
     text-align: center;
-
+    padding: 0 !important; /*reset*/
+    padding-top: 0.6em !important;
+   
     .title {
         font-size: 1.5em !important;
         height: 40px;

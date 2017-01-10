@@ -2,6 +2,8 @@
 import {Doughnut, HorizontalBar, Line, Polar, Bar, Pie} from 'react-chartjs-2';
 import Utils from '../../utilities/utils';
 import Loading from '../Loading';
+import MpdCardTitle from '../cards/cardTitle';
+
 
 class SimpleChart extends React.Component {
     constructor(props) {
@@ -35,8 +37,8 @@ class SimpleChart extends React.Component {
                     fill: true,
                     borderWidth: 0.8,
                     lineTension: 0.3,
-                    backgroundColor: Utils.colors.charts.blue_fade,
-                    borderColor: Utils.colors.charts.blue,
+                    backgroundColor: Utils.colors.charts.foreground_colours,
+                    borderColor: Utils.colors.charts.background_colours,
                     borderCapStyle: 'butt',
                     borderDash: [],
                     borderDashOffset: 0.0,
@@ -77,9 +79,15 @@ class SimpleChart extends React.Component {
                      }]     
             }
         }
+        const legendOptions = {
+            legend: {
+                display: true
+            }
+        }
 
         const defaultOptionsWithAxis = Object.assign({}, defaultOptions, axisDefaults);
-        
+        const defaultOptionsWithLegend = Object.assign({}, defaultOptions, legendOptions);
+
         switch (chartType) {
             case 'Line':
                 return (
@@ -95,7 +103,7 @@ class SimpleChart extends React.Component {
                 );
             case 'Doughnut':
                 return(
-                    <Doughnut data={this._transformChartData(this.props.sourceData, this.props.label)} height={100} options={defaultOptions} />
+                    <Doughnut data={this._transformChartData(this.props.sourceData, this.props.label)} height={100} options={defaultOptionsWithLegend} />
                 );
             default:
                 return(

@@ -77,7 +77,7 @@ class RadialChart extends React.Component {
                     </div>
                 ) : (null)}
                 <MpdCardTitle>
-                    {this.props.Label}
+                    {this.props.label}
                 </MpdCardTitle>
                 <div className="radial-container" style={{height: '80%', position: 'relative'}}>
                     <span className="radial-number">{this.state.count}</span>

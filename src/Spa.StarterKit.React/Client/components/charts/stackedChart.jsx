@@ -56,13 +56,13 @@ class StackedChart extends React.Component {
                 label: dataKey,
                 data: values,
                 borderColor: Utils.colors.charts.foreground_colours[i],
-                backgroundColor: Utils.colors.charts.background_colours[i],
-                pointBorderColor: Utils.colors.charts.background_colours[i],
+                backgroundColor: Utils.colors.charts.foreground_colours[i],
+                pointBorderColor: Utils.colors.charts.foreground_colours[i],
                 pointBackgroundColor: Utils.colors.white,
                 pointHoverBackgroundColor: Utils.colors.charts.foreground_colours[i],
                 pointHoverBorderColor: Utils.colors.charts.foreground_colours[i],
                 hoverBackgroundColor: Utils.colors.white,
-                hoverBorderColor: Utils.colors.red,
+                hoverBorderColor: Utils.colors.charts.foreground_colours[4],
                 fill: true,
                 borderWidth: 0.8
             });
@@ -106,7 +106,7 @@ class StackedChart extends React.Component {
                         <Loading />
                     </div>
                 ) : (null)}
-                <Bar data={this.state.chartData} height={100} options={{ maintainAspectRatio: false, legend: { display: true }, scales: { xAxes: [{ stacked: true, ticks: { beginAtZero: true } }], yAxes: [{stacked: true}] } }} />
+                <Bar data={this.state.chartData} height={100} options={{ maintainAspectRatio: false, legend: { display: true }, scales: { xAxes: [{ stacked: true, ticks: { beginAtZero: true } }], yAxes: [{stacked: true, ticks: {beginAtZero: true}}] } }} />
             </div>
             
         );

@@ -7,6 +7,7 @@ import ChartControls from './chartControls';
 import SimpleChart from '../charts/SimpleChart';
 import RadialChart from '../charts/RadialChart';
 import MultiChart from '../charts/MultiChart';
+import MpdCardTitle from '../cards/cardTitle';
 
 class NotShippedDashboard extends React.Component {
     constructor(props) {
@@ -33,21 +34,25 @@ class NotShippedDashboard extends React.Component {
                 </Cell>
                 <Cell col={6} tablet={12} phone={12}>
                     <Card shadow={0} style={{width: '100%' , height: '320px'}} raised>
+                        <MpdCardTitle>Overview</MpdCardTitle>
                         <SimpleChart reloading={this.props.reloading} label="State" sourceData={this.props.preDespatchOverviewData} chartType="Line" />
                     </Card>
                 </Cell>
                 <Cell col={6} tablet={12} phone={12}>
                     <Card shadow={0} style={{width: '100%' , height: '320px'}} raised>
+                        <MpdCardTitle>Carrier Allocation</MpdCardTitle>
                         <SimpleChart reloading={this.props.reloading} label="Allocated Carrier" sourceData={this.props.allocatedCarriersData} chartType="HorizontalBar" />
                     </Card>
                 </Cell>
                 <Cell col={12} phone={12}>
                     <Card shadow={0} style={{width: '100%' , height: '320px'}} raised>
+                        <MpdCardTitle>Carrier Service Allocation</MpdCardTitle>
                         <SimpleChart reloading={this.props.reloading} label="Allocated Carrier Services" sourceData={this.props.allocatedCarrierServicesData} chartType="HorizontalBar" />
                     </Card>
                 </Cell>
                 <Cell col={12} phone={12}>
                     <Card shadow={0} style={{width: '100%' , height: '320px'}} raised>
+                        <MpdCardTitle>Consignment Volume by Week</MpdCardTitle>
                         <MultiChart reloading={this.props.reloading} Source={this.props.allocationByCarrierService} LabelPrefix="Week" NullLabelText="Not Allocated" />
                     </Card>
                 </Cell>

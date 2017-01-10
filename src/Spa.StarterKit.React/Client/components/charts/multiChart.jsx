@@ -1,14 +1,18 @@
 ﻿import React from 'react';
 import {Doughnut, HorizontalBar, Line, Polar, Bar, Pie} from 'react-chartjs-2';
+import { Button } from 'react-toolbox/lib/button';
 import Utils from '../../utilities/utils';
+import Loading from '../Loading';
 
 class MultiChart extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            chartData: null
+            chartData: null,
+            reloading: false
         };
         this._transformChartData = this._transformChartData.bind(this);
+        this._toggleLoading = this._toggleLoading.bind(this);
     }
     componentWillMount() {
         this.setState({
@@ -16,6 +20,11 @@ class MultiChart extends React.Component {
                 this.props.Source,
                 this.props.LabelPrefix,
                 this.props.NullLabelText)
+        });
+    }
+    _toggleLoading() {
+        this.setState({
+            reloading: !this.state.reloading
         });
     }
     _transformChartData(source, labelPrefix, nullLabelText) {
@@ -49,6 +58,11 @@ class MultiChart extends React.Component {
     render() {
         return(
             <div className="chart-container">
+                {(this.props.reloading || this.state.reloading) ? (
+                    <div className="chart--loading">
+                        <Loading />
+                    </div>
+                ) : (null)}
                 <Line data={this.state.chartData} height={100} options={{maintainAspectRatio: false, legend: {display: true}}} />
             </div>
             

@@ -14,6 +14,11 @@ class DashboardContainer extends React.Component {
             preDespatchOverviewData: null,
             allocatedCarriersData: null,
             allocatedCarrierServicesData: null,
+            lateConsignmentsBar: null,
+            lateConsignmentsPie: null,
+            lateConsignmentsByCarrier: null,
+            issuesByCarrier: null,
+            shippedOverview: null,
             radials: null,
             shippedRadials: null,
             allocationByCarrierService: null,
@@ -35,6 +40,11 @@ class DashboardContainer extends React.Component {
                 radials: data.data.issuesRadialCharts,
                 shippedRadials: data.data.postDespatchRadialCharts,
                 allocationByCarrierService: data.data.allocationByCarrierService,
+                issuesByCarrier: data.data.issuesByCarrierStackedChart.chartData,
+                lateConsignmentsBar: data.data.lateConsignmentsBarChart,
+                lateConsignmentsPie: data.data.lateConsignmentsPieChart,
+                lateConsignmentsByCarrier: data.data.lateConsignmentsByCarrierStackedChart.chartData,
+                shippedOverview: data.data.postDespatchOverviewBarChart,
                 startDate: data.data.startDate,
                 endDate: data.data.endDate
             });
@@ -56,6 +66,11 @@ class DashboardContainer extends React.Component {
                         radials: data.data.issuesRadialCharts,
                         shippedRadials: data.data.postDespatchRadialCharts,
                         allocationByCarrierService: data.data.allocationByCarrierService,
+                        issuesByCarrier: data.data.issuesByCarrierStackedChart.chartData,
+                        lateConsignmentsBar: data.data.lateConsignmentsBarChart,
+                        lateConsignmentsPie: data.data.lateConsignmentsPieChart,
+                        lateConsignmentsByCarrier: data.data.lateConsignmentsByCarrierStackedChart.chartData,
+                        shippedOverview: data.data.postDespatchOverviewBarChart,
                         startDate: data.data.startDate,
                         endDate: data.data.endDate
                     });
@@ -87,6 +102,11 @@ class DashboardContainer extends React.Component {
                 radials={this.state.radials}
                 shippedRadials={this.state.shippedRadials}
                 allocationByCarrierService={this.state.allocationByCarrierService}
+                issuesByCarrier={this.state.issuesByCarrier}
+                lateConsignmentsBar={this.state.lateConsignmentsBar}
+                lateConsignmentsPie={this.state.lateConsignmentsPie}
+                lateConsignmentsByCarrier={this.state.lateConsignmentsByCarrier}
+                shippedOverview={this.state.shippedOverview}
                 startDate={this.state.startDate}
                 endDate={this.state.endDate}
                 reload={this._reloadData}

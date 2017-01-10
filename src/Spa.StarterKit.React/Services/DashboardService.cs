@@ -12,6 +12,7 @@ using Spa.StarterKit.React.ViewModels.Dashboard;
 using MPD.Electio.SDK.NetCore.DataTypes.Consignments.v1_1.Enums;
 using Spa.StarterKit.React.Extensions;
 using MPD.Electio.SDK.NetCore.DataTypes.Profile.v1_1;
+using Nancy.Extensions;
 
 namespace Spa.StarterKit.React.Services
 {
@@ -57,7 +58,7 @@ namespace Spa.StarterKit.React.Services
                 var getAllocationByCarrierServiceChart = AllocationByCarrierServiceByDateOperation(carrierSummary);
                 var getLateConsignmentsBarChart = GetLateConsignmentsBarChartDataOperationAsync(lateData);
                 var getLateConsignmentsPieChart = GetLateConsignmentsPieChartDataOperationAsync(lateData);
-                var getLateConsignmentsByCarrierStackedChart = GetLateConsignmentsStackedChartDataByCarrierOperationAsync(lateData);
+                var getLateConsignmentsByCarrierStackedChart = GetLateConsignmentsStackedChartDataByCarrierOperationAsync(lateData, carrierSummary);
                 var getLateConsignmentsStackedChart = GetLateConsignmentsStackedChartDataOperationAsync(lateData);
 
                 await Task.WhenAll(
@@ -169,7 +170,7 @@ namespace Spa.StarterKit.React.Services
                 var getPostDespatchOverview = GetPostDespatchOverviewDataOperationAsync(statusSummary);
                 var getLateConsignmentsBarChart = GetLateConsignmentsBarChartDataOperationAsync(lateData);
                 var getLateConsignmentsPieChart = GetLateConsignmentsPieChartDataOperationAsync(lateData);
-                var getLateConsignmentsByCarrierStackedChart = GetLateConsignmentsStackedChartDataByCarrierOperationAsync(lateData);
+                var getLateConsignmentsByCarrierStackedChart = GetLateConsignmentsStackedChartDataByCarrierOperationAsync(lateData, carrierSummary);
                 var getLateConsignmentsStackedChart = GetLateConsignmentsStackedChartDataOperationAsync(lateData);
 
                 await Task.WhenAll(
@@ -207,12 +208,14 @@ namespace Spa.StarterKit.React.Services
             try
             {
                 var getLateDataTask = _consignments.GetLateAndOnTimeConsignmentSummaryAsync(dateFrom, dateTo, shippingLocationReference);
+                var getCarrierSummaryTask = _consignments.GetConsignmenCarrierSummaryAsync(dateFrom, dateTo, shippingLocationReference);
 
                 var lateData = await getLateDataTask;
+                var carrierSummary = await getCarrierSummaryTask;
 
                 var getBarChartTask = GetLateConsignmentsBarChartDataOperationAsync(lateData);
                 var getPieChartTask = GetLateConsignmentsPieChartDataOperationAsync(lateData);
-                var getStackedChartByCarrierTask = GetLateConsignmentsStackedChartDataByCarrierOperationAsync(lateData);
+                var getStackedChartByCarrierTask = GetLateConsignmentsStackedChartDataByCarrierOperationAsync(lateData, carrierSummary);
                 var getStackedChartData = GetLateConsignmentsStackedChartDataOperationAsync(lateData);
 
                 await Task.WhenAll(getBarChartTask, getPieChartTask, getStackedChartByCarrierTask).ConfigureAwait(false);
@@ -916,12 +919,14 @@ namespace Spa.StarterKit.React.Services
             try
             {
                 var getLateDataTask = _consignments.GetLateAndOnTimeConsignmentSummaryAsync(dateFrom, dateTo, shippingLocationReference);
+                var getCarrierSummaryTask = _consignments.GetConsignmenCarrierSummaryAsync(dateFrom, dateTo);
 
-                await getLateDataTask;
+                await Task.WhenAll(getLateDataTask, getCarrierSummaryTask);
 
                 var lateData = await getLateDataTask;
+                var carrierSummary = await getCarrierSummaryTask;
 
-                return await GetLateConsignmentsStackedChartDataByCarrierOperationAsync(lateData);
+                return await GetLateConsignmentsStackedChartDataByCarrierOperationAsync(lateData, carrierSummary);
             }
             catch (Exception ex)
             {
@@ -984,6 +989,18 @@ namespace Spa.StarterKit.React.Services
             }
         }
 
+        private static IList<Carrier> GetDistinctCarriers(CarrierStatusResponseModel carrierSummary)
+        {
+            var summary =
+                carrierSummary.Summary.DistinctBy(x => x.MpdCarrierReference).ToList().Select(c => new Carrier()
+                {
+                    Name = c.MpdCarrierName,
+                    Reference = c.MpdCarrierReference
+                }).ToList();
+
+            return summary;
+        }
+
         private static List<Carrier> GetCarriersFromLateConsignmentSummary(LateConsignmentSummaryResponse lateConsignmentSummary)
         {
             var carriers = new List<Carrier>();
@@ -1007,7 +1024,7 @@ namespace Spa.StarterKit.React.Services
             return carriers;
         }
 
-        private async Task<StackedChartViewModel> GetLateConsignmentsStackedChartDataByCarrierOperationAsync(LateConsignmentSummaryResponse lateData)
+        private async Task<StackedChartViewModel> GetLateConsignmentsStackedChartDataByCarrierOperationAsync(LateConsignmentSummaryResponse lateData, CarrierStatusResponseModel carrierStatusResponse)
         {
             if (lateData?.LateConsignments == null)
             {
@@ -1018,7 +1035,8 @@ namespace Spa.StarterKit.React.Services
             {
                 return await Task.Run(() =>
                 {
-                    var carriers = GetCarriersFromLateConsignmentSummary(lateData);
+                    var carriers = GetDistinctCarriers(carrierStatusResponse);
+                    //var carriers = GetCarriersFromLateConsignmentSummary(lateData);
                     var stackedViewModel = new StackedChartViewModel() { ChartData = new List<Dictionary<string, object>>() };
 
                     foreach (var carrier in carriers.OrderBy(c => c.Name))

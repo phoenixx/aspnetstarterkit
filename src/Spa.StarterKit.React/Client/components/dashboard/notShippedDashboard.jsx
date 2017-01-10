@@ -48,7 +48,7 @@ class NotShippedDashboard extends React.Component {
                 </Cell>
                 <Cell col={12} phone={12}>
                     <Card shadow={0} style={{width: '100%' , height: '320px'}} raised>
-                        <MultiChart Source={this.props.allocationByCarrierService} LabelPrefix="Week" NullLabelText="Not Allocated" />
+                        <MultiChart reloading={this.props.reloading} Source={this.props.allocationByCarrierService} LabelPrefix="Week" NullLabelText="Not Allocated" />
                     </Card>
                 </Cell>
             </Grid>

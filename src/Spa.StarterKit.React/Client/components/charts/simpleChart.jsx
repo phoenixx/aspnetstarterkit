@@ -1,9 +1,7 @@
 ﻿import React from 'react';
 import {Doughnut, HorizontalBar, Line, Polar, Bar, Pie} from 'react-chartjs-2';
-import { Button } from 'react-toolbox/lib/button';
 import Utils from '../../utilities/utils';
 import Loading from '../Loading';
-
 
 class SimpleChart extends React.Component {
     constructor(props) {
@@ -62,14 +60,42 @@ class SimpleChart extends React.Component {
     }
 
     _getChartType(chartType) {
+
+        const defaultOptions = {
+            maintainAspectRatio: false,
+            legend: {
+                 display: false
+            }
+        };
+        const axisDefaults = {
+            scales: {
+                yAxes: [
+                     {
+                         ticks: {
+                             beginAtZero: true
+                         }
+                     }]     
+            }
+        }
+
+        const defaultOptionsWithAxis = Object.assign({}, defaultOptions, axisDefaults);
+        
         switch (chartType) {
             case 'Line':
                 return (
-                    <Line data={this._transformChartData(this.props.sourceData, this.props.label)} height={100} options={{ maintainAspectRatio: false, legend: { display: false } }} />
+                    <Line data={this._transformChartData(this.props.sourceData, this.props.label)} height={100} options={defaultOptionsWithAxis} />
                 );
             case 'HorizontalBar':
                 return(
-                    <HorizontalBar data={this._transformChartData(this.props.sourceData, this.props.label)} height={100} options={{ maintainAspectRatio: false, legend: { display: false } }} />
+                    <HorizontalBar data={this._transformChartData(this.props.sourceData, this.props.label)} height={100} options={defaultOptionsWithAxis} />
+                );
+            case 'Bar':
+                return (
+                    <Bar data={this._transformChartData(this.props.sourceData, this.props.label)} height={100} options={defaultOptionsWithAxis} />
+                );
+            case 'Doughnut':
+                return(
+                    <Doughnut data={this._transformChartData(this.props.sourceData, this.props.label)} height={100} options={defaultOptions} />
                 );
             default:
                 return(

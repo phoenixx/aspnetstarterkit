@@ -7,8 +7,7 @@ import {
 import ChartControls from './chartControls';
 import SimpleChart from '../charts/SimpleChart';
 import RadialChart from '../charts/RadialChart';
-import MultiChart from '../charts/MultiChart';
-
+import StackedChart from '../charts/StackedChart';
 
 class ShippedDashboard extends Component {
     render() {
@@ -18,24 +17,48 @@ class ShippedDashboard extends Component {
                     <ChartControls startDate={this.props.startDate} endDate={this.props.endDate} reload={this.props.reload} />
                 </Cell>
                 <Cell col={2} tablet={12} phone={12}>
-                    <RadialChart Source={this.props.shippedRadials} Label="Action Required" />
+                    <RadialChart reloading={this.props.reloading} source={this.props.shippedRadials} label="Action Required" />
                 </Cell>
                 <Cell col={2} tablet={12} phone={12}>
-                    <RadialChart Source={this.props.shippedRadials} Label="Missing" />
+                    <RadialChart reloading={this.props.reloading} source={this.props.shippedRadials} label="Missing" />
                 </Cell>
                 <Cell col={2} tablet={12} phone={12}>
-                    <RadialChart Source={this.props.shippedRadials} Label="Lost" />
+                    <RadialChart reloading={this.props.reloading} source={this.props.shippedRadials} label="Lost" />
                 </Cell>
                 <Cell col={2} tablet={12} phone={12}>
-                    <RadialChart Source={this.props.shippedRadials} Label="Damaged" />
+                    <RadialChart reloading={this.props.reloading} source={this.props.shippedRadials} label="Damaged" />
                 </Cell>
                 <Cell col={2} tablet={12} phone={12}>
-                    <RadialChart Source={this.props.shippedRadials} Label="Delivery Failed" />
+                    <RadialChart reloading={this.props.reloading} source={this.props.shippedRadials} label="Delivery Failed" />
                 </Cell>
                 <Cell col={2} tablet={12} phone={12}>
-                    <RadialChart Source={this.props.shippedRadials} Label="Partially Delivered" />
+                    <RadialChart reloading={this.props.reloading} source={this.props.shippedRadials} label="Partially Delivered" />
                 </Cell>
-
+                <Cell col={6} tablet={12} phone={12}>
+                    <Card shadow={0} style={{width: '100%' , height: '320px'}} raised>
+                        <StackedChart reloading={this.props.reloading} label="Issues" sourceData={this.props.issuesByCarrier} dataKey="carrier" />
+                    </Card>
+                </Cell>
+                 <Cell col={6} tablet={12} phone={12}>
+                    <Card shadow={0} style={{width: '100%' , height: '320px'}} raised>
+                        <SimpleChart reloading={this.props.reloading} label="Late" sourceData={this.props.lateConsignmentsPie} chartType="Doughnut" />
+                    </Card>
+                 </Cell>
+                <Cell col={6} tablet={12} phone={12}>
+                    <Card shadow={0} style={{width: '100%' , height: '320px'}} raised>
+                        <SimpleChart reloading={this.props.reloading} label="Late" sourceData={this.props.lateConsignmentsBar} chartType="Bar" />
+                    </Card>
+                </Cell>
+                <Cell col={6} tablet={12} phone={12}>
+                    <Card shadow={0} style={{width: '100%' , height: '320px'}} raised>
+                        <StackedChart reloading={this.props.reloading} label="Late" sourceData={this.props.lateConsignmentsByCarrier} dataKey="Carrier" />
+                    </Card>
+                </Cell>
+                <Cell col={12} tablet={12} phone={12}>
+                    <Card shadow={0} style={{width: '100%' , height: '320px'}} raised>
+                        <SimpleChart reloading={this.props.reloading} label="Consignments" sourceData={this.props.shippedOverview} chartType="Bar" />
+                    </Card>
+                </Cell>
             </Grid>
         );
     }

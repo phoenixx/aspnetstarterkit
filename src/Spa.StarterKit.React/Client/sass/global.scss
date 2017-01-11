@@ -5,6 +5,12 @@ $dark-red: rgba(222,32,34, 1);
 $darker-red: rgba(150, 0, 0, 1);
 $clr-grey: #333;
 $clr-spacegrey: #696969;
+$clr-lightgrey2: #e0e0e0;
+@import './colours.scss';
+
+body,html {
+    font-family: 'Roboto', Helvetica, Arial, sans-serif !important;
+}
 
 html {
 font-size: 67.5%
@@ -26,6 +32,22 @@ font-size: 67.5%
      background: $light-grey;
 }
 
+.appear-enter {
+  transition-duration: .7s;
+  transition-property: opacity;
+  transition-timing-function: ease-out;
+  opacity: 0;
+}
+
+.appear-enter.appear-enter-active {
+  opacity: 1;
+}
+
+.appear-leave {
+  opacity: 0;
+}
+
+/*vital for mobile resizing!*/
 .mdl-grid {
     max-width: 100%;
 }

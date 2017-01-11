@@ -1,0 +1,50 @@
+﻿@import 'global.scss';
+
+table {
+    font-size: 0.95em;
+    color: $clr-grey;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+/*th {
+    color: $clr-spacegrey;
+}*/
+
+/*tr {
+    border-top: 1px solid $clr-lightgrey2;
+    border-collapse: collapse;
+}*/
+
+tr:nth-child(odd) {
+    background-color: $grey-200;
+}
+
+tr:hover, tr:nth-child(odd):hover {
+    background-color: $grey-300;
+}
+
+tr.selected, tr.selected:nth-child(odd) {
+    background-color: $electio-red;
+    color: $white;
+}
+
+tr.selected:hover, tr.selected:nth-child(odd):hover {
+        background-color: $grey-400;
+} 
+
+
+
+thead > tr {
+    border-bottom: 1px solid $clr-lightgrey2;
+    background-color: $white !important;
+}
+
+th.left {text-align: left;}
+td.center {text-align: center;}
+td, th {
+    padding: 15px 5px;
+ 
+    vertical-align: middle;
+    display: table-cell;
+}

@@ -4,6 +4,7 @@ import Home from '../components/Home';
 import DashboardContainer from '../containers/DashboardContainer';
 import Loading from '../components/Loading';
 import ConsignmentsContainer from '../containers/ConsignmentsContainer';
+import ConsignmentContainer from '../containers/ConsignmentContainer';
 import { IntlProvider } from 'react-intl';
 
 class RouteComponent extends Component {
@@ -19,24 +20,14 @@ class RouteComponent extends Component {
                         <Route path="loading" component={Loading}/>
                         <Route path="shipped" consignmentState="shipped" component={ConsignmentsContainer}/>
                         <Route path="notshipped" consignmentState="notshipped" component={ConsignmentsContainer} />
+                        <Route path="/consignment">
+                            <Route path=":consignmentReference" component={ConsignmentContainer} />
+                        </Route>
                     </Route>
                 </Router>
             </IntlProvider>
         );
     }
 }
-
-//const routes = (
-//    <IntlProvider locale={'en-GB'}>
-//        <Router history={hashHistory}>
-//        <Route path="/" component={Home}>
-//            <IndexRoute component={DashboardContainer} />
-//            <Route path="loading" component={Loading} />
-//            <Route path="shipped" consignmentState="shipped" component={ConsignmentsContainer}/>
-//        </Route>
-//        </Router>
-//    </IntlProvider>
-    
-//); 
 
 export default RouteComponent;

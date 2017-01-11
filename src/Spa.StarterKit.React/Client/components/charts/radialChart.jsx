@@ -39,7 +39,7 @@ class RadialChart extends React.Component {
         });
         const labels = [label, 'Others'];
         const data = [];
-        
+
         data.push(radialSource[0].numerator);
         data.push(radialSource[0].denominator - radialSource[0].numerator);
 
@@ -71,23 +71,32 @@ class RadialChart extends React.Component {
     render() {
         return(
             <Card shadow={0} style={{width: '100%' , height: '320px', padding: '0'}} raised>
-                {(this.props.reloading || this.state.reloading) ? (
-                    <div className="radial--loading">
-                        <Loading />
-                    </div>
-                ) : (null)}
+
                 <MpdCardTitle>
                     {this.props.label}
                 </MpdCardTitle>
                 <div className="radial-container" style={{height: '80%', position: 'relative'}}>
-                    <span className="radial-number">{this.state.count}</span>
-                    <Doughnut data={this.state.chartData} options={{maintainAspectRatio: false, cutoutPercentage: 80, legend: {display: false}, tooltips: {enabled: false}}} />
+                    {(this.props.reloading || this.state.reloading) ? (
+                    <div className="radial--loading">
+                        <Loading />
+                    </div>
+                    ) : (
+                        <span className="radial-number">{this.state.count}</span>
+                    )}
+                    
+                    {(!this.props.reloading && !this.state.reloading) ? (
+                        <Doughnut data={this.state.chartData} options={{maintainAspectRatio: false, cutoutPercentage: 80, legend: {display: false}, tooltips: {enabled: false}}} />
+                    ): (null)}
+                    
                 </div>
-                <CardActions style={{textAlign: 'center'}} theme={cardActionsTheme}>
-                    <RedButton raised disabled={this.state.count === 0}>
-                        resolve
-                    </RedButton>
-                </CardActions>
+                {(!this.props.reloading && !this.state.reloading) ? (
+                    <CardActions style={{textAlign: 'center'}} theme={cardActionsTheme}>
+                        <RedButton raised disabled={this.state.count === 0}>
+                            resolve
+                        </RedButton>
+                    </CardActions>
+                ) : (null)}
+
             </Card>
         );
     }

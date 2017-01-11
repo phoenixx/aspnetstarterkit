@@ -1,5 +1,5 @@
 ﻿import React, { Component } from 'react';
-import { FormattedDate } from 'react-intl';
+import { FormattedDate, FormattedTime } from 'react-intl';
 
 class TextDate extends Component {
     constructor(props) {
@@ -57,6 +57,21 @@ class Date extends Component {
     }
 }
 
+class DateTime extends Component {
+    constructor(props) {
+        super(props);
+    }
+    render() {
+        return(
+            <span>
+                <FormattedDate {...this.props} year="numeric" month="numeric" day="numeric"/>
+                &nbsp;
+                <FormattedTime {...this.props}/>
+            </span>
+        );
+    }
+}
+
 export {
-    TextDate, LongDate, ShortDate, Date
+    TextDate, LongDate, ShortDate, Date, DateTime
 };

@@ -14,7 +14,6 @@ class SideDrawer extends React.Component {
         console.log(`calling _navigate(${location})`);
         this._toggleDrawer();
         this.context.router.push(location);
-        //browserHistory.push(`#/${location}`);
     }
     _navigateUrl(location) {
         window.location.href = location;

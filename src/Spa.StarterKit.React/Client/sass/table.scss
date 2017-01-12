@@ -25,15 +25,14 @@ tr:hover, tr:nth-child(odd):hover {
 }
 
 tr.selected, tr.selected:nth-child(odd) {
-    background-color: $electio-red;
+    background-color: $grey-400;
     color: $white;
 }
 
 tr.selected:hover, tr.selected:nth-child(odd):hover {
-        background-color: $grey-400;
+    background-color: $grey-300;
+    color: $black;
 } 
-
-
 
 thead > tr {
     border-bottom: 1px solid $clr-lightgrey2;
@@ -48,3 +47,19 @@ td, th {
     vertical-align: middle;
     display: table-cell;
 }
+
+tfoot > tr {
+    border-top: 1px solid $grey-300;
+}
+
+tfoot > tr > td {
+    column-span: all;
+    text-align: right;
+    background-color: $white;
+    padding-right: 15px;
+}
+
+tfoot > tr > td:hover {
+    background-color: $white;
+}
+

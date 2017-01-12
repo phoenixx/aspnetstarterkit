@@ -8,6 +8,7 @@ import Checkbox from '../components/checkbox/checkbox';
 import { ShortDate, DateTime } from '../components/utils/dateFormatting';
 import { FormattedNumber } from 'react-intl'; //todo extract to utility component
 import Loading from '../components/Loading';
+import Pagination from '../components/utils/pagination/pagination.jsx';
 import { Link } from 'react-router';
 import '../sass/table.scss';
 
@@ -16,16 +17,20 @@ class ConsignmentsContainer extends Component {
         super(props);
         this.state = {
             data: { consignments: []},
+            //consignments: [],
             type: this.props.route.consignmentState,
             loading: true,
+            selectAll: false,
             count: 0
         }
         this._loadData = this._loadData.bind(this);
+        this._selectAll = this._selectAll.bind(this);
     }
     componentDidMount() {
         this._loadData(this.props.route.consignmentState).then((data) => {
             if (data.consignments.length > 0) {
                 this.setState({
+                    //consignments: data.consignments.map(cons => (Object.assign({}, cons, {selected: false}))),
                     data: data,
                     loading: false,
                     count: data.consignments.length
@@ -51,6 +56,9 @@ class ConsignmentsContainer extends Component {
                 return response.data;
             });
     }
+    _selectAll() {
+        this.setState({ selectAll: !this.state.selectAll });
+    }
     render() {
         return(
         <Grid>
@@ -61,7 +69,7 @@ class ConsignmentsContainer extends Component {
                         <thead>
                             <tr>
                                 <th>
-                                    <Checkbox/>
+                                    <Checkbox checked={this.state.selectAll} onChange={() => this._selectAll()}/>
                                 </th>
                                 <th className="left">Consignment Reference</th>
                                 <th className="left">Client Reference</th>
@@ -82,12 +90,19 @@ class ConsignmentsContainer extends Component {
                             ) : (
                             this.state.data.consignments.map((con) => {
                                 return(
-                                <ConsignmentRow {...con} key={con.consignmentReference}/>
+                                <ConsignmentRow {...con} key={con.consignmentReference} selected={this.state.selectAll}/>
                                 );
                                 })
                             )}
                             
                         </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colSpan="12">
+                                    <Pagination totalRecords={1000}/>
+                                </td>
+                            </tr>
+                        </tfoot>
                     </table>
                 </Card>
             </Cell>
@@ -104,7 +119,7 @@ class ConsignmentRow extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            selected: false
+            selected: this.props.selected //initial
         }
 
         this._selectRow = this._selectRow.bind(this);
@@ -116,8 +131,8 @@ class ConsignmentRow extends Component {
     }
     render() {
         return(
-            <tr className={this.state.selected ? 'selected' : null} >
-                <td><Checkbox checked={this.state.selected} onChange={() => this._selectRow()} /></td>
+            <tr className={(this.state.selected || this.props.selected) ? 'selected' : null} >
+                <td><Checkbox checked={this.state.selected || this.props.selected} onChange={() => this._selectRow()} /></td>
                 <td>
                     <Link to={`/consignment/${this.props.consignmentReference}`} >
                         {this.props.consignmentReference}

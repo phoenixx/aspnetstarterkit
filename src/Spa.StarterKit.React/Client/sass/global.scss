@@ -32,6 +32,14 @@ font-size: 67.5%
      background: $light-grey;
 }
 
+a {
+    color: $electio-red;
+}
+
+a:hover, a:focus {
+    color: $dark-red;
+}
+
 .appear-enter {
   transition-duration: .7s;
   transition-property: opacity;

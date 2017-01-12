@@ -25,7 +25,7 @@ namespace Spa.StarterKit.React.Controllers
         {
             return View("~/Views/Account/Login.cshtml", new LoginModel()
             {
-                ReturnUrl = ReturnUrl
+                ReturnUrl = System.Net.WebUtility.UrlEncode(ReturnUrl) //include the hash...
             });
         }
 
@@ -57,7 +57,8 @@ namespace Spa.StarterKit.React.Controllers
                     AllowRefresh = false
                 });
 
-            return RedirectToLocal(model.ReturnUrl);
+            var redirectTo = System.Net.WebUtility.UrlDecode(model.ReturnUrl);
+            return RedirectToLocal(redirectTo);
         }
 
         public IActionResult Forbidden()

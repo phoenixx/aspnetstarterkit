@@ -1,0 +1,25 @@
+﻿@import './global.scss';
+
+ul.pagination {
+    list-style-type: none;
+    float: right;
+    
+    > li {
+        list-style-type: none;
+        float: left;
+    }
+}
+
+
+.pager {min-width: 50px;}
+
+.pager.active {
+    background: $electio-red;
+    color: $white !important;
+}
+
+.pager.active:hover {
+    cursor: initial;
+    background: $dark-red;
+    color: $white;
+}

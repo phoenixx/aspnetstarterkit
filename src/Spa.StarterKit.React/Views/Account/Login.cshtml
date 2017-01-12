@@ -2,7 +2,24 @@
 
 @section scripts {
     <script defer src="https://code.getmdl.io/1.2.1/material.min.js"></script>
+    <script>
+            var returnUrl = document.getElementById('returnUrl');
+            var queryParam = getParameterByName('ReturnUrl');
+            console.log('return url: ' + queryParam);
+            returnUrl.value = encodeURIComponent(queryParam);
 
+            function getParameterByName(name, url) {
+                if (!url) {
+                    url = window.location.href;
+                }
+                name = name.replace(/[\[\]]/g, "\\$&");
+                var regex = new RegExp("[?&]" + name + "(=([^]*)|&|#|$)");
+                var results = regex.exec(url);
+                if (!results) return null;
+                if (!results[2]) return '';
+                return decodeURIComponent(results[2].replace(/\+/g, " "));
+            }
+    </script>
 }
 
 @section styles {
@@ -69,7 +86,7 @@
                             <label class="mdl-textfield__label" for="password">Password:</label>
                         </div>
                     </div>
-                    @Html.HiddenFor(m => m.ReturnUrl)
+                    @Html.HiddenFor(m => m.ReturnUrl, new { id = "returnUrl"})
                 </div>
                 <div class="mdl-card__actions mdl-card--border">
                     <input type="submit" value="Login" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--electioaccent"/>

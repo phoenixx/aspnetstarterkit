@@ -7,15 +7,6 @@ table {
     width: 100%;
 }
 
-/*th {
-    color: $clr-spacegrey;
-}*/
-
-/*tr {
-    border-top: 1px solid $clr-lightgrey2;
-    border-collapse: collapse;
-}*/
-
 tr:nth-child(odd) {
     background-color: $grey-200;
 }
@@ -42,8 +33,7 @@ thead > tr {
 th.left {text-align: left;}
 td.center {text-align: center;}
 td, th {
-    padding: 15px 5px;
- 
+    padding: 10px 5px;
     vertical-align: middle;
     display: table-cell;
 }
@@ -62,4 +52,3 @@ tfoot > tr > td {
 tfoot > tr > td:hover {
     background-color: $white;
 }
-

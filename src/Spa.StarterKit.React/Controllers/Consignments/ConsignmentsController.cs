@@ -29,15 +29,15 @@ namespace Spa.StarterKit.React.Controllers.Consignments
         }
 
         [Route("consignments/notshipped")]
-        public async Task<IActionResult> NotShipped()
+        public async Task<IActionResult> NotShipped(int skip = 0, int take = 10)
         {
-            return await Consignments(ConsignmentStateType.NotShipped, null);
+            return await Consignments(ConsignmentStateType.NotShipped, null, skip, take);
         }
 
         [Route("consignments/shipped")]
-        public async Task<IActionResult> Shipped()
+        public async Task<IActionResult> Shipped(int skip = 0, int take = 10)
         {
-            return await Consignments(ConsignmentStateType.Shipped, null);
+            return await Consignments(ConsignmentStateType.Shipped, null, skip, take);
         }
 
         private async Task<IActionResult> Consignments(ConsignmentStateType stateType, ConsignmentState? state,

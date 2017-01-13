@@ -5,6 +5,7 @@ import {
     Cell, 
     Card } from 'react-mdl';
 import Checkbox from '../components/checkbox/checkbox';
+import FontIcon from 'react-toolbox/lib/font_icon';
 import { ShortDate, DateTime } from '../components/utils/dateFormatting';
 import { FormattedNumber } from 'react-intl'; //todo extract to utility component
 import Loading from '../components/Loading';
@@ -21,6 +22,8 @@ class ConsignmentsContainer extends Component {
             type: this.props.route.consignmentState,
             loading: true,
             selectAll: false,
+            selectedPage: 1,
+            pageSize: 10,
             count: 0
         }
         this._loadData = this._loadData.bind(this);
@@ -38,16 +41,27 @@ class ConsignmentsContainer extends Component {
             } else {
                 this.setState({
                     loading: false,
-                    count: 0
+                    count: 0,
+                    data: {consignments:[]}
                 });
             }
 
         });
     }
     _loadData(state, take, skip) {
-        const baseUrl = `/consignments/${state.toLowerCase()}`;
+        let baseUrl = `/consignments/${state.toLowerCase()}`;
 
         //add take skip....
+        let hasQuery = false;
+        if (skip) {
+            baseUrl = `${baseUrl}?skip=${skip}`;
+            hasQuery = true;
+        }
+
+        if (take) {
+            const delimeter = hasQuery ? '&' : '?';
+            baseUrl = `${baseUrl}${delimeter}take=${take}`;
+        }
 
         console.log('getting data from ' + baseUrl);
 
@@ -55,6 +69,9 @@ class ConsignmentsContainer extends Component {
             .then(function(response) {
                 return response.data;
             });
+    }
+    _selectPage = (page) => {
+        this._loadData(this.state.type, this.state.pageSize, (this.state.pageSize * (page - 1)));
     }
     _selectAll() {
         this.setState({ selectAll: !this.state.selectAll });
@@ -99,7 +116,7 @@ class ConsignmentsContainer extends Component {
                         <tfoot>
                             <tr>
                                 <td colSpan="12">
-                                    <Pagination totalRecords={1000}/>
+                                    <Pagination totalRecords={this.state.count} pageSize={this.state.pageSize} selectPage={(page) => this._selectPage(page)}/>
                                 </td>
                             </tr>
                         </tfoot>
@@ -151,7 +168,7 @@ class ConsignmentRow extends Component {
                 <td><ShortDate value={this.props.earliestDeliveryDate} /></td>
                 <td>{this.props.consignmentState}</td>
                 <td>{this.props.destinationAddress}</td>
-                <td className="center">{this.props.haveLabelsEverBeenPrinted.toString()}</td>
+                <td className="center">{this.props.haveLabelsEverBeenPrinted ? (<FontIcon value='done' />) : (<FontIcon value='clear'/>)}</td>
             </tr>
         );
     }

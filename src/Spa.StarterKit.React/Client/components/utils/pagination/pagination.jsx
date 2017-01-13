@@ -5,10 +5,7 @@ import '../../../sass/pagination.scss';
 
 class Pagination extends Component {
     static propTypes = {
-        next: PropTypes.func.required,
-        previous: PropTypes.func.required,
-        first: PropTypes.func.required,
-        last: PropTypes.func.required,
+        selectPage: PropTypes.func.required,
         totalRecords: PropTypes.number.required,
         pageSize: PropTypes.number,
         maxPages: PropTypes.number
@@ -21,6 +18,7 @@ class Pagination extends Component {
     _selectPage = (selectedPage) => {
         console.log(`parent ${selectedPage}`);
         if (selectedPage <= this.state.pages && selectedPage > 0 && this.state.currentPage !== selectedPage) {
+            this.props.selectPage(selectedPage);
             this.setState({
                 currentPage: selectedPage
             });    
@@ -31,6 +29,16 @@ class Pagination extends Component {
     }
     _lastPage = () => {
         this._selectPage(this.state.pages);
+    }
+    _nextPage = () => {
+        if (this.state.currentPage < this.state.pages) {
+            this._selectPage(this.state.currentPage + 1);
+        }
+    }
+    _previousPage = () => {
+        if (this.state.currentPage > 1) {
+            this._selectPage(this.state.currentPage - 1);
+        }
     }
     constructor(props) {
         super(props);
@@ -47,17 +55,44 @@ class Pagination extends Component {
         });
     }
     render() {
-        return(
-            <div>
-                <PagerButtons 
-                    maxPages={this.props.maxPages}
-                    pages={this.state.pages}
-                    currentPage={this.state.currentPage}
-                    selectPage={this._selectPage}
-                    selectFirstPage={this._firstPage}
-                    selectLastPage={this._lastPage}/>
-            </div>
-        );
+        if (this.props.totalRecords <= this.props.pageSize) {
+            return(
+                <div>
+                    <ul className="pagination">
+                        <li>
+                            <Button primary className="pager" icon="skip_previous" disabled></Button>
+                        </li>
+                        <li>
+                            <Button primary className="pager" icon="fast_rewind" disabled></Button>
+                        </li>
+                        <li>
+                            <Button primary className='pager active'>1</Button>
+                        </li>
+                         <li>
+                            <Button primary className="pager" icon="fast_forward" disabled />
+                         </li>
+                        <li>
+                            <Button primary className="pager" icon="skip_next" disabled />
+                        </li>
+                    </ul>
+                </div>
+            );
+        } else {
+            return(
+                <div>
+                    <PagerButtons 
+                        maxPages={this.props.maxPages}
+                        pages={this.state.pages}
+                        currentPage={this.state.currentPage}
+                        selectPage={this._selectPage}
+                        selectFirstPage={this._firstPage}
+                        selectLastPage={this._lastPage}
+                        selectNextPage={this._nextPage}                              
+                        selectPreviousPage={this._previousPage} />
+                </div>
+        );    
+        }
+        
     }
 }
 
@@ -71,71 +106,51 @@ class PagerButtons extends Component {
 
     render() {
         let pages = this.props.pages;
-        let split = false;
 
         if (this.props.pages > this.props.maxPages) {
             pages = this.props.maxPages;
-            split = true;
         }
 
-        const pageArray = [];
-        for (let page = 1; page <= pages; page++) {
-            pageArray.push(page);
+        const pageList = [];
+        for (let page = 1; page <= this.props.pages; page++) {
+            pageList.push(page);
         }
+        
+        const offset = this.props.currentPage === 1 ? pages : this.props.currentPage + pages - 2;
+        const start = this.props.currentPage > 1 ? (this.props.currentPage - 2) : this.props.currentPage - 1;
 
-        if (split) {
-            const splitPoint = Math.floor(pages / 2);
-            let left = [];
-            for (let current = this.props.currentPage;);
-            left = [1, 2, 3, 4, 5]; //take current page into account
+        const left = pageList.slice(start, offset);
 
-            //take first split point
-            //then last split point and add a ... in between
-            left = pageArray.slice(0, splitPoint);
-            let right = [];
-            for (let i = splitPoint - 1; i >= 0; i--) {
-                right.push(this.props.pages - i);
-            }
-            
-            const firstDisabled = this.props.currentPage === 1;
-            const lastDisabled = this.props.currentPage === this.props.pages;
+        const firstDisabled = this.props.currentPage === 1;
+        const lastDisabled = this.props.currentPage === this.props.pages;
 
-            return (
-                     <ul className="pagination">
-                         <li>
-                             <Button primary className="pager" icon="chevron_left" disabled={firstDisabled} onClick={() => this.props.selectFirstPage()}></Button>
-                         </li>
-                         {left.map((p) => {
-                            let className = "pager";
-                            if (p === this.props.currentPage) {
-                                className += " active";
-                            }
-                            return(
-                                <li>
-                                    <Button primary className={className} onClick={() => this._selectPage(p)}>{p}</Button>
-                                </li>
-                            );
-                         })}
-                        <li>
-                            <Button primary className="pager" icon="chevron_right" disabled={lastDisabled} onClick={() => this.props.selectLastPage()}/>
-                        </li>
-                     </ul>
-            );
-
-        } else {
-            return(
+        return (
                 <ul className="pagination">
-                    {pageArray.map((p) => {
+                    <li>
+                        <Button primary className="pager" icon="skip_previous" disabled={firstDisabled} onClick={() => this.props.selectFirstPage()}></Button>
+                    </li>
+                    <li>
+                        <Button primary className="pager" icon="fast_rewind" disabled={firstDisabled} onClick={() => this.props.selectPreviousPage()}></Button>
+                    </li>
+                    {left.map((p) => {
+                        let className = 'pager';
+                        if (p === this.props.currentPage) {
+                            className += ' active';
+                        }
                         return(
-                            <li>
-                                <Button primary className="pager">{p}</Button>
-                            </li>
+                        <li>
+                            <Button primary className={className} onClick={() => this._selectPage(p)}>{p}</Button>
+                        </li>
                         );
-                    })}    
+                    })}
+                    <li>
+                        <Button primary className="pager" icon="fast_forward" disabled={lastDisabled} onClick={() => this.props.selectNextPage()}/>
+                    </li>
+                    <li>
+                        <Button primary className="pager" icon="skip_next" disabled={lastDisabled} onClick={() => this.props.selectLastPage()}/>
+                    </li>
                 </ul>
-                
-            );
-        }
+        );
     }
 }
 

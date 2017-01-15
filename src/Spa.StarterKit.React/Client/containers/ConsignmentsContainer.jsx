@@ -37,7 +37,7 @@ class ConsignmentsContainer extends Component {
                 this.setState({
                     data: data,
                     loading: false,
-                    count: data.consignments.length
+                    count: data.totalRecords
                 });
             } else {
                 this.setState({
@@ -70,8 +70,28 @@ class ConsignmentsContainer extends Component {
                 return response.data;
             });
     }
-    _selectPage(page) {
-        this._loadData(this.state.type, this.state.pageSize, (this.state.pageSize * (page - 1)));
+    _selectPage = (page) => {
+        this.setState({
+            loading: true
+        }, () => {
+            this._loadData(this.state.type, this.state.pageSize, (this.state.pageSize * (page - 1)))
+            .then((data) => {
+                if (data.consignments.length > 0) {
+                    this.setState({
+                        data: data,
+                        loading: false,
+                        count: data.totalRecords
+                    });
+                } else {
+                    this.setState({
+                        loading: false,
+                        count: 0,
+                        data: {consignments:[]}
+                    });
+                }
+            });    
+        });
+        
     }
     _selectAll() {
         this.setState({ selectAll: !this.state.selectAll });

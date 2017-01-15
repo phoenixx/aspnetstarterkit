@@ -1,7 +1,8 @@
 ﻿import React, { Component } from 'react';
 import {
     Cell, 
-    Card } from 'react-mdl';
+    Card,
+    CardActions } from 'react-mdl';
 import Checkbox from '../checkbox/checkbox';
 import Loading from '../Loading';
 import Pagination from '../utils/pagination/pagination.jsx';
@@ -22,7 +23,7 @@ class ConsignmentsTable extends Component {
         return(
             <Cell col={12}>
                 <h3>{this.props.count} Consignments</h3>
-                <Card shadow={0} style={{width: '100%', minHeight: '500px', overflow: 'auto'}} raised>
+                <Card shadow={0} style={{width: '100%', minHeight: '531px', overflow: 'auto'}} raised>
                     <table className="striped">
                         <thead>
                             <tr>
@@ -55,15 +56,11 @@ class ConsignmentsTable extends Component {
                                     })
                                 )}
                         </tbody>
-                        <tfoot>
-                            <tr>
-                                <td colSpan="12">
-                                    <Pagination totalRecords={this.props.count} pageSize={this.props.pageSize} selectPage={(page) => this.props.selectPage(page)} />
-                                </td>
-                            </tr>
-                        </tfoot>
                     </table>
                 </Card>
+                <CardActions>
+                        <Pagination totalRecords={this.props.count} pageSize={this.props.pageSize} selectPage={(page) => this.props.selectPage(page)} />
+                </CardActions>
             </Cell>
         );
     }

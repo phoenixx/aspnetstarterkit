@@ -8,21 +8,39 @@ import { Link } from 'react-router';
 class ConsignmentsRow extends Component {
     constructor(props) {
         super(props);
+
         this.state = {
-            selected: this.props.selected //initial
+            selectable: this.props.type && this.props.type.substring(this.props.type.length, 3) !== "ing",
+            selected: this.props.selected && this.state.selectable
         }
 
         this._selectRow = this._selectRow.bind(this);
     }
+
     _selectRow() {
+        if (this.state.selectable) {
+            this.setState({
+                selected: !this.state.selected
+            });            
+        }
+    }
+    componentDidMount() {
+        const consignmentState = this.props.consignmentState;
+        const ing = consignmentState.substring(consignmentState.length, 3);
+        const selectable = consignmentState && consignmentState.substring(consignmentState.length - 3) !== 'ing';
+        console.log(`Selectable: (${ing}) ${consignmentState} ${selectable}`, this.props);
         this.setState({
-            selected: !this.state.selected
+            selectable: selectable,
+            selected: this.props.selected && selectable
         });
+    }
+    componentDidReceiveProps() {
+        
     }
     render() {
         return(
-            <tr className={(this.state.selected || this.props.selected) ? 'selected' : null} >
-                <td><Checkbox checked={this.state.selected || this.props.selected} onChange={() => this._selectRow()} /></td>
+            <tr className={(this.state.selectable && (this.state.selected || this.props.selected)) ? 'selected' : (!this.state.selectable ? 'locked' : null)} >
+                <td><Checkbox disabled={!this.state.selectable} checked={this.state.selectable && (this.state.selected || this.props.selected)} onChange={() => this._selectRow()} /></td>
                 <td>
                     <Link to={`/consignment/${this.props.consignmentReference}`} rel="consignment" >
                         {this.props.consignmentReference}

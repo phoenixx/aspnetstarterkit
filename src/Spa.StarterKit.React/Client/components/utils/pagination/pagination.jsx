@@ -47,17 +47,16 @@ class Pagination extends Component {
             pages: 0
         }
     }
-    componentDidMount = () => {
-        const pages = Math.floor(this.props.totalRecords / this.props.pageSize);
+    componentWillReceiveProps = (nextProps) => {
+        const pages = Math.ceil(nextProps.totalRecords / nextProps.pageSize);
         this.setState({
-            currentPage: 1,
             pages: pages
         });
     }
     render() {
         if (this.props.totalRecords <= this.props.pageSize) {
             return(
-                <div>
+                <div className="pagination-container">
                     <ul className="pagination">
                         <li>
                             <Button primary className="pager" icon="skip_previous" disabled></Button>

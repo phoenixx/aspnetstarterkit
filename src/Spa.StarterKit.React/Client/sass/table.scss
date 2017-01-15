@@ -10,14 +10,26 @@ table {
 tr:nth-child(odd) {
     background-color: $grey-200;
 }
+tr.locked:nth-child(odd):hover {
+    background-color: $grey-200;
+}
 
 tr:hover, tr:nth-child(odd):hover {
     background-color: $grey-300;
 }
 
+tr.locked:hover {
+    background-color: $white;
+}
+
 tr.selected, tr.selected:nth-child(odd) {
     background-color: $grey-400;
     color: $white;
+}
+
+tr.locked {
+    font-style: italic;
+    color: $grey-400;
 }
 
 tr.selected:hover, tr.selected:nth-child(odd):hover {

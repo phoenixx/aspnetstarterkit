@@ -6,13 +6,17 @@ class TextDate extends Component {
         super(props);
     }
     render() {
-        return(
-            <FormattedDate {...this.props}
-                year="numeric"
-                month="short"
-                day="numeric"
-                weekday="short"/>
-        );
+        if (this.props.value) {
+            return(
+                <FormattedDate {...this.props}
+                    year="numeric"
+                    month="short"
+                    day="numeric"
+                    weekday="short"/>
+            );
+        } else {
+            return null;
+        }
     }
 }
 
@@ -21,13 +25,17 @@ class LongDate extends Component {
         super(props);
     }
     render() {
-        return(
-            <FormattedDate {...this.props}
-                year="numeric"
-                month="long"
-                day="numeric"
-                weekday="short"/>
-        );
+        if (this.props.value) {
+            return(
+                <FormattedDate {...this.props}
+                    year="numeric"
+                    month="long"
+                    day="numeric"
+                    weekday="short"/>
+            );
+        } else {
+            return null;
+        }
     }
 }
 
@@ -36,13 +44,17 @@ class ShortDate extends Component {
         super(props);
     }
     render() {
-        return(
-            <FormattedDate {...this.props}
-                year="numeric"
-                month="numeric"
-                day="numeric"
-                />
-        );
+        if (this.props.value) {
+            return(
+                <FormattedDate {...this.props}
+                    year="numeric"
+                    month="numeric"
+                    day="numeric"
+                    />
+            );
+        } else {
+            return null;
+        }
     }
 }
 
@@ -51,9 +63,13 @@ class Date extends Component {
         super(props);
     }
     render() {
-        return(
-            <FormattedDate {...this.props}/>
-        );
+        if (this.props.value) {
+            return(
+                <FormattedDate {...this.props}/>
+            );
+        } else {
+            return null;
+        }
     }
 }
 
@@ -62,13 +78,17 @@ class DateTime extends Component {
         super(props);
     }
     render() {
-        return(
-            <span>
-                <FormattedDate {...this.props} year="numeric" month="numeric" day="numeric"/>
-                &nbsp;
-                <FormattedTime {...this.props}/>
-            </span>
-        );
+        if (this.props.value) {
+            return(
+                   <span>
+                    <FormattedDate {...this.props} year="numeric" month="numeric" day="numeric"/>
+                            &nbsp;
+                    <FormattedTime {...this.props}/>
+                </span>
+            );
+        } else {
+            return null;
+        }
     }
 }
 

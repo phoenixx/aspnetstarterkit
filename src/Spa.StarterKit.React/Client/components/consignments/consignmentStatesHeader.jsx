@@ -9,6 +9,7 @@ class ConsignmentStateHeaders extends Component {
     }
     _clickHandler(url) {
         console.log(url);
+        this.context.router.push(url);
     }
     render() {
         
@@ -19,7 +20,7 @@ class ConsignmentStateHeaders extends Component {
                         const className = `timeline--badge ${header.severity}`;
                         return(
                                 <li>
-                                    <div className="timeline--inner" onClick={(h) => this._clickHandler(h.url)}>
+                                    <div className="timeline--inner" onClick={() => this._clickHandler(header.url)}>
                                         <Link to={header.url}>
                                             {header.label}
                                         </Link>
@@ -37,5 +38,8 @@ class ConsignmentStateHeaders extends Component {
 //ConsignmentStateHeaders.propTypes = {
 //    data: PropTypes.isArray.required
 //}
+ConsignmentStateHeaders.contextTypes = {
+    router: PropTypes.func.isRequired //force router into context...
+}
 
 export default ConsignmentStateHeaders;

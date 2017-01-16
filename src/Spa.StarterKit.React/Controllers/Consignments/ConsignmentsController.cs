@@ -34,6 +34,18 @@ namespace Spa.StarterKit.React.Controllers.Consignments
             return await Consignments(ConsignmentStateType.NotShipped, null, skip, take);
         }
 
+        [Route("consignments/notshipped/{state}")]
+        public async Task<IActionResult> NotShippedByState(ConsignmentState state, int skip = 0, int take = 10)
+        {
+            return await Consignments(ConsignmentStateType.NotShipped, state, skip, take);
+        }
+
+        [Route("consignments/shipped/{state}")]
+        public async Task<IActionResult> ShippedByState(ConsignmentState state, int skip = 0, int take = 10)
+        {
+            return await Consignments(ConsignmentStateType.Shipped, state, skip, take);
+        }
+
         [Route("consignments/shipped")]
         public async Task<IActionResult> Shipped(int skip = 0, int take = 10)
         {
@@ -108,7 +120,7 @@ namespace Spa.StarterKit.React.Controllers.Consignments
                 ? ConsignmentStates.Shipped
                 : ConsignmentStates.UnShipped;
 
-            const string urlBase = "/allocation/{0}/{1}";
+            const string urlBase = "/{0}/{1}";
 
             var startDate = DateTime.Now.AddDays(_daysToStart);
             var endDate = DateTime.Now.AddDays(1);
@@ -142,7 +154,7 @@ namespace Spa.StarterKit.React.Controllers.Consignments
                 Diameter = 100,
                 Label = stateType.UnCamelCase(),
                 Numerator = total,
-                Url = $"/allocation/{stateType.ToString().ToLower()}",
+                Url = $"/{stateType.ToString().ToLower()}",
                 Severity = "total",
                 ShowButton = false,
                 UiGroup = 4,

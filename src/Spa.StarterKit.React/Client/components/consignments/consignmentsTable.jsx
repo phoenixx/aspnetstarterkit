@@ -22,7 +22,6 @@ class ConsignmentsTable extends Component {
 
         return(
             <Cell col={12}>
-                <h3>{this.props.count} Consignments</h3>
                 <Card shadow={0} style={{width: '100%', minHeight: '531px', overflow: 'auto'}} raised>
                     <table className="striped">
                         <thead>

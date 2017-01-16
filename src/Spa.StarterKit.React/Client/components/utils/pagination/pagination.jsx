@@ -56,7 +56,7 @@ class Pagination extends Component {
     render() {
         if (this.props.totalRecords <= this.props.pageSize) {
             return(
-                <div className="pagination-container">
+                <div>
                     <ul className="pagination">
                         <li>
                             <Button primary className="pager" icon="skip_previous" disabled></Button>

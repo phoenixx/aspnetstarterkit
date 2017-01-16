@@ -13,6 +13,7 @@ class ConsignmentsContainer extends Component {
         this.state = {
             data: { consignments: []},
             type: this.props.route.consignmentState,
+            subType: this.props.params.consignmentSubState || null,
             loading: true,
             selectAll: false,
             selectedPage: 1,
@@ -33,7 +34,7 @@ class ConsignmentsContainer extends Component {
             });
         });
 
-        this._loadConsignments(this.props.route.consignmentState).then((data) => {
+        this._loadConsignments(this.props.route.consignmentState, this.props.params.consignmentSubState).then((data) => {
             if (data.consignments.length > 0) {
                 this.setState({
                     data: data,
@@ -50,8 +51,13 @@ class ConsignmentsContainer extends Component {
 
         });
     }
-    _loadConsignments(state, take, skip) {
+    _loadConsignments(state, substate, take, skip) {
+
         let baseUrl = `/consignments/${state.toLowerCase()}`;
+
+        if (substate) {
+            baseUrl = `/consignments/${state.toLowerCase()}/${substate.toLowerCase()}`;
+        }
 
         let hasQuery = false;
         if (skip) {
@@ -86,7 +92,7 @@ class ConsignmentsContainer extends Component {
         this.setState({
             loading: true
         }, () => {
-            this._loadConsignments(this.state.type, this.state.pageSize, (this.state.pageSize * (page - 1)))
+            this._loadConsignments(this.state.type, this.state.subType, this.state.pageSize, (this.state.pageSize * (page - 1)))
             .then((data) => {
                 if (data.consignments.length > 0) {
                     this.setState({

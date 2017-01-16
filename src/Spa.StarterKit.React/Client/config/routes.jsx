@@ -20,7 +20,10 @@ class RouteComponent extends Component {
                         <IndexRoute component={DashboardContainer}/>
                         <Route path="loading" component={Loading}/>
                         <Route path="shipped" consignmentState="shipped" component={ConsignmentsContainer}/>
-                        <Route path="notshipped" consignmentState="notshipped" component={ConsignmentsContainer} />
+                        <Route path="/notshipped">
+                            <IndexRoute component={ConsignmentsContainer} consignmentState="notshipped"/>
+                            <Route path=":consignmentSubState" consignmentState="notshipped" component={ConsignmentsContainer}/>
+                        </Route>
                         <Route path="/consignment">
                             <Route path=":consignmentReference" component={ConsignmentContainer} />
                         </Route>

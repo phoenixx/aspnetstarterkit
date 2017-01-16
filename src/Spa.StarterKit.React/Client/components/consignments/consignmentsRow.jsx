@@ -16,7 +16,6 @@ class ConsignmentsRow extends Component {
 
         this._selectRow = this._selectRow.bind(this);
     }
-
     _selectRow() {
         if (this.state.selectable) {
             this.setState({
@@ -26,16 +25,11 @@ class ConsignmentsRow extends Component {
     }
     componentDidMount() {
         const consignmentState = this.props.consignmentState;
-        const ing = consignmentState.substring(consignmentState.length, 3);
         const selectable = consignmentState && consignmentState.substring(consignmentState.length - 3) !== 'ing';
-        console.log(`Selectable: (${ing}) ${consignmentState} ${selectable}`, this.props);
         this.setState({
             selectable: selectable,
             selected: this.props.selected && selectable
         });
-    }
-    componentDidReceiveProps() {
-        
     }
     render() {
         return(

@@ -59,7 +59,7 @@ class ConsignmentsTable extends Component {
                     </table>
                 </Card>
                 <CardActions>
-                        <Pagination totalRecords={this.props.count} pageSize={this.props.pageSize} selectPage={(page) => this.props.selectPage(page)} />
+                    <Pagination totalRecords={this.props.count} pageSize={this.props.pageSize} selectPage={(page) => this.props.selectPage(page)} />
                 </CardActions>
             </Cell>
         );

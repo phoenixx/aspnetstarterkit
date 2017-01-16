@@ -1,0 +1,17 @@
+﻿@import './colours.scss';
+
+.notfound--container {
+    color: $electio-red;
+    font-size: 3em;
+    font-weight:bold;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    padding-top: 20%;
+}
+
+.notfound--subtext {
+    padding-top: 20px;
+    font-size: 0.5em;
+
+}

@@ -11,20 +11,24 @@ class ConsignmentStateHeaders extends Component {
         console.log(url);
     }
     render() {
+        
         return(
             <div className="timeline--container">
-                <div className="timeline--list">
+                <ol className="timeline--list">
                     {this.props.data.map((header) => {
+                        const className = `timeline--badge ${header.severity}`;
                         return(
-                            <div className="timeline--inner" onClick={(h) => this._clickHandler(h.url)}>
-                                <Link to={header.url}>
-                                    {header.label}
-                                </Link>
-                                <span className="timeline--badge">{header.numerator}</span>
-                            </div>
+                                <li>
+                                    <div className="timeline--inner" onClick={(h) => this._clickHandler(h.url)}>
+                                        <Link to={header.url}>
+                                            {header.label}
+                                        </Link>
+                                        <span className={className}>{header.numerator}</span>
+                                    </div>
+                                </li>
                         );
                     })}
-                </div>
+                </ol>
             </div>
         );
     }

@@ -1,0 +1,153 @@
+﻿@import './global.scss';
+@import './colours.scss';
+
+.timeline--container {
+    min-height: 165px;
+    height: 165px;
+    width: 100%;
+    text-align: center;
+    display: none;
+}
+
+.timeline--list {
+    list-style-type: none;
+    position: relative;
+    display: block;
+    height: 4px;
+    background: $electio-red;
+    margin-top: 145px;
+}
+.timeline--list:before {
+    left:0;
+}
+
+
+.timeline--list::before {
+    content: "";
+    position: absolute;
+    top: -8px;
+    display: block;
+    width: 0;
+    height: 0;
+    border-radius: 10px;
+    border: 10px solid $electio-red;
+}
+
+.timeline--list::after {
+    position: absolute;
+    content: "";
+    border: 10px solid transparent;
+    border-right: 0;
+    border-left: 20px solid $electio-red;
+    border-radius: 3px;
+    right: -10px;
+    top: -8px;
+}
+
+.timeline--list > li {
+    top: -30px;
+    left: -27px;
+    height: 15px;
+    position: relative;
+    /*top: -46px;*/
+    display: inline-block;
+    float: none;
+    width: 4.1%;
+    transform: rotate(-45deg);
+    -ms-transform: rotate(-45deg);
+    -webkit-transform: rotate(-45deg);
+    text-align: left;
+}
+
+.timeline--list li:first-child {
+    margin-left:15px;
+}
+
+.timeline--list > li::before {
+    content: "";
+    position: absolute;
+    top: 3px;
+    left: -25px;
+    display: block;
+    width: 15px;
+    height: 15px;
+    border: 4px solid $electio-red;
+    border-radius: 10px;
+    background-color: $grey-100;
+}
+
+.timeline--list > li:hover::before {
+    background-color: $green-800;
+}
+
+.timeline--list > li:hover .timeline--badge {
+    background-color: $darker-red;
+}
+
+.timeline--inner {
+    min-width: 200px;
+}
+
+.timeline--inner:hover {
+    cursor: pointer;
+}
+
+.timeline--badge {
+    display: inline-block;
+    min-width: 10px;
+    padding: 3px 7px;
+    font-size: 12px;
+    font-weight: bold;
+    line-height: 1;
+    color: #fff;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    border-radius: 10px;
+    background-color: $electio-red;
+    margin-left: 5px;
+}
+
+/*breakpoints*/
+    /* Custom, iPhone Retina */ 
+    @media only screen and (min-width : 320px) {
+    }
+
+    /* Extra Small Devices, Phones */ 
+    @media only screen and (min-width : 480px) {
+    }
+
+    /* Small Devices, Tablets */
+    @media only screen and (min-width : 768px) {
+        .timeline--container {
+            display: block;
+        }
+    }
+
+    @media only screen and (min-width : 992px) {
+        .timeline--list > li {
+            top: -34px;
+        }
+    }
+
+    @media only screen and (min-width : 1200px) {
+        .timeline--list > li {
+            top: -37px;
+        }
+    }
+
+    @media only screen and (min-width : 1500px) {
+        .timeline--list > li {
+            top: -41px;
+        }
+    }
+
+    @media only screen and (min-width : 1800px) {
+        .timeline--list > li {
+            top: -46px;
+        }
+    }
+
+    
+
+

@@ -40,6 +40,13 @@ namespace Spa.StarterKit.React.Controllers.Consignments
             return await Consignments(ConsignmentStateType.Shipped, null, skip, take);
         }
 
+        [Route("consignments/stateheaders")]
+        public async Task<IActionResult> GetRadials(ConsignmentStateType type)
+        {
+            var radials = await GetConsignmentRadials(type);
+            return Json(radials);
+        }
+
         private async Task<IActionResult> Consignments(ConsignmentStateType stateType, ConsignmentState? state,
             int skip = 0, int take = 10)
         {
@@ -93,6 +100,136 @@ namespace Spa.StarterKit.React.Controllers.Consignments
 
                 return Json(viewModel);
             });
+        }
+
+        private async Task<IList<RadialItemViewModel>> GetConsignmentRadials(ConsignmentStateType stateType)
+        {
+            var relevantStates = stateType == ConsignmentStateType.Shipped
+                ? ConsignmentStates.Shipped
+                : ConsignmentStates.UnShipped;
+
+            const string urlBase = "/allocation/{0}/{1}";
+
+            var startDate = DateTime.Now.AddDays(_daysToStart);
+            var endDate = DateTime.Now.AddDays(1);
+            var stats = await _consignmentService.GetConsignmentStatusSummaryAsync(startDate, endDate);
+            if (stats == null)
+            {
+                return new List<RadialItemViewModel>(0);
+            }
+
+            var statuses = stats.Summary.Where(s => relevantStates.Contains(s.Key)).ToList();
+
+            var total = statuses.Sum(s => s.Value);
+
+            var result =
+                statuses.Select(consignmentState => SetRadialUiGroupings(consignmentState.Key, new RadialItemViewModel()
+                {
+                    ButtonText = consignmentState.Key.UnCamelCase(),
+                    Denominator = total,
+                    Diameter = 100,
+                    Label = consignmentState.Key.UnCamelCase(),
+                    Numerator = consignmentState.Value,
+                    Url = string.Format(urlBase, stateType.ToString().ToLower(), consignmentState.Key.ToString().ToLower()),
+                    Severity = consignmentState.Key.UiSeverity().ToString().ToLower(),
+                    ShowButton = false
+                })).ToList();
+
+            result.Add(new RadialItemViewModel()
+            {
+                ButtonText = stateType.UnCamelCase(),
+                Denominator = total,
+                Diameter = 100,
+                Label = stateType.UnCamelCase(),
+                Numerator = total,
+                Url = $"/allocation/{stateType.ToString().ToLower()}",
+                Severity = "total",
+                ShowButton = false,
+                UiGroup = 4,
+                UiPositionInGroup = 0
+            });
+
+            result = result.OrderBy(r => r.UiGroup).ThenBy(r => r.UiPositionInGroup).ToList();
+
+            return result;
+
+        }
+
+        private static RadialItemViewModel SetRadialUiGroupings(ConsignmentState state, RadialItemViewModel radial)
+        {
+            // ReSharper disable once SwitchStatementMissingSomeCases
+            switch (state)
+            {
+                case ConsignmentState.AtDropOffPoint:
+                    radial.UiGroup = 1;
+                    radial.UiPositionInGroup = 1;
+                    break;
+                case ConsignmentState.Collected:
+                    radial.UiGroup = 1;
+                    radial.UiPositionInGroup = 2;
+                    break;
+                case ConsignmentState.AtCollectionPoint:
+                    radial.UiGroup = 1;
+                    radial.UiPositionInGroup = 3;
+                    break;
+                case ConsignmentState.CollectionFailed:
+                    radial.UiGroup = 1;
+                    radial.UiPositionInGroup = 4;
+                    break;
+                case ConsignmentState.InTransit:
+                    radial.UiGroup = 2;
+                    radial.UiPositionInGroup = 1;
+                    break;
+                case ConsignmentState.InTransitWaiting:
+                    radial.UiGroup = 2;
+                    radial.UiPositionInGroup = 2;
+                    break;
+                case ConsignmentState.OutForDelivery:
+                    radial.UiGroup = 2;
+                    radial.UiPositionInGroup = 3;
+                    break;
+                case ConsignmentState.Delayed:
+                    radial.UiGroup = 2;
+                    radial.UiPositionInGroup = 4;
+                    break;
+                case ConsignmentState.ActionRequired:
+                    radial.UiGroup = 2;
+                    radial.UiPositionInGroup = 5;
+                    break;
+                case ConsignmentState.Missing:
+                    radial.UiGroup = 2;
+                    radial.UiPositionInGroup = 6;
+                    break;
+                case ConsignmentState.Lost:
+                    radial.UiGroup = 2;
+                    radial.UiPositionInGroup = 7;
+                    break;
+                case ConsignmentState.Damaged:
+                    radial.UiGroup = 2;
+                    radial.UiPositionInGroup = 8;
+                    break;
+                case ConsignmentState.Delivered:
+                    radial.UiGroup = 3;
+                    radial.UiPositionInGroup = 1;
+                    break;
+                case ConsignmentState.DeliveryFailedCardLeft:
+                    radial.UiGroup = 3;
+                    radial.UiPositionInGroup = 2;
+                    break;
+                case ConsignmentState.PartiallyDelivered:
+                    radial.UiGroup = 3;
+                    radial.UiPositionInGroup = 3;
+                    break;
+                case ConsignmentState.DeliveryFailed:
+                    radial.UiGroup = 3;
+                    radial.UiPositionInGroup = 4;
+                    break;
+                case ConsignmentState.ReturnToSender:
+                    radial.UiGroup = 3;
+                    radial.UiPositionInGroup = 5;
+                    break;
+            }
+            return radial;
         }
     }
 }

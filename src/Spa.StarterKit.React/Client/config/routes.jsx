@@ -5,6 +5,7 @@ import DashboardContainer from '../containers/DashboardContainer';
 import Loading from '../components/Loading';
 import ConsignmentsContainer from '../containers/ConsignmentsContainer';
 import ConsignmentContainer from '../containers/ConsignmentContainer';
+import RouteNotFound from '../components/404';
 import { IntlProvider } from 'react-intl';
 
 class RouteComponent extends Component {
@@ -23,6 +24,7 @@ class RouteComponent extends Component {
                         <Route path="/consignment">
                             <Route path=":consignmentReference" component={ConsignmentContainer} />
                         </Route>
+                        <Route path="*" component={RouteNotFound}/>
                     </Route>
                 </Router>
             </IntlProvider>

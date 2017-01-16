@@ -1,18 +1,9 @@
 ﻿import React, { Component } from 'react';
 import axios from 'axios';
-import {
-    Grid,
-    Cell, 
-    Card } from 'react-mdl';
-import Checkbox from '../components/checkbox/checkbox';
-import FontIcon from 'react-toolbox/lib/font_icon';
-import { ShortDate, DateTime } from '../components/utils/dateFormatting';
-import { FormattedNumber } from 'react-intl'; //todo extract to utility component
-import Loading from '../components/Loading';
-import Pagination from '../components/utils/pagination/pagination.jsx';
-import { Link } from 'react-router';
+import { Grid } from 'react-mdl';
 
 import ConsignmentsTable from '../components/consignments/consignmentsTable';
+import ConsignmentStatesHeader from '../components/consignments/consignmentStatesHeader';
 
 import '../sass/table.scss';
 
@@ -26,13 +17,23 @@ class ConsignmentsContainer extends Component {
             selectAll: false,
             selectedPage: 1,
             pageSize: 10,
-            count: 0
+            count: 0,
+            stateHeaderLoading: true,
+            stateHeaders: []
         }
-        this._loadData = this._loadData.bind(this);
+        this._loadConsignments = this._loadConsignments.bind(this);
         this._selectAll = this._selectAll.bind(this);
+        this._loadStateHeaders = this._loadStateHeaders.bind(this);
     }
     componentDidMount() {
-        this._loadData(this.props.route.consignmentState).then((data) => {
+        this._loadStateHeaders().then((data) => {
+            this.setState({
+                stateHeaders: data,
+                stateHeadersLoading: false
+            });
+        });
+
+        this._loadConsignments(this.props.route.consignmentState).then((data) => {
             if (data.consignments.length > 0) {
                 this.setState({
                     data: data,
@@ -49,7 +50,7 @@ class ConsignmentsContainer extends Component {
 
         });
     }
-    _loadData(state, take, skip) {
+    _loadConsignments(state, take, skip) {
         let baseUrl = `/consignments/${state.toLowerCase()}`;
 
         let hasQuery = false;
@@ -67,6 +68,17 @@ class ConsignmentsContainer extends Component {
 
         return axios.get(baseUrl)
             .then(function(response) {
+                console.log(response);
+                return response.data;
+            });
+    }
+    _loadStateHeaders() {
+        const type = this.state.type;
+        const url = `/consignments/stateHeaders?type=${type}`;
+        
+        return axios.get(url)
+            .then((response) => {
+                console.log('radials', response);
                 return response.data;
             });
     }
@@ -74,7 +86,7 @@ class ConsignmentsContainer extends Component {
         this.setState({
             loading: true
         }, () => {
-            this._loadData(this.state.type, this.state.pageSize, (this.state.pageSize * (page - 1)))
+            this._loadConsignments(this.state.type, this.state.pageSize, (this.state.pageSize * (page - 1)))
             .then((data) => {
                 if (data.consignments.length > 0) {
                     this.setState({
@@ -99,6 +111,7 @@ class ConsignmentsContainer extends Component {
     render() {
         return(
         <Grid>
+            <ConsignmentStatesHeader data={this.state.stateHeaders}/>
             <ConsignmentsTable count={this.state.count} 
                                selectAll={this.state.selectAll}
                                selectAllConsignments={this._selectAll} 

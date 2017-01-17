@@ -29,6 +29,7 @@ using ConsignmentService = MPD.Electio.SDK.NetCore.Services.v1_1.ConsignmentServ
 using IConsignmentService = MPD.Electio.SDK.NetCore.Interfaces.v1_1.Services.IConsignmentService;
 using ILogger = MPD.Electio.SDK.NetCore.Interfaces.ILogger;
 using System.Linq;
+using StaticDataService = MPD.Electio.SDK.NetCore.Services.StaticDataService;
 
 namespace Spa.StarterKit.React.Ioc
 {
@@ -150,6 +151,12 @@ namespace Spa.StarterKit.React.Ioc
                 config
                     .For<ICacheProvider>()
                     .Use(new RedisCacheProvider(RedisCacheConnector.Connection, new NLogSystemLogger()));
+
+                config
+                    .For<IStaticDataService>()
+                    .Use<MPD.Electio.SDK.NetCore.Services.v1_1.StaticDataService>()
+                    .Ctor<Func<string>>("apiKey").Is(() => ApiKey(container))
+                    .LifecycleIs<TransientLifecycle>();
 
                 config
                     .For<IMpdSecurityConfigSettings>()

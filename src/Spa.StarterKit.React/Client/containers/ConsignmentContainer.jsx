@@ -5,7 +5,10 @@ import Input from 'react-toolbox/lib/input';
 import Loading from '../components/Loading';
 import PageHeader from '../components/layout/pageHeader';
 import Utils from '../components/utils/utils';
+import StaticData from '../components/utils/staticData';
 import { Grid, Cell, Card, CardTitle, CardText } from 'react-mdl';
+import Dropdown from 'react-toolbox/lib/dropdown';
+import Autocomplete from '../components/autocomplete/autocomplete';
 import {Button, IconButton} from 'react-toolbox/lib/button';
 import '../sass/consignment.scss';
 
@@ -20,6 +23,7 @@ class ConsignmentContainer extends Component {
         }
         this._loadConsignment = this._loadConsignment.bind(this);
         this._toggleAddressDialog = this._toggleAddressDialog.bind(this);
+        this._lookups = this._lookups.bind(this);
     }
     componentDidMount() {
         this._loadConsignment().then((result) => {
@@ -28,6 +32,7 @@ class ConsignmentContainer extends Component {
                 consignment: result
             });
         });
+        this._lookups();
     }
     _toggleAddressDialog(address) {
         if (address && address.addressLine1) {
@@ -48,6 +53,18 @@ class ConsignmentContainer extends Component {
             console.log(`result from ${url}:`, result);
             return result.data;
         });
+    }
+    _lookups() {
+        return axios.all([
+            StaticData.getTitles(),
+            StaticData.getCountries()
+        ])
+        .then(axios.spread((titles, countries) => {
+                this.setState({
+                    titles: titles,
+                    countries: countries
+                });
+            }));
     }
     render() {
         if (this.state.loading) {
@@ -88,17 +105,117 @@ class ConsignmentContainer extends Component {
                         </Card>
                     </Cell>
 
-                    <EditAddressDialog active={this.state.showAddressDialog} toggleDialog={this._toggleAddressDialog} address={this.state.addressDialogData} title="Edit address" />
+                    <EditAddressDialog 
+                        title='Edit address'
+                        active={this.state.showAddressDialog}
+                        toggleDialog={this._toggleAddressDialog}
+                        address={this.state.addressDialogData}
+                        countries={this.state.countries} />
                 </Grid>
             );    
         }
     }
 }
 
+class CountryAutocomplete extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            selected: [this.props.initialValue],
+            options: this._mapOptions(this.props.source)
+        }
+        this._handleChange = this._handleChange.bind(this);
+
+    }
+    _mapOptions(options) {
+        let countriesObject = {};
+        options.map((option) => {
+            countriesObject[option.value] = option.label;
+        });
+        console.log(countriesObject);
+        return countriesObject;
+    }
+    _handleChange(value) {
+        console.log(value);
+        this.setState({
+            selected: value
+        });
+
+    }
+    render() {
+        return(
+            <Autocomplete 
+                direction="down"
+                onChange={this._handleChange}
+                label="Choose country"
+                source={this.state.options}
+                value={this.state.selected}
+                multiple={false}
+            />
+        );
+    }
+}
+
+//todo extract...
+class CountryDropdown extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            selected: this.props.initialValue
+        }
+        this._customItem = this._customItem.bind(this);
+        this._selectItem = this._selectItem.bind(this);
+    }
+    _selectItem(item) {
+        console.log(item);
+        this.setState({
+            selected: item
+        });
+    }
+    _customItem(item) {
+        const containerStyle = {
+            display: 'flex',
+            flexDirection: 'row'
+        }
+
+        const valueStyle = {
+            display: 'flex',
+            height: '32px',
+            width: '32px',
+            flexGrow: 0,
+            marginRight: '8px',
+            backgroundColor: '#ccc',
+            textAlign: 'center',
+            marginLeft: 0
+        }
+
+        const contentStyle = {
+            display: 'flex',
+            flexDirection: 'column',
+            flexGrow: 2
+        }
+
+        return(
+            <div style={containerStyle}>
+                <div style={valueStyle}>
+                    {item.value}
+                </div>
+                <div style={contentStyle}>
+                    <strong>{item.label}</strong>
+                </div>
+            </div>
+        );
+    }
+    render() {
+        return(
+            <Dropdown auto source={this.props.source} template={this._customItem} value={this.state.selected} onChange={(item) => this._selectItem(item)} />
+        );
+    }
+}
+
 class EditAddressDialog extends Component {
     constructor(props) {
         super(props);
-
     }
     render() {
         let address = this.props.address != null ? this.props.address : {
@@ -142,7 +259,7 @@ class EditAddressDialog extends Component {
                             <Input type='text' label='Town' name='Town' value={address.town} />
                             <Input type='text' label='Region' name='Region' value={address.region} />
                             <Input type='text' label='Postcode' name='Postcode' value={address.postcode} />
-                            <Input type='text' label='Country' name='Country' value={address.country.name} />
+                            <CountryAutocomplete initialValue={address.country.isoCode.twoLetterCode} source={this.props.countries} />
                             <Input type='text' label='Special instructions' name='Special instructions' value={address.specialInstructions} />
                         </Cell>
                         <Cell col={12} style={{textAlign: 'right'}}>

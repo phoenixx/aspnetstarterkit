@@ -124,25 +124,32 @@ class EditAddressDialog extends Component {
             specialInstructions: null
         };
         return(
-            <Dialog active={this.props.active} onEscKeyDown={this.props.toggleDialog} onOverlayClick={this.props.toggleDialog} title={this.props.title}>
+            <Dialog active={this.props.active} onEscKeyDown={this.props.toggleDialog} title={this.props.title}>
                 {this.props.address === null ? (null) : (
-                    <section>
-                        <Input type='text' label='Title' name='Title' value={address.contact.title} />
-                        <Input type='text' label='Forename' name='Forename' value={address.contact.firstName} />
-                        <Input type='text' label='Surname' name='Surname' value={address.contact.lastName} />
-                        <Input type='text' label='Email' name='Email' value={address.contact.email} />
-                        <Input type='text' label='Landline' name='Landline' value={address.contact.landline} />
-                        <Input type='text' label='Mobile' name='Mobile' value={address.contact.mobile} />
-                        <Input type='text' label='Address Line 1' name='Address Line 1' value={address.addressLine1} />
-                        <Input type='text' label='Address Line 2' name='Address Line 2' value={address.addressLine2} />
-                        <Input type='text' label='Address Line 3' name='Address Line 3' value={address.addressLine3} />
-                        <Input type='text' label='Town' name='Town' value={address.town} />
-                        <Input type='text' label='Region' name='Region' value={address.region} />
-                        <Input type='text' label='Postcode' name='Postcode' value={address.postcode} />
-                        <Input type='text' label='Country' name='Country' value={address.country.name} />
-                        <Input type='text' label='Special instructions' name='Special instructions' value={address.specialInstructions} />
-                        <Button icon='done' label='Save' raised primary />
-                    </section>
+                    <Grid>
+                        <Cell col={6}>
+                            <Input type='text' label='Title' name='Title' value={address.contact.title} />
+                            <Input type='text' label='Forename' name='Forename' value={address.contact.firstName} />
+                            <Input type='text' label='Surname' name='Surname' value={address.contact.lastName} />
+                            <Input type='text' label='Email' name='Email' value={address.contact.email} />
+                            <Input type='text' label='Landline' name='Landline' value={address.contact.landline} />
+                            <Input type='text' label='Mobile' name='Mobile' value={address.contact.mobile} />
+                        </Cell>
+                        <Cell col={6}>
+                            <Input type='text' label='Address Line 1' name='Address Line 1' value={address.addressLine1} />
+                            <Input type='text' label='Address Line 2' name='Address Line 2' value={address.addressLine2} />
+                            <Input type='text' label='Address Line 3' name='Address Line 3' value={address.addressLine3} />
+                            <Input type='text' label='Town' name='Town' value={address.town} />
+                            <Input type='text' label='Region' name='Region' value={address.region} />
+                            <Input type='text' label='Postcode' name='Postcode' value={address.postcode} />
+                            <Input type='text' label='Country' name='Country' value={address.country.name} />
+                            <Input type='text' label='Special instructions' name='Special instructions' value={address.specialInstructions} />
+                        </Cell>
+                        <Cell col={12} style={{textAlign: 'right'}}>
+                            <Button icon='clear' label='Cancel' flat primary onClick={this.props.toggleDialog} />
+                            <Button icon='done' label='Save' raised primary />
+                        </Cell>
+                    </Grid>
                 )}
             </Dialog>
         );

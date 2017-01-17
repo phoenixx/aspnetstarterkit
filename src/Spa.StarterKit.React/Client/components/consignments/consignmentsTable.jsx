@@ -48,11 +48,12 @@ class ConsignmentsTable extends Component {
                                     <Loading/>
                                 )
                                 : (
+                                    consignmentArray.length === 0 ? (<EmptyRow/>) : (
                                     consignmentArray.map((con) => {
                                         return(
                                             <ConsignmentsRow {...con} key={con.consignmentReference} selected={this.props.selectAll}/>
                                         );
-                                    })
+                                    }))
                                 )}
                         </tbody>
                     </table>
@@ -62,6 +63,15 @@ class ConsignmentsTable extends Component {
                 </CardActions>
             </Cell>
         );
+    }
+}
+
+class EmptyRow extends Component {
+    constructor(props) {
+        super(props);
+    }
+    render() {
+        return(<tr><td style={{textAlign: 'center'}} colSpan="12">No consignments found</td></tr>);
     }
 }
 

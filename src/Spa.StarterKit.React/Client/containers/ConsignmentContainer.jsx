@@ -91,6 +91,7 @@ class ConsignmentContainer extends Component {
                                 <br/>
                                 To:
                                 {Utils.formatConsignmentAddress(destination[0])}
+                                <Button icon='create' floating mini onClick={() => this._toggleAddressDialog(destination[0])} />
                             </CardText>
                         </Card>
                     </Cell>
@@ -110,7 +111,8 @@ class ConsignmentContainer extends Component {
                         active={this.state.showAddressDialog}
                         toggleDialog={this._toggleAddressDialog}
                         address={this.state.addressDialogData}
-                        countries={this.state.countries} />
+                        countries={this.state.countries}
+                        consignmentReference={this.state.consignment.reference} />
                 </Grid>
             );    
         }
@@ -124,8 +126,7 @@ class CountryAutocomplete extends Component {
             selected: [this.props.initialValue],
             options: this._mapOptions(this.props.source)
         }
-        this._handleChange = this._handleChange.bind(this);
-
+        this._changeValue = this._changeValue.bind(this);
     }
     _mapOptions(options) {
         let countriesObject = {};
@@ -135,22 +136,20 @@ class CountryAutocomplete extends Component {
         console.log(countriesObject);
         return countriesObject;
     }
-    _handleChange(value) {
-        console.log(value);
-        this.setState({
-            selected: value
-        });
-
+    _changeValue(value) {
+        debugger;
+        this.setState({ selected: value });
+        this.props.onChange(value);
     }
     render() {
         return(
             <Autocomplete 
                 direction="down"
-                onChange={this._handleChange}
                 label="Choose country"
                 source={this.state.options}
                 value={this.state.selected}
                 multiple={false}
+                onChange={this._changeValue}
             />
         );
     }
@@ -216,8 +215,6 @@ class CountryDropdown extends Component {
 class EditAddressDialog extends Component {
     constructor(props) {
         super(props);
-    }
-    render() {
         let address = this.props.address != null ? this.props.address : {
             contact: {
                 title: null,
@@ -240,37 +237,60 @@ class EditAddressDialog extends Component {
             region: null,
             specialInstructions: null
         };
+
+        this.state = address;
+        this._saveAddress = this._saveAddress.bind(this);
+        this._handleChange = this._handleChange.bind(this);
+
+    }
+    _saveAddress() {
+        const url = `/consignment/${this.props.consignmentReference}/updateaddress`;
+        console.log(this.state);
+    }
+    _handleChange(parentName, objName, objValue) {
+        if (parentName) {
+            const modifiedField = Utils.setNestedPropertyValue(this.state, parentName, objName, objValue);
+            this.setState({ [parentName]: modifiedField });
+        } else {
+            this.setState({ [objName]: objValue });
+        }
+    }
+    componentWillReceiveProps(props) {
+        const newState = Object.assign({}, props.address);
+        this.setState(newState);
+    }
+    render() {
         return(
             <Dialog active={this.props.active} onEscKeyDown={this.props.toggleDialog} title={this.props.title}>
                 {this.props.address === null ? (null) : (
                     <Grid>
                         <Cell col={6}>
-                            <Input type='text' label='Title' name='Title' value={address.contact.title} />
-                            <Input type='text' label='Forename' name='Forename' value={address.contact.firstName} />
-                            <Input type='text' label='Surname' name='Surname' value={address.contact.lastName} />
-                            <Input type='text' label='Email' name='Email' value={address.contact.email} />
-                            <Input type='text' label='Landline' name='Landline' value={address.contact.landline} />
-                            <Input type='text' label='Mobile' name='Mobile' value={address.contact.mobile} />
+                            <Input type='text' label='Title' name='Title' value={this.state.contact.title} onChange={(val) => this._handleChange('contact', 'title', val)} />
+                            <Input type='text' label='Forename' name='Forename' value={this.state.contact.firstName} onChange={(val) => this._handleChange('contact', 'firstName', val)}/>
+                            <Input type='text' label='Surname' name='Surname' value={this.state.contact.lastName} onChange={(val) => this._handleChange('contact', 'lastName', val)}/>
+                            <Input type='text' label='Email' name='Email' value={this.state.contact.email} onChange={(val) => this._handleChange('contact', 'email', val)}/>
+                            <Input type='text' label='Landline' name='Landline' value={this.state.contact.landline} onChange={(val) => this._handleChange('contact', 'landline', val)}/>
+                            <Input type='text' label='Mobile' name='Mobile' value={this.state.contact.mobile} onChange={(val) => this._handleChange('contact', 'mobile', val)}/>
                         </Cell>
                         <Cell col={6}>
-                            <Input type='text' label='Address Line 1' name='Address Line 1' value={address.addressLine1} />
-                            <Input type='text' label='Address Line 2' name='Address Line 2' value={address.addressLine2} />
-                            <Input type='text' label='Address Line 3' name='Address Line 3' value={address.addressLine3} />
-                            <Input type='text' label='Town' name='Town' value={address.town} />
-                            <Input type='text' label='Region' name='Region' value={address.region} />
-                            <Input type='text' label='Postcode' name='Postcode' value={address.postcode} />
-                            <CountryAutocomplete initialValue={address.country.isoCode.twoLetterCode} source={this.props.countries} />
-                            <Input type='text' label='Special instructions' name='Special instructions' value={address.specialInstructions} />
+                            <Input type='text' label='Address Line 1' name='Address Line 1' value={this.state.addressLine1} onChange={(val) => this._handleChange(null, 'addressLine1', val)}/>
+                            <Input type='text' label='Address Line 2' name='Address Line 2' value={this.state.addressLine2} onChange={(val) => this._handleChange(null, 'addressLine2', val)}/>
+                            <Input type='text' label='Address Line 3' name='Address Line 3' value={this.state.addressLine3} onChange={(val) => this._handleChange(null, 'addressLine3', val)}/>
+                            <Input type='text' label='Town' name='Town' value={this.state.town} onChange={(val) => this._handleChange(null, 'town', val)}/>
+                            <Input type='text' label='Region' name='Region' value={this.state.region} onChange={(val) => this._handleChange(null, 'region', val)}/>
+                            <Input type='text' label='Postcode' name='Postcode' value={this.state.postcode} onChange={(val) => this._handleChange(null, 'postcode', val)}/>
+                            <CountryAutocomplete initialValue={this.state.country.isoCode.twoLetterCode} source={this.props.countries} onChange={(val) => { this._handleChange('country.isoCode', 'twoLetterCode', val); }}/>
+                            <Input type='text' label='Special instructions' name='Special instructions' value={this.state.specialInstructions} onChange={(val) => this._handleChange(null, 'specialInstructions', val)} />
                         </Cell>
                         <Cell col={12} style={{textAlign: 'right'}}>
                             <Button icon='clear' label='Cancel' flat primary onClick={this.props.toggleDialog} />
-                            <Button icon='done' label='Save' raised primary />
+                            <Button icon='done' label='Save' raised primary onClick={this._saveAddress} />
                         </Cell>
                     </Grid>
                 )}
             </Dialog>
-        );
-    }
+);
+}
 }
 
 export default ConsignmentContainer;

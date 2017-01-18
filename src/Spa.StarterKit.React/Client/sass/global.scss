@@ -55,6 +55,10 @@ a:hover, a:focus {
   opacity: 0;
 }
 
+section {
+    overflow-y: auto;
+}
+
 /*vital for mobile resizing!*/
 .mdl-grid {
     max-width: 100%;

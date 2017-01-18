@@ -7,10 +7,14 @@ namespace Spa.StarterKit.React.Controllers.Data
     public class DataController : Controller
     {
         private readonly IStaticDataService _staticDataService;
+        private readonly IShippingLocationService _shippingLocationService;
 
-        public DataController(IStaticDataService staticDataService)
+        public DataController(
+            IStaticDataService staticDataService,
+            IShippingLocationService shippingLocationService)
         {
             _staticDataService = staticDataService;
+            _shippingLocationService = shippingLocationService;
         }
 
         [Route("data/titles")]
@@ -25,6 +29,13 @@ namespace Spa.StarterKit.React.Controllers.Data
         {
             var countries = await _staticDataService.GetCountries();
             return Json(countries);
+        }
+
+        [Route("data/shippinglocations/assigned")]
+        public async Task<IActionResult> AssignedShippingLocations()
+        {
+            var result = await _shippingLocationService.GetAssignedShippingLocations();
+            return Json(result);
         }
     }
 }

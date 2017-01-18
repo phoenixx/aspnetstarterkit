@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using MPD.Electio.SDK.NetCore.DataTypes.Profile.v1_1;
+using MPD.Electio.SDK.NetCore.Interfaces.v1_1.Services;
 using Spa.StarterKit.React.Models;
 using Spa.StarterKit.React.Services.Interfaces;
 
@@ -10,14 +10,21 @@ namespace Spa.StarterKit.React.Services
 {
     public class ShippingLocationService : IShippingLocationService
     {
+        private readonly IShippingLocationsService _shippingLocationsService;
+
+        public ShippingLocationService(IShippingLocationsService shippingLocationsService)
+        {
+            _shippingLocationsService = shippingLocationsService;
+        }
+
         public async Task<List<ShippingLocation>> GetShippingLocations()
         {
-            return await Task.Run(() => new List<ShippingLocation>());
+            return await _shippingLocationsService.GetShippingLocationsAsync();
         }
 
         public async Task<List<ShippingLocation>> GetAssignedShippingLocations()
         {
-            return await Task.Run(() => new List<ShippingLocation>());
+            return await _shippingLocationsService.GetAssignedShippingLocationsAsync();
         }
 
         public Task<ShippingLocation> GetShippingLocation(string shippingLocationReference)

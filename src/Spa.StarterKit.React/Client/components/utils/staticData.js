@@ -31,4 +31,18 @@ StaticData.getTitles = () => {
     });
 }
 
+StaticData.getAssignedShippingLocations = () => {
+    const url = '/data/shippinglocations/assigned';
+    return axios.get(url).then((result) => {
+        console.log('shipping locs: ', result.data);
+        return result.data.map((loc) => {
+            return {
+                label: loc.name,
+                value: loc.reference,
+                location: loc
+            }
+        });
+    });
+}
+
 export default StaticData;

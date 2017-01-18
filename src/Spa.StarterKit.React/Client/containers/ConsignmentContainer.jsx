@@ -57,12 +57,14 @@ class ConsignmentContainer extends Component {
     _lookups() {
         return axios.all([
             StaticData.getTitles(),
-            StaticData.getCountries()
+            StaticData.getCountries(),
+            StaticData.getAssignedShippingLocations()
         ])
-        .then(axios.spread((titles, countries) => {
+        .then(axios.spread((titles, countries, shippingLocations) => {
                 this.setState({
                     titles: titles,
-                    countries: countries
+                    countries: countries,
+                    shippingLocations: shippingLocations
                 });
             }));
     }
@@ -112,7 +114,8 @@ class ConsignmentContainer extends Component {
                         toggleDialog={this._toggleAddressDialog}
                         address={this.state.addressDialogData}
                         countries={this.state.countries}
-                        consignmentReference={this.state.consignment.reference} />
+                        consignmentReference={this.state.consignment.reference}
+                        shippingLocations={this.state.shippingLocations} />
                 </Grid>
             );    
         }
@@ -235,13 +238,14 @@ class EditAddressDialog extends Component {
             },
             postcode: null,
             region: null,
-            specialInstructions: null
+            specialInstructions: null,
+            shippingLocationReference: null
         };
 
         this.state = address;
         this._saveAddress = this._saveAddress.bind(this);
         this._handleChange = this._handleChange.bind(this);
-
+        this._handleShippingLocationSelect = this._handleShippingLocationSelect.bind(this);
     }
     _saveAddress() {
         const url = `/consignment/${this.props.consignmentReference}/updateaddress`;
@@ -255,16 +259,50 @@ class EditAddressDialog extends Component {
             this.setState({ [objName]: objValue });
         }
     }
+    _handleShippingLocationSelect(locationRef) {
+
+        const loc = this.props.shippingLocations.filter((loc) => {
+            return loc.value === locationRef;
+        });
+        if (loc.length > 0) {
+            const match = loc[0].location;
+            console.log(match);
+            this.setState({
+                contact: {
+                    title: match.contact.title,
+                    firstName: match.contact.firstName,
+                    lastName: match.contact.lastName,
+                    email: match.contact.email,
+                    landline: match.contact.landline,
+                    mobile: match.contact.mobile
+                },
+                addressLine1: match.addressLine1,
+                addressLine2: match.addressLine2,
+                country: {
+                    name: match.country.name,
+                    isoCode: {
+                        twoLetterCode: match.country.isoCode.twoLetterCode
+                    }
+                },
+                postcode: match.postcode,
+                region: match.region,
+                specialInstructions: match.specialInstructions,
+                shippingLocationReference: locationRef
+            });
+        }
+    }
     componentWillReceiveProps(props) {
         const newState = Object.assign({}, props.address);
         this.setState(newState);
     }
+
     render() {
         return(
-            <Dialog active={this.props.active} onEscKeyDown={this.props.toggleDialog} title={this.props.title}>
+            <Dialog active={this.props.active} onEscKeyDown={this.props.toggleDialog} onOverlayClick={this.props.toggleDialog} title={this.props.title}>
                 {this.props.address === null ? (null) : (
                     <Grid>
                         <Cell col={6}>
+                            <Dropdown label='Shipping Location' auto source={this.props.shippingLocations} value={this.state.shippingLocationReference} onChange={(val) => this._handleShippingLocationSelect(val)} />
                             <Input type='text' label='Title' name='Title' value={this.state.contact.title} onChange={(val) => this._handleChange('contact', 'title', val)} />
                             <Input type='text' label='Forename' name='Forename' value={this.state.contact.firstName} onChange={(val) => this._handleChange('contact', 'firstName', val)}/>
                             <Input type='text' label='Surname' name='Surname' value={this.state.contact.lastName} onChange={(val) => this._handleChange('contact', 'lastName', val)}/>
@@ -279,7 +317,7 @@ class EditAddressDialog extends Component {
                             <Input type='text' label='Town' name='Town' value={this.state.town} onChange={(val) => this._handleChange(null, 'town', val)}/>
                             <Input type='text' label='Region' name='Region' value={this.state.region} onChange={(val) => this._handleChange(null, 'region', val)}/>
                             <Input type='text' label='Postcode' name='Postcode' value={this.state.postcode} onChange={(val) => this._handleChange(null, 'postcode', val)}/>
-                            <CountryAutocomplete initialValue={this.state.country.isoCode.twoLetterCode} source={this.props.countries} onChange={(val) => { this._handleChange('country.isoCode', 'twoLetterCode', val); }}/>
+                            <CountryAutocomplete initialValue={this.state.country.isoCode.twoLetterCode} value={this.state.country.isoCode.twoLetterCode} source={this.props.countries} onChange={(val) => { this._handleChange('country.isoCode', 'twoLetterCode', val); }}/>
                             <Input type='text' label='Special instructions' name='Special instructions' value={this.state.specialInstructions} onChange={(val) => this._handleChange(null, 'specialInstructions', val)} />
                         </Cell>
                         <Cell col={12} style={{textAlign: 'right'}}>

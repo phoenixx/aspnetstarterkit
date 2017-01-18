@@ -236,10 +236,11 @@ class EditAddressDialog extends Component {
             specialInstructions: null,
             shippingLocationReference: null
         };
-
+        this.state = address;
         this._saveAddress = this._saveAddress.bind(this);
         this._handleChange = this._handleChange.bind(this);
         this._handleShippingLocationSelect = this._handleShippingLocationSelect.bind(this);
+        this._shippingLocationExists = this._shippingLocationExists.bind(this);
     }
     _saveAddress() {
         const url = `/consignment/${this.props.consignmentReference}/updateaddress`;
@@ -258,32 +259,40 @@ class EditAddressDialog extends Component {
         const loc = this.props.shippingLocations.filter((loc) => {
             return loc.value === locationRef;
         });
+        const empty = '';
         if (loc.length > 0) {
             const match = loc[0].location;
             console.log(match);
             this.setState({
                 contact: {
-                    title: match.contact.title,
-                    firstName: match.contact.firstName,
-                    lastName: match.contact.lastName,
-                    email: match.contact.email,
-                    landline: match.contact.landline,
-                    mobile: match.contact.mobile
+                    title: match.contact.title || empty,
+                    firstName: match.contact.firstName || empty,
+                    lastName: match.contact.lastName || empty,
+                    email: match.contact.email || empty,
+                    landline: match.contact.landline || empty,
+                    mobile: match.contact.mobile || empty
                 },
-                addressLine1: match.addressLine1,
-                addressLine2: match.addressLine2,
+                addressLine1: match.addressLine1 || empty,
+                addressLine2: match.addressLine2 || empty,
                 country: {
-                    name: match.country.name,
+                    name: match.country.name || empty,
                     isoCode: {
-                        twoLetterCode: match.country.isoCode.twoLetterCode
+                        twoLetterCode: match.country.isoCode.twoLetterCode || empty
                     }
                 },
-                postcode: match.postcode,
-                region: match.region,
-                specialInstructions: match.specialInstructions,
+                postcode: match.postcode || empty,
+                region: match.region || empty,
+                specialInstructions: match.specialInstructions || empty,
                 shippingLocationReference: locationRef
             });
         }
+    }
+    _shippingLocationExists() {
+        const locationRef = this.state.shippingLocationReference;
+        const loc = this.props.shippingLocations.filter((loc) => {
+            return loc.value === locationRef;
+        });
+        return (typeof loc !== 'undefined' && loc !== null && loc.length > 0);
     }
     componentWillReceiveProps(props) {
         const newState = Object.assign({}, props.address);
@@ -291,7 +300,7 @@ class EditAddressDialog extends Component {
     }
 
     render() {
-        const inputDisabled = this.state.shippingLocationReference !== null;
+        const inputDisabled = this.state && this.state.shippingLocationReference !== null && this._shippingLocationExists();
         return(
             <Dialog active={this.props.active} onEscKeyDown={this.props.toggleDialog} onOverlayClick={this.props.toggleDialog} title={this.props.title}>
                 {this.props.address === null ? (null) : (

@@ -129,30 +129,25 @@ class CountryAutocomplete extends Component {
             selected: [this.props.initialValue],
             options: this._mapOptions(this.props.source)
         }
-        this._changeValue = this._changeValue.bind(this);
     }
     _mapOptions(options) {
         let countriesObject = {};
         options.map((option) => {
             countriesObject[option.value] = option.label;
         });
-        console.log(countriesObject);
         return countriesObject;
-    }
-    _changeValue(value) {
-        debugger;
-        this.setState({ selected: value });
-        this.props.onChange(value);
     }
     render() {
         return(
             <Autocomplete 
+                disabled={this.props.disabled}
                 direction="down"
                 label="Choose country"
                 source={this.state.options}
-                value={this.state.selected}
+                value={this.props.value}
+                onChange={this.props.onChange}
                 multiple={false}
-                onChange={this._changeValue}
+                
             />
         );
     }
@@ -242,7 +237,6 @@ class EditAddressDialog extends Component {
             shippingLocationReference: null
         };
 
-        this.state = address;
         this._saveAddress = this._saveAddress.bind(this);
         this._handleChange = this._handleChange.bind(this);
         this._handleShippingLocationSelect = this._handleShippingLocationSelect.bind(this);
@@ -297,28 +291,29 @@ class EditAddressDialog extends Component {
     }
 
     render() {
+        const inputDisabled = this.state.shippingLocationReference !== null;
         return(
             <Dialog active={this.props.active} onEscKeyDown={this.props.toggleDialog} onOverlayClick={this.props.toggleDialog} title={this.props.title}>
                 {this.props.address === null ? (null) : (
                     <Grid>
                         <Cell col={6}>
                             <Dropdown label='Shipping Location' auto source={this.props.shippingLocations} value={this.state.shippingLocationReference} onChange={(val) => this._handleShippingLocationSelect(val)} />
-                            <Input type='text' label='Title' name='Title' value={this.state.contact.title} onChange={(val) => this._handleChange('contact', 'title', val)} />
-                            <Input type='text' label='Forename' name='Forename' value={this.state.contact.firstName} onChange={(val) => this._handleChange('contact', 'firstName', val)}/>
-                            <Input type='text' label='Surname' name='Surname' value={this.state.contact.lastName} onChange={(val) => this._handleChange('contact', 'lastName', val)}/>
-                            <Input type='text' label='Email' name='Email' value={this.state.contact.email} onChange={(val) => this._handleChange('contact', 'email', val)}/>
-                            <Input type='text' label='Landline' name='Landline' value={this.state.contact.landline} onChange={(val) => this._handleChange('contact', 'landline', val)}/>
-                            <Input type='text' label='Mobile' name='Mobile' value={this.state.contact.mobile} onChange={(val) => this._handleChange('contact', 'mobile', val)}/>
+                            <Input disabled={inputDisabled} type='text' label='Title' name='Title' value={this.state.contact.title} onChange={(val) => this._handleChange('contact', 'title', val)} />
+                            <Input disabled={inputDisabled} type='text' label='Forename' name='Forename' value={this.state.contact.firstName} onChange={(val) => this._handleChange('contact', 'firstName', val)}/>
+                            <Input disabled={inputDisabled} type='text' label='Surname' name='Surname' value={this.state.contact.lastName} onChange={(val) => this._handleChange('contact', 'lastName', val)}/>
+                            <Input disabled={inputDisabled} type='text' label='Email' name='Email' value={this.state.contact.email} onChange={(val) => this._handleChange('contact', 'email', val)}/>
+                            <Input disabled={inputDisabled} type='text' label='Landline' name='Landline' value={this.state.contact.landline} onChange={(val) => this._handleChange('contact', 'landline', val)}/>
+                            <Input disabled={inputDisabled} type='text' label='Mobile' name='Mobile' value={this.state.contact.mobile} onChange={(val) => this._handleChange('contact', 'mobile', val)}/>
                         </Cell>
                         <Cell col={6}>
-                            <Input type='text' label='Address Line 1' name='Address Line 1' value={this.state.addressLine1} onChange={(val) => this._handleChange(null, 'addressLine1', val)}/>
-                            <Input type='text' label='Address Line 2' name='Address Line 2' value={this.state.addressLine2} onChange={(val) => this._handleChange(null, 'addressLine2', val)}/>
-                            <Input type='text' label='Address Line 3' name='Address Line 3' value={this.state.addressLine3} onChange={(val) => this._handleChange(null, 'addressLine3', val)}/>
-                            <Input type='text' label='Town' name='Town' value={this.state.town} onChange={(val) => this._handleChange(null, 'town', val)}/>
-                            <Input type='text' label='Region' name='Region' value={this.state.region} onChange={(val) => this._handleChange(null, 'region', val)}/>
-                            <Input type='text' label='Postcode' name='Postcode' value={this.state.postcode} onChange={(val) => this._handleChange(null, 'postcode', val)}/>
-                            <CountryAutocomplete initialValue={this.state.country.isoCode.twoLetterCode} value={this.state.country.isoCode.twoLetterCode} source={this.props.countries} onChange={(val) => { this._handleChange('country.isoCode', 'twoLetterCode', val); }}/>
-                            <Input type='text' label='Special instructions' name='Special instructions' value={this.state.specialInstructions} onChange={(val) => this._handleChange(null, 'specialInstructions', val)} />
+                            <Input disabled={inputDisabled} type='text' label='Address Line 1' name='Address Line 1' value={this.state.addressLine1} onChange={(val) => this._handleChange(null, 'addressLine1', val)}/>
+                            <Input disabled={inputDisabled} type='text' label='Address Line 2' name='Address Line 2' value={this.state.addressLine2} onChange={(val) => this._handleChange(null, 'addressLine2', val)}/>
+                            <Input disabled={inputDisabled} type='text' label='Address Line 3' name='Address Line 3' value={this.state.addressLine3} onChange={(val) => this._handleChange(null, 'addressLine3', val)}/>
+                            <Input disabled={inputDisabled} type='text' label='Town' name='Town' value={this.state.town} onChange={(val) => this._handleChange(null, 'town', val)}/>
+                            <Input disabled={inputDisabled} type='text' label='Region' name='Region' value={this.state.region} onChange={(val) => this._handleChange(null, 'region', val)}/>
+                            <Input disabled={inputDisabled} type='text' label='Postcode' name='Postcode' value={this.state.postcode} onChange={(val) => this._handleChange(null, 'postcode', val)}/>
+                            <CountryAutocomplete disabled={inputDisabled} initialValue={this.state.country.isoCode.twoLetterCode} value={this.state.country.isoCode.twoLetterCode} source={this.props.countries} onChange={(val) => { this._handleChange('country.isoCode', 'twoLetterCode', val); }}/>
+                            <Input disabled={inputDisabled} type='text' label='Special instructions' name='Special instructions' value={this.state.specialInstructions} onChange={(val) => this._handleChange(null, 'specialInstructions', val)} />
                         </Cell>
                         <Cell col={12} style={{textAlign: 'right'}}>
                             <Button icon='clear' label='Cancel' flat primary onClick={this.props.toggleDialog} />

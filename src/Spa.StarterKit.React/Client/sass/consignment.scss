@@ -20,3 +20,38 @@
     font-style: italic;
     color: $grey-300;
 }
+
+.package-container {
+    font-size: 1.3em;
+    padding: 12px 8px;
+    background-color: $grey-200;
+    margin-bottom: 16px;
+}
+
+.package-reference{
+    width: 50%;
+    float: left;
+    text-align: left;
+    font-size: 1.5em;
+    color: $electio-red;
+    font-weight: bold;
+}
+
+.package-edit {
+    float:left;
+    width:50%;
+    text-align: right;
+}
+
+.package-table th {
+    text-align: left;
+    background-color: $grey-200;
+}
+
+.package-table thead > tr {
+    border-bottom: 0 none;
+}
+
+.package-table tr {
+    background-color: $grey-200;
+}

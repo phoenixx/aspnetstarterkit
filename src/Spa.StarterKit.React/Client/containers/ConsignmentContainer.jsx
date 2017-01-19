@@ -6,9 +6,12 @@ import Loading from '../components/Loading';
 import PageHeader from '../components/layout/pageHeader';
 import Utils from '../components/utils/utils';
 import StaticData from '../components/utils/staticData';
+import Tabs from '../components/tabs/tabs';
+import { Tab } from 'react-toolbox';
 import { ShortDate, DateTime } from '../components/utils/dateFormatting';
 import { AddressDisplayContainer } from './AddressContainer';
 import { Grid, Cell, Card, CardTitle, CardText } from 'react-mdl';
+import { FormattedNumber } from 'react-intl'; //todo extract to utility component
 import Dropdown from 'react-toolbox/lib/dropdown';
 import FontIcon from 'react-toolbox/lib/font_icon';
 import Autocomplete from '../components/autocomplete/autocomplete';
@@ -22,8 +25,10 @@ class ConsignmentContainer extends Component {
             loading: true,
             consignment: null,
             showAddressDialog: false,
-            addressDialogData: null
+            addressDialogData: null,
+            activeTab: 0
         }
+        this._setActiveTab = this._setActiveTab.bind(this);
         this._loadConsignment = this._loadConsignment.bind(this);
         this._toggleAddressDialog = this._toggleAddressDialog.bind(this);
         this._lookups = this._lookups.bind(this);
@@ -36,6 +41,9 @@ class ConsignmentContainer extends Component {
             });
         });
         this._lookups();
+    }
+    _setActiveTab(tabId) {
+        this.setState({ activeTab: tabId });
     }
     _toggleAddressDialog(address) {
         if (address && address.addressLine1) {
@@ -144,7 +152,7 @@ class ConsignmentContainer extends Component {
                                     {this.state.consignment.shippingTerms}
                                 </ConsignmentProperty>
                                 <ConsignmentProperty label="Date created">
-                                    <DateTime value={this.state.consignment.dateCreated}/>
+                                    <DateTime value={this.state.consignment.dateCreated} />
                                 </ConsignmentProperty>
                                 <ConsignmentProperty label="Requested delivery date">
                                     <DateTime value={this.state.consignment.requestedDelivertyDate} />
@@ -163,7 +171,34 @@ class ConsignmentContainer extends Component {
                             <CardTitle>{consignmentState}</CardTitle>
                         </Card>
                     </Cell>
+                    <Cell col={12}>
+                        <Tabs index={this.state.activeTab} onChange={(tabId) =>this._setActiveTab(tabId)} fixed>
+                            <Tab label="Packages" icon="card_giftcard">
+                                <PackagesTab packages={this.state.consignment.packages} />
+                            </Tab>
 
+                            <Tab label="Documents" icon="description">
+                                <Card shadow={0} raised style={{height: '300px', width: '100%'}}>
+                                    <CardTitle>Documents & labels</CardTitle>
+                                </Card>
+                            </Tab>
+                            <Tab label="Tracking" icon="event">
+                                <Card shadow={0} raised style={{height: '300px', width: '100%'}}>
+                                    <CardTitle>Tracking events</CardTitle>
+                                </Card>
+                            </Tab>
+                            <Tab label="History" icon="history">
+                                <Card shadow={0} raised style={{height: '300px', width: '100%'}}>
+                                    <CardTitle>History</CardTitle>
+                                </Card>
+                            </Tab>
+                            <Tab label="Metadata" icon="hourglass_empty">
+                                <Card shadow={0} raised style={{height: '300px', width: '100%'}}>
+                                    <CardTitle>Metadata</CardTitle>
+                                </Card>
+                            </Tab>
+                        </Tabs>
+                    </Cell>
                     <EditAddressDialog title='Edit address'
                                        active={this.state.showAddressDialog}
                                        toggleDialog={this._toggleAddressDialog}
@@ -174,6 +209,68 @@ class ConsignmentContainer extends Component {
                 </Grid>
             );
         }
+    }
+}
+
+/*extract all this stuff to new components*/
+class PackagesTab extends Component {
+    constructor(props) {
+        super(props);
+    }
+    render() {
+        return(
+            <Card shadow={0} raised style={{minHeight: '300px', width: '100%'}}>
+                <CardTitle>Packages</CardTitle>
+                <CardText className="tab--cardtext">
+                    {this.props.packages.map((pkg) => {
+                        return (<Package {...pkg} />);
+                    })}
+                </CardText>
+            </Card>
+        );
+    }
+}
+
+class Package extends Component {
+    constructor(props) {
+        super(props);
+    }
+    render() {
+        return(
+            <div className="package-container">
+                <div className="package-reference">
+                    Package {this.props.reference}
+                </div>
+                <div className="package-edit">
+                        <Button icon='create' label='Edit' primary />
+                </div>
+                <table className="package-table">
+                    <thead>
+                        <tr>
+                            <th>Your reference</th>
+                            <th>Description</th>
+                            <th>Dimensions</th>
+                            <th>Value</th>
+                            <th>Barcode</th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>{this.props.packageReferenceProvidedByCustomer}</td>
+                            <td>{this.props.description}</td>
+                            <td>{this.props.dimensions.height}cm x {this.props.dimensions.length}cm x {this.props.dimensions.width}cm</td>
+                            <td><FormattedNumber value={this.props.value.amount} style="currency" currency={this.props.value.currency.isoCode} /></td>
+                            <td>
+                                <OptionalProperty>
+                                    {this.props.barcode}
+                                </OptionalProperty>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        );
     }
 }
 

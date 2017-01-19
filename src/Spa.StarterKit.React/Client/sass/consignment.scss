@@ -1,4 +1,22 @@
-﻿.consignment-card {
+﻿@import './colours.scss';
+
+.consignment-card {
     font-size: 0.9em;
     line-height: 1.8em;
+    padding-top: 4px;
+}
+
+.property-group {
+    padding: 5px 0;
+}
+
+.property-group__label {
+    display: inline-block;
+    width: 50%;
+    font-weight: 700;
+}
+
+.property-group__item--empty {
+    font-style: italic;
+    color: $grey-300;
 }

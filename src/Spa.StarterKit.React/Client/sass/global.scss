@@ -102,6 +102,26 @@ section {
     background: $darker-red;
 }
 
+h1.mdl-card__title-text,
+h2.mdl-card__title-text {
+    color: $electio-red
+}
+
+.mdl-card__title > h2 {
+    align-self: flex-end;
+    display: block;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    font-size: 24px;
+    font-weight: 300;
+    line-height: normal;
+    overflow: hidden;
+    -webkit-transform-origin: 149px 48px;
+    transform-origin: 149px 48px;
+    margin: 0;
+}
+
 /*main app layout components*/
 /*#app {
     position: absolute;

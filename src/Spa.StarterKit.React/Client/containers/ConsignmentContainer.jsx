@@ -6,8 +6,11 @@ import Loading from '../components/Loading';
 import PageHeader from '../components/layout/pageHeader';
 import Utils from '../components/utils/utils';
 import StaticData from '../components/utils/staticData';
+import { ShortDate, DateTime } from '../components/utils/dateFormatting';
+import { AddressDisplayContainer } from './AddressContainer';
 import { Grid, Cell, Card, CardTitle, CardText } from 'react-mdl';
 import Dropdown from 'react-toolbox/lib/dropdown';
+import FontIcon from 'react-toolbox/lib/font_icon';
 import Autocomplete from '../components/autocomplete/autocomplete';
 import {Button, IconButton} from 'react-toolbox/lib/button';
 import '../sass/consignment.scss';
@@ -61,16 +64,16 @@ class ConsignmentContainer extends Component {
             StaticData.getAssignedShippingLocations()
         ])
         .then(axios.spread((titles, countries, shippingLocations) => {
-                this.setState({
-                    titles: titles,
-                    countries: countries,
-                    shippingLocations: shippingLocations
-                });
-            }));
+            this.setState({
+                titles: titles,
+                countries: countries,
+                shippingLocations: shippingLocations
+            });
+        }));
     }
     render() {
         if (this.state.loading) {
-            return (<Loading/>);
+            return (<Loading />);
         } else {
             const consignmentState = `Consignment status: ${Utils.splitCamelCase(this.state.consignment.consignmentState)}`;
             const origin = this.state.consignment.addresses.filter((address) => {
@@ -79,27 +82,80 @@ class ConsignmentContainer extends Component {
             const destination = this.state.consignment.addresses.filter((address) => {
                 return address.addressType === 'Destination';
             });
-            
+
             return(
                 <Grid>
-                    <PageHeader title={`Consignment ${this.state.consignment.reference}`}/>
+                    <PageHeader title={`Consignment ${this.state.consignment.reference}`} />
                     <Cell col={3} tablet={12} phone={12}>
-                        <Card shadow={0} raised style={{height: '500px', width: '100%'}}>
-                            <CardTitle>Addresses</CardTitle>
-                            <CardText className="consignment-card">
-                                From: 
-                                {Utils.formatConsignmentAddress(origin[0])}
-                                <Button icon='create' floating mini onClick={() => this._toggleAddressDialog(origin[0])} />
-                                <br/>
-                                To:
-                                {Utils.formatConsignmentAddress(destination[0])}
-                                <Button icon='create' floating mini onClick={() => this._toggleAddressDialog(destination[0])} />
-                            </CardText>
-                        </Card>
+                        <Grid style={{margin: 0, padding: 0}}>
+                            <Cell col={12} style={{margin:0, padding:0, width: '100%', marginBottom: '8px'}}>
+                                <Card shadow={0} raised style={{height: '242px', width: '100%'}}>
+                                <CardTitle>
+                                    <h2>
+                                        From
+                                    </h2>
+                                    <span style={{right:'16px', position: 'absolute'}}>
+                                        <Button icon='create' label='Edit' primary onClick={() => this._toggleAddressDialog(origin[0])} />
+                                    </span>
+                                </CardTitle>
+                                <CardText className="consignment-card">
+                                    <AddressDisplayContainer address={origin[0]} />
+                                </CardText>
+                                </Card>
+                            </Cell>
+                            <Cell col={12} style={{margin:0, padding:0, width: '100%', marginTop: '8px'}}>
+                                <Card shadow={0} raised style={{height: '242px', width: '100%'}}>
+                                <CardTitle>
+                                    <h2>
+                                        To
+                                    </h2>
+                                    <span style={{right:'16px', position: 'absolute'}}>
+                                        <Button icon='create' label='Edit' primary onClick={() => this._toggleAddressDialog(destination[0])} />
+                                    </span>
+                                </CardTitle>
+                                <CardText className="consignment-card">
+                                    <AddressDisplayContainer address={destination[0]} />
+                                </CardText>
+                                </Card>
+                            </Cell>
+                        </Grid>
                     </Cell>
                     <Cell col={3}>
                         <Card shadow={0} raised style={{height: '500px', width: '100%'}}>
-                            <CardTitle>Consignment details</CardTitle>
+                            <CardTitle>
+                                <h2>
+                                    Consignment details
+                                </h2>
+                                <span style={{right:'16px', position: 'absolute'}}>
+                                    <Button icon='create' label='Edit' primary />
+                                </span>
+                            </CardTitle>
+                            <CardText className="consignment-card">
+                                <ConsignmentProperty label="Electio reference">
+                                    {this.state.consignment.reference}
+                                </ConsignmentProperty>
+                                <ConsignmentProperty label="Your reference">
+                                    {this.state.consignment.consignmentReferenceProvidedByCustomer}
+                                </ConsignmentProperty>
+                                <ConsignmentProperty label="Source">
+                                    {this.state.consignment.source}
+                                </ConsignmentProperty>
+                                <ConsignmentProperty label="Shipping Terms">
+                                    {this.state.consignment.shippingTerms}
+                                </ConsignmentProperty>
+                                <ConsignmentProperty label="Date created">
+                                    <DateTime value={this.state.consignment.dateCreated}/>
+                                </ConsignmentProperty>
+                                <ConsignmentProperty label="Requested delivery date">
+                                    <DateTime value={this.state.consignment.requestedDelivertyDate} />
+                                </ConsignmentProperty>
+                                <ConsignmentProperty label="Shipping date">
+                                    <DateTime value={this.state.consignment.shippingDate} />
+                                </ConsignmentProperty>
+                                <ConsignmentProperty label="Earliest delivery">
+                                    <DateTime value={this.state.consignment.earliestDeliveryDate} />
+                                </ConsignmentProperty>
+                            </CardText>
                         </Card>
                     </Cell>
                     <Cell col={6}>
@@ -108,17 +164,50 @@ class ConsignmentContainer extends Component {
                         </Card>
                     </Cell>
 
-                    <EditAddressDialog 
-                        title='Edit address'
-                        active={this.state.showAddressDialog}
-                        toggleDialog={this._toggleAddressDialog}
-                        address={this.state.addressDialogData}
-                        countries={this.state.countries}
-                        consignmentReference={this.state.consignment.reference}
-                        shippingLocations={this.state.shippingLocations} />
+                    <EditAddressDialog title='Edit address'
+                                       active={this.state.showAddressDialog}
+                                       toggleDialog={this._toggleAddressDialog}
+                                       address={this.state.addressDialogData}
+                                       countries={this.state.countries}
+                                       consignmentReference={this.state.consignment.reference}
+                                       shippingLocations={this.state.shippingLocations} />
                 </Grid>
-            );    
+            );
         }
+    }
+}
+
+class ConsignmentProperty extends Component {
+    constructor(props) {
+        super(props);
+    }
+    render() {
+        return(
+            <div className="property-group">
+                <span className="property-group__label">
+                    {this.props.label}:
+                </span>
+                <OptionalProperty>
+                    {this.props.children}
+                </OptionalProperty>
+            </div>
+        );
+    }
+}
+
+class OptionalProperty extends Component {
+    constructor(props) {
+        super(props);
+    }
+    render() {
+        return(
+            <span className="property-group__item">
+                {(this.props.children && this.props.children !== '') ?
+                (this.props.children)
+                :
+                (<span className="property-group__item--empty">Not specified</span>)}
+            </span>
+        );
     }
 }
 
@@ -139,16 +228,13 @@ class CountryAutocomplete extends Component {
     }
     render() {
         return(
-            <Autocomplete 
-                disabled={this.props.disabled}
-                direction="down"
-                label="Choose country"
-                source={this.state.options}
-                value={this.props.value}
-                onChange={this.props.onChange}
-                multiple={false}
-                
-            />
+            <Autocomplete disabled={this.props.disabled}
+                          direction="down"
+                          label="Choose country"
+                          source={this.state.options}
+                          value={this.props.value}
+                          onChange={this.props.onChange}
+                          multiple={false} />
         );
     }
 }
@@ -307,7 +393,7 @@ class EditAddressDialog extends Component {
         const inputDisabled = this.state && this.state.shippingLocationReference !== null && this._shippingLocationExists();
         return(
                         <Dialog active={this.props.active} onEscKeyDown={this.props.toggleDialog} onOverlayClick={this.props.toggleDialog} title={this.props.title}>
-                {this.props.address === null ? (null) : (
+                            {this.props.address === null ? (null) : (
                     <Grid>
                         <Cell col={6}>
                             <Dropdown label='Shipping Location' auto source={this.props.shippingLocations} value={this.state.shippingLocationReference} onChange={(val) => this._handleShippingLocationSelect(val)} />
@@ -337,9 +423,9 @@ class EditAddressDialog extends Component {
                         </Cell>
                     </Grid>
                 )}
-            </Dialog>
+                        </Dialog>
 );
-}
+    }
 }
 
 export default ConsignmentContainer;

@@ -62,3 +62,15 @@
 .package-table tr:hover {
     background-color: $grey-200;
 }
+
+.late-icon {
+    position:absolute;
+    right:20px;
+    color: $red-700;
+    font-weight:bold;
+
+}
+
+.cancel-link {
+    font-size: 1.2em;
+}

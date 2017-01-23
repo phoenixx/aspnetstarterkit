@@ -128,7 +128,7 @@ class ConsignmentContainer extends Component {
                             </Cell>
                         </Grid>
                     </Cell>
-                    <Cell col={3}>
+                    <Cell col={3} tablet={12} phone={12}>
                         <Card shadow={0} raised style={{height: '500px', width: '100%'}}>
                             <CardTitle>
                                 <h2>
@@ -155,7 +155,7 @@ class ConsignmentContainer extends Component {
                                     <DateTime value={this.state.consignment.dateCreated} />
                                 </ConsignmentProperty>
                                 <ConsignmentProperty label="Requested delivery date">
-                                    <ShortDate value={this.state.consignment.requestedDeliveryDate.date} />
+                                    {this.state.consignment.requestedDeliveryDate ? (<ShortDate value={this.state.consignment.requestedDeliveryDate.date} />) : (null)}
                                 </ConsignmentProperty>
                                 <ConsignmentProperty label="Shipping date">
                                     <ShortDate value={this.state.consignment.shippingDate} />
@@ -166,9 +166,11 @@ class ConsignmentContainer extends Component {
                             </CardText>
                         </Card>
                     </Cell>
-                    <Cell col={6}>
+                    <Cell col={6} tablet={12} phone={12}>
                         <Card shadow={0} raised style={{height: '500px', width: '100%'}}>
-                            <CardTitle>{consignmentState}</CardTitle>
+                            <CardTitle>
+                                <ConsignmentStatusHeader {...this.state.consignment} />
+                            </CardTitle>
                             <CardText>
                                 <AllocationDetails {...this.state.consignment} />
                             </CardText>
@@ -215,6 +217,21 @@ class ConsignmentContainer extends Component {
     }
 }
 
+class ConsignmentStatusHeader extends Component {
+    constructor(props) {
+        super(props);
+    }
+    render() {
+        const consignmentState = `Consignment status: ${Utils.splitCamelCase(this.props.consignmentState)}`;
+        return(
+            <h2>
+                {consignmentState}
+                {this.props.isLate ? (<span className="late-icon"><FontIcon value='alarm' /> Late</span>) : (null)}
+            </h2>
+        );
+    }
+}
+
 /*extract all this stuff to new components*/
 class AllocationDetails extends Component {
     constructor(props) {
@@ -225,17 +242,91 @@ class AllocationDetails extends Component {
         const isAllocated = this.props.allocation !== null && this.props.consignmentState !== "Unallocated" && !inTransition;
         const allocFailed = !isAllocated && this.props.failedAllocation !== null;
 
-        if (isAllocated) {
-            return (<AllocatedPanel {...this.props.allocation} />);
+        return (<Actions {...this.props} />);
+
+        //if (isAllocated) {
+        //    return (<AllocatedPanel {...this.props.allocation} />);
+        //}
+
+        //if (allocFailed) {
+        //    return (<div>failed</div>);
+        //}
+
+        //return(<div>default</div>);
+
+
+    }
+}
+
+class Actions extends Component {
+    constructor(props) {
+        super(props);
+    }
+    render() {
+        const inTransition = this.props.consignmentState.substring(this.props.consignmentState.length, 3) === "ing";
+
+        const isAllocated = this.props.allocation !== null && this.props.consignmentState !== "Unallocated" && !inTransition;
+        const allocFailed = !isAllocated && this.props.failedAllocation !== null;
+        return(
+            <div>
+                <div className="panel">
+                    <span className="panel--action">Available actions:</span>
+                    <ConditionalComponent condition={() => isAllocated === false && inTransition === false}>
+                        <Button icon='done' label='Allocate' raised primary className="button--action" />
+                    </ConditionalComponent>
+                    <ConditionalComponent condition={() => isAllocated === true}>
+                        <Button icon='cancel' label='De-allocate' raised primary className="button--action" />
+                        <Button icon='assignment' label='Manifest' raised primary className="button--action" />
+                        <Button icon='print' label='Print labels' raised primary className="button--action" />
+                    </ConditionalComponent>
+                </div>
+                {isAllocated === true ? (
+                    <div className="panel">
+                        <span className="panel--title">Allocation details</span>
+                        <AllocationProperty label="Service Name">
+                            {this.props.allocation.mpdCarrierServiceName}
+                        </AllocationProperty>
+                        <AllocationProperty label="Service Code">
+                            {this.props.allocation.mpdCarrierServiceReference}
+                        </AllocationProperty>
+                        <AllocationProperty label="Price">
+                            <FormattedNumber value={this.props.allocation.price.net} style="currency" currency={this.props.allocation.price.currency.isoCode} />
+                        </AllocationProperty>
+                    </div>
+                ) : (null)}
+                {allocFailed ? (
+                    <div className="panel">
+                        <span className="panel--title">Allocation failure details</span>
+                        <div className="allocation-failure-message">
+                            <AllocationProperty label="Attempted allocation">
+                                <DateTime value={this.props.failedAllocation.attemptedAllocationDate} />
+                            </AllocationProperty>
+                            <AllocationProperty label="Allocation failure reason">
+                                {this.props.failedAllocation.message}
+                            </AllocationProperty>
+                        </div>
+                    </div>
+                ) : (null)}
+                <span className="cancel-link">
+                    <a href="#/">Cancel consignment</a>
+                </span>
+            </div>
+        );
+    }
+}
+
+class ConditionalComponent extends Component {
+    constructor(props) {
+        super(props);
+    }
+    render() {
+        const doRender = this.props.condition();
+        console.log(doRender);
+        if (doRender === true) {
+            return(<span>{this.props.children}</span>);
+        } else {
+            return null;
         }
-
-        if (allocFailed) {
-            return (<div>failed</div>);
-        }
-
-        return(<div>default</div>);
-
-
     }
 }
 
@@ -264,6 +355,9 @@ class AllocatedPanel extends Component {
                         <FormattedNumber value={this.props.price.net} style="currency" currency={this.props.price.currency.isoCode} />
                     </AllocationProperty>
                 </div>
+                <span className="cancel-link">
+                    <a href="#/">Cancel consignment</a>
+                </span>
             </div>
 
         );

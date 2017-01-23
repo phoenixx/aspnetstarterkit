@@ -16,6 +16,12 @@
     font-weight: 700;
 }
 
+.property-group__label--narrow {
+    display: inline-block;
+    width: 25%;
+    font-weight: 700;
+}
+
 .property-group__item--empty {
     font-style: italic;
     color: $grey-300;
@@ -52,6 +58,7 @@
     border-bottom: 0 none;
 }
 
-.package-table tr {
+.package-table tr,
+.package-table tr:hover {
     background-color: $grey-200;
 }

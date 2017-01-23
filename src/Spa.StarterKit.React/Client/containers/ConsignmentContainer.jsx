@@ -169,6 +169,9 @@ class ConsignmentContainer extends Component {
                     <Cell col={6}>
                         <Card shadow={0} raised style={{height: '500px', width: '100%'}}>
                             <CardTitle>{consignmentState}</CardTitle>
+                            <CardText>
+                                <AllocationDetails {...this.state.consignment} />
+                            </CardText>
                         </Card>
                     </Cell>
                     <Cell col={12}>
@@ -213,6 +216,60 @@ class ConsignmentContainer extends Component {
 }
 
 /*extract all this stuff to new components*/
+class AllocationDetails extends Component {
+    constructor(props) {
+        super(props);
+    }
+    render() {
+        const inTransition = this.props.consignmentState.substring(this.props.consignmentState.length, 3) === "ing";
+        const isAllocated = this.props.allocation !== null && this.props.consignmentState !== "Unallocated" && !inTransition;
+        const allocFailed = !isAllocated && this.props.failedAllocation !== null;
+
+        if (isAllocated) {
+            return (<AllocatedPanel {...this.props.allocation} />);
+        }
+
+        if (allocFailed) {
+            return (<div>failed</div>);
+        }
+
+        return(<div>default</div>);
+
+
+    }
+}
+
+class AllocatedPanel extends Component {
+    constructor(props) {
+        super(props);
+    }
+    render() {
+        return(
+            <div>
+                <div className="panel">
+                    <span className="panel--action">Available actions:</span>
+                    <Button icon='cancel' label='De-allocate' raised primary className="button--action" />
+                    <Button icon='assignment' label='Manifest' raised primary className="button--action" />
+                    <Button icon='print' label='Print labels' raised primary className="button--action" />
+                </div>
+                <div className="panel">
+                    <span className="panel--title">Allocation details</span>
+                    <AllocationProperty label="Service Name">
+                        {this.props.mpdCarrierServiceName}
+                    </AllocationProperty>
+                    <AllocationProperty label="Service Code">
+                        {this.props.mpdCarrierServiceReference}
+                    </AllocationProperty>
+                    <AllocationProperty label="Price">
+                        <FormattedNumber value={this.props.price.net} style="currency" currency={this.props.price.currency.isoCode} />
+                    </AllocationProperty>
+                </div>
+            </div>
+
+        );
+    }
+}
+
 class PackagesTab extends Component {
     constructor(props) {
         super(props);
@@ -257,7 +314,11 @@ class Package extends Component {
                     </thead>
                     <tbody>
                         <tr>
-                            <td>{this.props.packageReferenceProvidedByCustomer}</td>
+                            <td>
+                                <OptionalProperty>
+                                    {this.props.packageReferenceProvidedByCustomer}
+                                </OptionalProperty>
+                            </td>
                             <td>{this.props.description}</td>
                             <td>{this.props.dimensions.height}cm x {this.props.dimensions.length}cm x {this.props.dimensions.width}cm</td>
                             <td><FormattedNumber value={this.props.value.amount} style="currency" currency={this.props.value.currency.isoCode} /></td>
@@ -269,6 +330,24 @@ class Package extends Component {
                         </tr>
                     </tbody>
                 </table>
+            </div>
+        );
+    }
+}
+
+class AllocationProperty extends Component {
+    constructor(props) {
+        super(props);
+    }
+    render() {
+        return(
+            <div className="property-group">
+                <span className="property-group__label--narrow">
+                    {this.props.label}:
+                </span>
+                <OptionalProperty>
+                    {this.props.children}
+                </OptionalProperty>
             </div>
         );
     }

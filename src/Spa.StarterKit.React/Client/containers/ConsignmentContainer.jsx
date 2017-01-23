@@ -155,13 +155,13 @@ class ConsignmentContainer extends Component {
                                     <DateTime value={this.state.consignment.dateCreated} />
                                 </ConsignmentProperty>
                                 <ConsignmentProperty label="Requested delivery date">
-                                    <DateTime value={this.state.consignment.requestedDelivertyDate} />
+                                    <ShortDate value={this.state.consignment.requestedDeliveryDate.date} />
                                 </ConsignmentProperty>
                                 <ConsignmentProperty label="Shipping date">
-                                    <DateTime value={this.state.consignment.shippingDate} />
+                                    <ShortDate value={this.state.consignment.shippingDate} />
                                 </ConsignmentProperty>
                                 <ConsignmentProperty label="Earliest delivery">
-                                    <DateTime value={this.state.consignment.earliestDeliveryDate} />
+                                    <ShortDate value={this.state.consignment.earliestDeliveryDate} />
                                 </ConsignmentProperty>
                             </CardText>
                         </Card>

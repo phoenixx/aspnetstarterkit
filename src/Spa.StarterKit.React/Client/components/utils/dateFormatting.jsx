@@ -92,6 +92,25 @@ class DateTime extends Component {
     }
 }
 
+class DateTimeSeconds extends Component {
+    constructor(props) {
+        super(props);
+    }
+    render() {
+        if (this.props.value) {
+            return(
+                <span>
+                    <FormattedDate {...this.props} year="numeric" month="numeric" day="numeric"/>
+                    &nbsp;
+                    <FormattedTime {...this.props} hour="numeric" minute="numeric" second="numeric"/>
+                </span>
+            );
+        } else {
+            return null;
+        }
+    }
+}
+
 export {
-    TextDate, LongDate, ShortDate, Date, DateTime
+    TextDate, LongDate, ShortDate, Date, DateTime, DateTimeSeconds
 };

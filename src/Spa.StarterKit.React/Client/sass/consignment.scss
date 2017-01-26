@@ -27,14 +27,15 @@
     color: $grey-300;
 }
 
-.package-container {
-    font-size: 1.3em;
+.package-container,
+.document-container {
+    /*font-size: 1.3em;*/
     padding: 12px 8px;
     background-color: $grey-200;
     margin-bottom: 16px;
 }
 
-.package-reference{
+.package-reference {
     width: 50%;
     float: left;
     text-align: left;
@@ -61,6 +62,35 @@
 .package-table tr,
 .package-table tr:hover {
     background-color: $grey-200;
+}
+
+.document-section {
+    width: 100%;
+    text-align: left;
+    font-size: 1.5em;
+    color: $electio-red;
+    font-weight: bold;
+    margin-bottom: 20px;
+ }
+
+.document-contents {
+    margin: 10px 0;
+    width: 100%;
+}
+
+.document-contents--row {
+    padding: 5px 0;
+    width: 100%;
+    min-height: 25px;
+}
+
+.document-contents--column {
+    width: 25%;
+    float:left;
+}
+
+.history-table th {
+    text-align:left;
 }
 
 .late-icon {

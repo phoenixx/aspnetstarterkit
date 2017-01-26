@@ -1,7 +1,7 @@
 ﻿import React, { Component } from 'react';
-import '../sass/address.scss';
+import '../../sass/address.scss';
 
-class AddressDisplayContainer extends Component {
+class AddressDisplay extends Component {
     constructor(props) {
         super(props);
     }
@@ -18,7 +18,9 @@ class AddressDisplayContainer extends Component {
                     <span className="family-name">
                         {this.props.address.contact.lastName}
                     </span>
-                    {this.props.address.contact.email ? (<span className="email">({this.props.address.contact.email})</span>) : (null)}
+                    {this.props.address.contact.email
+                        ? (<span className="email">({this.props.address.contact.email})</span>)
+                        : (null)}
                 </div>
                 <div className="adr">
                     <div className="street-address">
@@ -42,4 +44,4 @@ class AddressDisplayContainer extends Component {
     }
 }
 
-export { AddressDisplayContainer }
+export default AddressDisplay;

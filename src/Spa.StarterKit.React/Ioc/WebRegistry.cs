@@ -9,6 +9,7 @@ namespace Spa.StarterKit.React.Ioc
     {
         public WebRegistry()
         {
+            For<ITrackingService>().Use<TrackingService>().LifecycleIs<TransientLifecycle>();
             For<ILoginService>().Use<LoginService>().LifecycleIs<TransientLifecycle>();
         }
     }

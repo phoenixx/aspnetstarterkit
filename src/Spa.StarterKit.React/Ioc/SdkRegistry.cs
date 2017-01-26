@@ -106,6 +106,10 @@ namespace Spa.StarterKit.React.Ioc
                     .Use<ShippingLocationsServiceService>()
                     .Ctor<Func<string>>("apiKey").Is(() => ApiKey(container))
                     .LifecycleIs<TransientLifecycle>();
+                config.For<ITrackingService>()
+                    .Use<TrackingService>()
+                    .Ctor<Func<string>>("apiKey").Is(() => ApiKey(container))
+                    .LifecycleIs<TransientLifecycle>();
                 config.For<MPD.Electio.SDK.NetCore.Interfaces.Services.IShippingLocationsService>()
                     .Use<MPD.Electio.SDK.NetCore.Services.ShippingLocationsServiceService>()
                     .Ctor<Func<string>>("apiKey").Is(() => ApiKey(container))

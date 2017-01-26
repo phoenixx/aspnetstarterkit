@@ -4,7 +4,7 @@ import PackagesTab from './tabs/packagesTab';
 import DocumentsTab from './tabs/documentsTab';
 import TrackingTab from './tabs/trackingTab';
 import HistoryTab from './tabs/historyTab';
-import { Card, CardTitle, CardText } from 'react-mdl';
+import MetadataTab from './tabs/metadataTab';
 
 class ConsignmentTabs extends Component {
     constructor(props) {
@@ -26,9 +26,7 @@ class ConsignmentTabs extends Component {
                    <HistoryTab consignmentReference={this.props.consignment.reference} />
                 </Tab>
                 <Tab label="Metadata" icon="hourglass_empty">
-                    <Card shadow={0} raised style={{height: '300px', width: '100%'}}>
-                        <CardTitle>Metadata</CardTitle>
-                    </Card>
+                    <MetadataTab consignmentReference={this.props.consignment.reference}/>
                 </Tab>
             </Tabs>
         );

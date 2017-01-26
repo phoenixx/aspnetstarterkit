@@ -28,7 +28,8 @@
 }
 
 .package-container,
-.document-container {
+.document-container,
+.metadata-container {
     /*font-size: 1.3em;*/
     padding: 12px 8px;
     background-color: $grey-200;
@@ -50,21 +51,31 @@
     text-align: right;
 }
 
-.package-table th {
+.package-table th,
+.metadata-table th  {
     text-align: left;
     background-color: $grey-200;
 }
 
-.package-table thead > tr {
+.metadata-table th {
+    width: 20%;
+}
+
+.package-table thead > tr,
+.metadata-table thead > tr {
     border-bottom: 0 none;
 }
 
 .package-table tr,
-.package-table tr:hover {
+.package-table tr:hover,
+.metadata-table tr,
+.metadata-table tr:hover
+ {
     background-color: $grey-200;
 }
 
-.document-section {
+.document-section,
+.metadata-section {
     width: 100%;
     text-align: left;
     font-size: 1.5em;

@@ -307,6 +307,14 @@ namespace Spa.StarterKit.React.Config.Mapping.Profiles.ServiceInterfaceToViewMod
                 ;
 
             CreateMap<Tolerance, ToleranceViewModel>(MemberList.None);
+
+            CreateMap<MetaData, ViewModels.Metadata.MetadataItem>(MemberList.None)
+                .ForMember(d => d.BoolValue, opt => opt.MapFrom(s => s.BoolValue))
+                .ForMember(d => d.DateTimeValue, opt => opt.MapFrom(s => s.DateTimeValue))
+                .ForMember(d => d.DecimalValue, opt => opt.MapFrom(s => s.DecimalValue))
+                .ForMember(d => d.IntValue, opt => opt.MapFrom(s => s.IntValue))
+                .ForMember(d => d.KeyValue, opt => opt.MapFrom(s => s.KeyValue))
+                .ForMember(d => d.StringValue, opt => opt.MapFrom(s => s.StringValue));
         }
 
         private static string NullSafeValueOf(Allocation allocation,
